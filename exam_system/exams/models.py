@@ -2,6 +2,36 @@ import datetime
 from exam_system.db import get_db
 from bson import ObjectId
 
+class Folder:
+    @staticmethod
+    def get_collection():
+        return get_db()['folders']
+
+    def __init__(self, name, description=None, parent_folder_id=None, created_at=None):
+        self.name = name
+        self.description = description
+        self.parent_folder_id = parent_folder_id
+        self.created_at = created_at or datetime.datetime.now()
+
+    def save(self):
+        data = {
+            "name": self.name,
+            "description": self.description,
+            "parent_folder_id": self.parent_folder_id,
+            "created_at": self.created_at
+        }
+        result = self.get_collection().insert_one(data)
+        self._id = result.inserted_id
+        return self._id
+
+    @classmethod
+    def find_by_id(cls, folder_id):
+        return cls.get_collection().find_one({"_id": folder_id})
+
+    @classmethod
+    def find_by_parent_id(cls, parent_folder_id):
+        return list(cls.get_collection().find({"parent_folder_id": parent_folder_id}))
+
 class Question:
     @staticmethod
     def get_collection():
@@ -43,20 +73,24 @@ class Exam:
     def get_collection():
         return get_db()['exams']
 
-    def __init__(self, title, difficulty, status, access, created_at=None, updated_at=None):
+    def __init__(self, folder_id, title, difficulty, status, access, max_duration, created_at=None, updated_at=None):
+        self.folder_id = folder_id
         self.title = title
         self.difficulty = difficulty
         self.status = status
         self.access = access
+        self.max_duration = max_duration  # Đảm bảo có trường này
         self.created_at = created_at or datetime.datetime.now()
         self.updated_at = updated_at or datetime.datetime.now()
 
     def save(self):
         data = {
+            "folder_id": self.folder_id,
             "title": self.title,
             "difficulty": self.difficulty,
             "status": self.status,
             "access": self.access,
+            "max_duration": self.max_duration,
             "created_at": self.created_at,
             "updated_at": self.updated_at
         }
@@ -67,6 +101,10 @@ class Exam:
     @classmethod
     def find_by_title(cls, title):
         return cls.get_collection().find_one({"title": title})
+
+    @classmethod
+    def find_by_folder_id(cls, folder_id):
+        return list(cls.get_collection().find({"folder_id": folder_id}))
 
     def get_questions(self):
         return Question.find_by_exam_id(self._id)
