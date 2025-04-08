@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Exam</title>
+    {% load static %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/exam/exam.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/exam/part5.css' %}" id="part5-css" disabled>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/exam/part6.css' %}" id="part6-css" disabled>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/exam/part7.css' %}" id="part7-css" disabled>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.0.0/tinymce.min.js" defer></script>
+    <script>
+        const examId = "{{ exam_id }}";
+    </script>
+    <script type="text/javascript" src="{% static 'js/exam/exam.js' %}" defer></script>
+    <script type="text/javascript" src="{% static 'js/exam/part5.js' %}" defer id="part5-js"></script>
+    <script type="text/javascript" src="{% static 'js/exam/part6.js' %}" defer id="part6-js"></script>
+    <script type="text/javascript" src="{% static 'js/exam/part7.js' %}" defer id="part7-js"></script>
+</head>
+<body>
+    <div class="header">
+        <!-- Nút quay về -->
+        <button class="btn btn-sm btn-outline-secondary me-2" onclick="showExitWarning()">
+            <i class="fas fa-arrow-left me-1"></i> Thoát
+        </button>
+        
+        <!-- Các tab phần thi -->
+        <button class="part-tab active" onclick="showPart(5)">Part 5</button>
+        <button class="part-tab" onclick="showPart(6)">Part 6</button>
+        <button class="part-tab" onclick="showPart(7)">Part 7</button>
+        
+        <!-- Nút cài đặt -->
+        <button class="btn btn-sm btn-outline-primary ms-auto" data-bs-toggle="modal" data-bs-target="#examSettingsModal">
+            <i class="fas fa-cog"></i> Cài đặt
+        </button>
+    </div>
+
+    <!-- Part 5 -->
+    <div id="part-5" class="content active">
+        <div id="part-5__left-section" class="part-5__left-section"></div>
+        <div id="part-5__right-section" class="part-5__right-section">
+            <textarea id="part-5__editor-1" class="part-5__editor-content" spellcheck="false" placeholder="Nhập nội dung các câu hỏi tại đây..."></textarea>
+            <div class="part-5__button-container">
+                
+                <div class="part-5__button-column">
+                    <button onclick="Part5.insertSampleContent()"><i class="fas fa-lightbulb me-1"></i> Hướng dẫn qua nội dung mẫu</button>
+                </div>
+                <div class="part-5__button-column">
+                    <input type="file" id="part-5__file-input" accept=".pdf" style="display: none;" onchange="Part5.readFile(event)">
+                    <button onclick="document.getElementById('part-5__file-input').click()"><i class="fas fa-file-pdf me-1"></i> Tải file PDF</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Part 6 -->
+    <div id="part-6" class="content">
+        <div id="part-6__left-section" class="part-6__left-section"></div>
+        <div id="part-6__right-section" class="part-6__right-section">
+            <div id="part-6__passage-question-container" class="part-6__passage-question-container">
+                <div class="part-6__passage-question-pair" data-pair-id="1">
+                    <div class="part-6__passage-editor-box">
+                        <textarea id="part-6__passage-editor-1" class="part-6__passage-editor" placeholder="Nhập nội dung đoạn văn..."></textarea>
+                    </div>
+                    <div class="part-6__question-editor-box">
+                        <textarea id="part-6__question-editor-1" class="part-6__question-editor" spellcheck="false" placeholder="Nhập nội dung các câu hỏi tại đây..."></textarea>
+                    </div>
+                    <button class="part-6__delete-pair" onclick="Part6.deletePassageQuestionPair(this)">Xóa</button>
+                </div>
+            </div>
+            <div class="part-6__editor-tools">
+                <button onclick="Part6.addPassageQuestionPair()">Thêm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Part 7 -->
+    <div id="part-7" class="content">
+        <div id="part-7__left-section" class="part-7__left-section"></div>
+        <div id="part-7__right-section" class="part-7__right-section">
+            <div id="part-7__passage-question-container" class="part-7__passage-question-container">
+                <div class="part-7__passage-question-pair" data-pair-id="1">
+                    <div class="part-7__passage-editor-box">
+                        <textarea id="part-7__passage-editor-1" class="part-7__passage-editor" placeholder="Nhập nội dung đoạn văn..."></textarea>
+                    </div>
+                    <div class="part-7__question-editor-box">
+                        <textarea id="part-7__question-editor-1" class="part-7__question-editor" spellcheck="false" placeholder="Nhập nội dung các câu hỏi tại đây..."></textarea>
+                    </div>
+                    <button class="part-7__delete-pair" onclick="Part7.deletePassageQuestionPair(this)">Xóa</button>
+                </div>
+            </div>
+            <div class="part-7__editor-tools">
+                <button onclick="Part7.addPassageQuestionPair()">Thêm</button>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade exam-settings-modal" id="examSettingsModal" tabindex="-1" aria-labelledby="examSettingsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="examSettingsModalLabel">Cài đặt đề thi</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="examSettingsForm">
+                        <div class="mb-3">
+                            <label for="examTitle" class="form-label">Tiêu đề đề thi</label>
+                            <input type="text" class="form-control" id="examTitle" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="examStatus" class="form-label">Trạng thái</label>
+                            <select class="form-select" id="examStatus" required>
+                                <option value="draft">Nháp</option>
+                                <option value="active">Công khai</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="examAccess" class="form-label">Quyền truy cập</label>
+                            <select class="form-select" id="examAccess" required>
+                                <option value="free">Miễn phí</option>
+                                <option value="premium">Trả phí</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="examDuration" class="form-label">Thời gian làm bài (phút)</label>
+                            <input type="number" class="form-control" id="examDuration" min="1" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="saveExamSettings">Lưu đề thi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal nhắc nhở khi thoát -->
+    <div class="modal fade" id="exitWarningModal" tabindex="-1" aria-labelledby="exitWarningModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light border-0">
+                    <div class="d-flex align-items-center">
+                        <i class="fas fa-exclamation-triangle text-warning me-2 fs-4"></i>
+                        <h5 class="modal-title mb-0" id="exitWarningModalLabel">Thông báo quan trọng</h5>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <div class="d-flex align-items-start">
+                        <i class="fas fa-info-circle text-primary me-3 mt-1"></i>
+                        <div>
+                            <p class="mb-1"><strong>Bạn có thay đổi chưa lưu!</strong></p>
+                            <p class="text-muted mb-0">Để đảm bảo không mất dữ liệu, vui lòng:</p>
+                            <ol class="mt-2 mb-0">
+                                <li>Vào <strong>Cài đặt</strong> → Lưu lại đề thi</li>
+                                <li>Hoặc xuất bản đề thi nếu đã hoàn thành</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#examSettingsModal">
+                        <i class="fas fa-cog me-1"></i> Vào cài đặt
+                    </button>
+                    <button type="button" class="btn btn-danger" onclick="window.location.href='/admin/exams/exam_management/'">
+                        <i class="fas fa-sign-out-alt me-1"></i> Thoát ngay
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

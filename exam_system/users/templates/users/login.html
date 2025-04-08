@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đăng nhập - MochiMochi</title>
+    {% load static %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/users/login.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body class="flex items-center justify-center">
+    <!-- Background elements -->
+    <div class="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+        <div class="absolute top-20 left-20 w-40 h-40 bg-yellow-100 rounded-full opacity-20 blur-xl"></div>
+        <div class="absolute bottom-20 right-20 w-60 h-60 bg-blue-100 rounded-full opacity-20 blur-xl"></div>
+        <div class="absolute top-1/3 right-1/4 w-32 h-32 bg-purple-100 rounded-full opacity-15 blur-xl"></div>
+    </div>
+    
+    <!-- Floating decoration -->
+    <div class="absolute top-1/4 left-1/4 w-16 h-16 bg-[#FFCB08] rounded-full opacity-20 floating"></div>
+    <div class="absolute bottom-1/3 right-1/4 w-24 h-24 bg-[#4285F4] rounded-full opacity-20 floating" style="animation-delay: 2s;"></div>
+
+    <!-- Main login container -->
+    <div class="login-container relative z-10 w-full max-w-md p-8 mx-4">
+        <!-- Header -->
+        <div class="header-bg rounded-xl shadow-md p-6 mb-8 text-center relative overflow-hidden">
+            <div class="absolute -top-10 -right-10 w-20 h-20 bg-white opacity-10 rounded-full"></div>
+            <div class="absolute -bottom-10 -left-10 w-24 h-24 bg-white opacity-10 rounded-full"></div>
+            <h1 class="text-3xl font-bold text-gray-900 relative z-10">ĐĂNG NHẬP</h1>
+            <p class="text-gray-800 mt-2 relative z-10">Chào mừng bạn trở lại</p>
+            <p class="text-gray-600 mt-2">Học Toiec vui vẻ cùng MochiMochi</p>
+        </div>
+        
+        <!-- Google Sign In -->
+        <div class="mb-6 text-center">
+            <p class="text-gray-600 mb-3">Đăng nhập nhanh với</p>
+            <div>
+                <div id="g_id_onload"
+                    data-client_id="12000488149-j2dggdu4aefme79sv6tqimf6d0k2b9dn.apps.googleusercontent.com"
+                    data-context="signin"
+                    data-ux_mode="redirect"
+                    data-login_uri="http://localhost:8000/users/login/user/"
+                    data-auto_prompt="false">
+                </div>
+                <div class="flex justify-center">
+                    <div class="g_id_signin"
+                        data-type="standard"
+                        data-shape="pill"
+                        data-theme="filled_blue"
+                        data-text="signin_with"
+                        data-size="large"
+                        data-logo_alignment="left"
+                        data-width="300">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Divider -->
+        <div class="divider text-gray-500 my-6">HOẶC</div>
+        {% if messages %}
+            <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+                {% for message in messages %}
+                    <p><i class="fas fa-exclamation-circle mr-2"></i>{{ message }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <!-- Login form -->
+        <form method="post" action="{% url 'users:login_admin' %}" class="space-y-5">
+            {% csrf_token %}
+            <div class="relative">
+                <i class="fas fa-user absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <input type="text" name="username" placeholder="Tên đăng nhập"
+                    class="input-field w-full pl-12 pr-4 py-3 rounded-full text-gray-700 focus:outline-none">
+            </div>
+            
+            <div class="relative">
+                <i class="fas fa-lock absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                <input type="password" name="password" placeholder="Mật khẩu"
+                    class="input-field w-full pl-12 pr-4 py-3 rounded-full text-gray-700 focus:outline-none">
+            </div>
+            
+            <div class="pt-2">
+                <button type="submit" class="btn-primary w-full py-3 rounded-full text-white font-semibold text-lg shadow-md">
+                    <i class="fas fa-sign-in-alt mr-2"></i> ĐĂNG NHẬP
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

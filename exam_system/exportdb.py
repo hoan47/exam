@@ -1,5 +1,5 @@
 import json
-from exam_system.db import get_db
+from services.db import get_db
 
 # Kết nối database
 db = get_db()

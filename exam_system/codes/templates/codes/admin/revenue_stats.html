@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê doanh thu</title>
+    {% load humanize %}
+    {% load static %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/codes/revenue_stats.css' %}">
+    <script type="text/javascript" src="{% static 'js/codes/revenue_stats.js' %}" defer></script>
+</head>
+<body>
+    <div class="container">
+        <div style="position: absolute; top: 10px; right: 10px;">
+            <a href="/users/admin/dashboard/" class="exit-button">&times;</a>
+        </div>
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-title">Tổng doanh thu</div>
+                <div class="stat-value" id="totalRevenue">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Tổng giao dịch</div>
+                <div class="stat-value" id="totalTransactions">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Giá trị trung bình</div>
+                <div class="stat-value" id="avgValue">-</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Gói phổ biến nhất</div>
+                <div class="stat-value" id="popularPackage">-</div>
+                <div class="stat-change"><span class="badge badge-primary">TOP</span></div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h2 id="section-title"></h2>
+                <div style="text-align: center;">
+                    <a href="#" class="back-button" style="display: none;" onclick="goBack()">Quay về</a>
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+
+        <div class="tables-grid">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Xếp hạng gói bán chạy</h2>
+                </div>
+                <table class="package-table">
+                    <thead>
+                        <tr>
+                            <th>Gói (tháng)</th>
+                            <th>Doanh thu (VNĐ)</th>
+                            <th>Tỷ lệ (%)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for package in packages %}
+                        <tr>
+                            <td>{{ package.duration }}</td>
+                            <td class="number-cell">{{ package.total|intcomma }}</td>
+                            <td class="percent-cell">
+                                <span class="percent-text">{{ package.percent|floatformat:2 }}</span>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" style="text-align: center;">Không có dữ liệu gói.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h2>Xếp hạng user tạo doanh thu</h2>
+                </div>
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>User</th>
+                            <th>Doanh thu (VNĐ)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for user in users %}
+                        <tr>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar">{{ user.username|first|upper }}</div>
+                                    {{ user.username }}
+                                </div>
+                            </td>
+                            <td class="number-cell">{{ user.total|intcomma }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="2" style="text-align: center;">Không có dữ liệu người dùng.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>© 2025 Dashboard thống kê doanh thu | Cập nhật lần cuối: <span id="lastUpdate"></span></p>
+        </div>
+    </div>
+</body>
+</html>

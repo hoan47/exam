@@ -1,0 +1,106 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+/* Body */
+body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* Header */
+.header {
+    background: linear-gradient(90deg, #56ccf2, #2f80ed);
+    padding: 5px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.header button {
+    padding: 8px 16px;
+    margin: 0 5px;
+    border: none;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #2c3e50;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.header button.active {
+    background-color: #e74c3c;
+    color: white;
+    transform: scale(1.1);
+}
+
+.header button:hover:not(.active) {
+    background-color: #ecf0f1;
+}
+
+/* Content */
+.content {
+    display: none;
+    flex: 1;
+    height: calc(100vh - 50px);
+    margin-top: 50px;
+}
+
+.content.active {
+    display: flex;
+}
+
+.exam-settings-modal .modal-content {
+    border-radius: 0.75rem;
+}
+
+.exam-settings-modal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.exam-settings-modal .modal-footer {
+    border-top: none;
+}
+
+.editor-tools {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+
+.exam-settings-modal .modal-content {
+    border-radius: 0.75rem;
+}
+
+.exam-settings-modal .modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.exam-settings-modal .modal-footer {
+    border-top: none;
+}
+
+.part-tab {
+    padding: 0.5rem 1rem;
+    border: none;
+    background-color: transparent;
+    font-weight: 500;
+    color: var(--light-text);
+    cursor: pointer;
+    border-radius: 0.25rem;
+    transition: all 0.2s;
+}
+

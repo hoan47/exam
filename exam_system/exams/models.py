@@ -1,24 +1,25 @@
 import datetime
-from exam_system.db import get_db
-from bson import ObjectId
+from services.db import get_db
 
 class Folder:
     @staticmethod
     def get_collection():
         return get_db()['folders']
 
-    def __init__(self, name, description=None, parent_folder_id=None, created_at=None):
+    def __init__(self, name, description=None, parent_folder_id=None, created_at=None, order=None):
         self.name = name
         self.description = description
         self.parent_folder_id = parent_folder_id
         self.created_at = created_at or datetime.datetime.now()
+        self.order = order
 
     def save(self):
         data = {
             "name": self.name,
             "description": self.description,
             "parent_folder_id": self.parent_folder_id,
-            "created_at": self.created_at
+            "created_at": self.created_at,
+            "order": self.order
         }
         result = self.get_collection().insert_one(data)
         self._id = result.inserted_id
@@ -30,8 +31,8 @@ class Folder:
 
     @classmethod
     def find_by_parent_id(cls, parent_folder_id):
-        return list(cls.get_collection().find({"parent_folder_id": parent_folder_id}))
-
+        return list(cls.get_collection().find({"parent_folder_id": parent_folder_id}).sort([("order", 1), ("created_at", 1)]))
+        
 class Question:
     @staticmethod
     def get_collection():

@@ -1,0 +1,181 @@
+/* Part 5 Styles */
+#part-5.active {
+    flex-direction: row;
+}
+
+#part-5 .part-5__left-section {
+    width: 40%;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    overflow-x: hidden; /* Chặn cuộn ngang */
+}
+
+#part-5 .part-5__right-section {
+    width: 60%;
+    height: 100%;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* Style cho textarea */
+#part-5 .part-5__editor-content {
+    flex: 1;
+    padding: 15px;
+    border: 2px solid #00d2dd;
+    border-radius: 8px;
+    font-size: 18px;
+    line-height: 1.6;
+    background-color: #fefefe;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    outline: none;
+    color: #333;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    resize: vertical; /* Cho phép kéo dãn chiều dọc */
+    font-family: Arial, sans-serif;
+    white-space: pre-wrap; /* Giữ định dạng xuống dòng và tab */
+    word-wrap: break-word; /* Đảm bảo xuống dòng khi cần */
+}
+
+/* Focus state */
+#part-5 .part-5__editor-content:focus {
+    border-color: #66afe9;
+    box-shadow: 0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+/* Placeholder cho textarea */
+#part-5 .part-5__editor-content::placeholder {
+    color: #aaa;
+    font-style: italic;
+}
+
+#part-5 .part-5__button-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+#part-5 .part-5__button-column {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+#part-5 .part-5__button-column button {
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+    width: 80%;
+    text-align: center;
+}
+
+#part-5 .part-5__button-column button:hover {
+    background-color: #2980b9;
+}
+
+#part-5 #part-5__file-input {
+    display: none;
+}
+
+#part-6.active, #part-7.active {
+    padding: 20px;
+    align-items: center;
+}
+
+/* Question Display */
+#part-5 .question-box {
+    background-color: #fff;
+    padding: 15px;
+    border: 2px solid #1aff00;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+#part-5 .question-text {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+#part-5 .options .option {
+    margin: 5px 0;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+#part-5 .correct-answer {
+    margin-top: 10px;
+    color: #2ecc71;
+    font-weight: bold;
+    word-wrap: break-word;
+}
+
+#part-5 .explanation {
+    margin-top: 10px;
+    color: #666;
+    font-size: 14px;
+    word-wrap: break-word;
+}
+
+/* Guide Container */
+#part-5 .guide-container {
+    background: #f8fafc;
+    border: 2px dashed #94a3b8;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+    color: #475569;
+    margin-top: 20px;
+}
+
+#part-5 .guide-container h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+#part-5 .guide-container p {
+    margin-bottom: 10px;
+}
+
+#part-5 .guide-container .highlight {
+    color: #0f766e;
+    font-weight: bold;
+}
+
+#part-5 .guide-container button {
+    background: #0f766e;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+#part-5 .guide-container button:hover {
+    background: #0d665c;
+}
+
+#part-5 .example-box {
+    background: #f9fafb;
+    border: 5px solid #2563eb;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: monospace;
+    white-space: pre-line;
+    margin-top: 10px;
+    width: 100%;
+    text-align: left;
+}

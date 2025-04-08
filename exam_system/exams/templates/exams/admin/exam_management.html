@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý đề thi</title>
+    {% load static %}
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/exam/exam_management.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'js/exam/exam_management.js' %}" defer></script>
+</head>
+<body class="bg-gray-100">
+    <!-- ✅ Container chính căn giữa -->
+    <div class="container mx-auto max-w-7xl py-6">
+        <!-- Nút đóng -->
+        <div style="position: absolute; top: 10px; right: 10px;">
+            <a href="/users/admin/dashboard/" class="exit-button">×</a>
+        </div>
+
+        <!-- Khung trắng có bo góc và đổ bóng -->
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-800">Quản lý đề thi</h1>
+                    <p class="text-sm text-gray-500 mt-1">Tổ chức và quản lý các đề thi của bạn</p>
+                </div>
+                <button id="createFolderBtn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center transition-colors">
+                    <i class="fas fa-folder-plus mr-2"></i>
+                    Tạo thư mục mới
+                </button>
+            </div>
+            
+            <!-- Main Content -->
+            <div class="p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Danh sách thư mục</h3>
+                <div class="space-y-3" id="folderList">
+                    <!-- Các thư mục sẽ hiển thị ở đây -->
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

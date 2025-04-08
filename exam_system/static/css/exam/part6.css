@@ -1,0 +1,331 @@
+/* Part 6 Styles */
+#part-6.active {
+    display: flex;
+    flex-direction: row;
+}
+
+/* Left Section */
+#part-6 .part-6__left-section {
+    width: 40%;
+    height: 100%;
+    padding: 20px;
+    overflow-y: auto;
+    overflow-x: hidden; /* Chặn cuộn ngang */
+    white-space: normal; /* Đảm bảo văn bản xuống dòng */
+    word-wrap: break-word; /* Ngắt từ nếu quá dài */
+}
+
+/* Right Section */
+#part-6 .part-6__right-section {
+    width: 60%;
+    height: 100%;
+    padding: 14px 7px;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    background-color: #ffffff;
+}
+
+/* Container cho các cặp Passage + Question */
+#part-6 .part-6__passage-question-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Tăng khoảng cách giữa các cặp */
+    margin-bottom: 20px;
+}
+
+/* Mỗi cặp Passage + Question */
+#part-6 .part-6__passage-question-pair {
+    background-color: #f9fafb;
+    border: 2px solid #00d2dd;
+    border-radius: 6px;
+    padding: 7px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* Khoảng cách giữa các phần tử bên trong */
+    position: relative; /* Để nút Xóa có thể định vị cố định nếu cần */
+}
+
+/* Passage Editor Box */
+#part-6 .part-6__passage-editor-box {
+    display: flex;
+    flex-direction: column;
+}
+
+#part-6 .part-6__passage-editor-box h4 {
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Passage Editor (textarea gốc và TinyMCE) */
+#part-6 .part-6__passage-editor,
+#part-6 .tox-tinymce {
+    width: 100%;
+    height: 600px;
+    padding: 7px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    resize: vertical;
+    background-color: #ffffff;
+    color: #1f2937;
+    box-sizing: border-box;
+}
+
+#part-6 .part-6__passage-editor:focus,
+#part-6 .tox-tinymce:focus-within {
+    border-color: #3498db;
+    outline: none;
+}
+
+#part-6 .part-6__passage-editor::placeholder {
+    color: #9ca3af;
+}
+
+/* Question Editor Box */
+#part-6 .part-6__question-editor-box {
+    display: flex;
+    flex-direction: column;
+}
+
+#part-6 .part-6__question-editor-box h4 {
+    color: #1e293b;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+/* Question Editor */
+#part-6 .part-6__question-editor {
+    width: 100%;
+    height: 600px;
+    padding: 7px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    resize: vertical;
+    background-color: #ffffff;
+    color: #1f2937;
+    box-sizing: border-box;
+}
+
+#part-6 .part-6__question-editor:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+#part-6 .part-6__question-editor::placeholder {
+    color: #9ca3af;
+}
+
+/* Nút Xóa */
+#part-6 .part-6__delete-pair {
+    padding: 8px 12px;
+    background-color: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    width: fit-content;
+    align-self: flex-end;
+    margin-top: 10px;
+}
+
+#part-6 .part-6__delete-pair:disabled {
+    background-color: #d1d5db;
+    cursor: not-allowed;
+}
+
+/* Editor Tools (Nút Thêm cặp) */
+#part-6 .part-6__editor-tools {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+#part-6 .part-6__editor-tools button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+}
+
+/* Nhóm đoạn văn và câu hỏi */
+#part-6 .part-6-passage-question-group {
+    background-color: #ffffff;
+    padding: 15px;
+    border: 2px solid #1aff00;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Tiêu đề đoạn văn */
+#part-6 .passage-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 5px;
+}
+
+#part-6 .passage-box {
+    background-color: transparent;
+    padding: 0;
+    border: none;
+    margin-bottom: 20px;
+    box-shadow: none;
+}
+
+#part-6 .passage-text {
+    font-size: 15px;
+    color: #1f2937;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+
+/* Đảm bảo ảnh không tràn div */
+#part-6 .passage-text img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 10px 0;
+}
+
+/* Đảm bảo bảng scale đúng và không có thanh cuộn riêng */
+#part-6 .passage-text table {
+    width: 100%; /* Bảng co giãn theo container */
+    max-width: 100%; /* Không vượt quá container */
+    border-collapse: collapse; /* Gộp viền */
+    table-layout: auto; /* Tự động điều chỉnh cột */
+}
+
+/* Đảm bảo các ô trong bảng cũng scale */
+#part-6 .passage-text td, 
+#part-6 .passage-text th {
+    padding: 8px; /* Padding cho ô */
+    border: 1px solid #e2e8f0; /* Viền ô */
+    word-wrap: break-word; /* Ngắt từ trong ô */
+    overflow-wrap: break-word;
+    white-space: normal; /* Cho phép xuống dòng trong ô */
+    max-width: 0; /* Hack để cột tự co giãn đều */
+}
+
+#part-6 .question-box {
+    padding: 10px;
+}
+
+#part-6 .question-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+#part-6 .options {
+    margin-bottom: 10px;
+}
+
+#part-6 .options .option {
+    font-size: 14px;
+    color: #1f2937;
+    margin: 5px 0;
+    word-wrap: break-word;
+}
+
+#part-6 .correct-answer {
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #2ecc71;
+    word-wrap: break-word;
+}
+
+#part-6 .explanation {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+/* Guide Container */
+#part-6 .guide-container {
+    background: #f8fafc;
+    border: 2px dashed #94a3b8;
+    padding: 16px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 16px;
+    color: #475569;
+    margin-top: 20px;
+}
+
+#part-6 .guide-container h2 {
+    font-size: 20px;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+#part-6 .guide-container p {
+    margin-bottom: 10px;
+}
+
+#part-6 .guide-container .highlight {
+    color: #0f766e;
+    font-weight: bold;
+}
+
+#part-6 .guide-container button {
+    background: #0f766e;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+#part-6 .guide-container button:hover {
+    background: #0d665c;
+}
+
+#part-6 .example-box {
+    background: #f9fafb;
+    border: 5px solid #2563eb;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: monospace;
+    white-space: pre-line;
+    margin-top: 10px;
+    width: 100%;
+    text-align: left;
+}
+
+#part-6 .note-container {
+    background: #fff8e1;
+    border: 4px solid #f59e0b;
+    padding: 12px;
+    border-radius: 6px;
+    color: #92400e;
+    font-size: 14px;
+    margin-top: 10px;
+}
+
+#part-6 .note-container strong {
+    color: #b45309;
+}
