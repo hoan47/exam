@@ -1,21 +1,30 @@
-from services.db import get_db
 import bcrypt
+from mongoengine import Document, StringField
+from werkzeug.security import check_password_hash
 
-# Admin Model
-class Admin:
-    @staticmethod
-    def get_collection():
-        return get_db()['admins']
+class Admin(Document):
+    username = StringField(required=True, unique=True)
+    password = StringField(required=True)
+    name = StringField(required=True)
 
-    def __init__(self, username, password, name):
-        self.username = username
-        self.password = password
-        self.name = name
+    def to_json(self):
+        return {
+            "id": str(self.id),
+            "username": self.username,
+            "name": self.name
+        }
 
-    @staticmethod
-    def find_one(filter):
-        return Admin.get_collection().find_one(filter)
-
-    def check_password(self, password):
+    @classmethod
+    def authenticate(cls, username, password):
+        admin = cls.objects(username=username).first()
+        if admin and admin.check_password_hash(password):
+            return admin
+        return None
+    
+    @classmethod
+    def find_by_username(cls, username):
+        return cls.objects(username=username).first()
+    
+    def check_password_hash(self, password):
         # So sánh mật khẩu nhập vào với mật khẩu đã mã hóa
         return bcrypt.checkpw(password.encode('utf-8'), self.password.encode('utf-8'))

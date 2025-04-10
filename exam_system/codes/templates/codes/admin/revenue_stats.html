@@ -16,7 +16,7 @@
 <body>
     <div class="container">
         <div style="position: absolute; top: 10px; right: 10px;">
-            <a href="/users/admin/dashboard/" class="exit-button">&times;</a>
+            <a href="/users/admin_dashboard/" class="exit-button">&times;</a>
         </div>
         <div class="stats-row">
             <div class="stat-card">
@@ -64,7 +64,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for package in packages %}
+                        <!-- {% for package in packages %}
                         <tr>
                             <td>{{ package.duration }}</td>
                             <td class="number-cell">{{ package.total|intcomma }}</td>
@@ -76,7 +76,7 @@
                         <tr>
                             <td colspan="3" style="text-align: center;">Không có dữ liệu gói.</td>
                         </tr>
-                        {% endfor %}
+                        {% endfor %} -->
                     </tbody>
                 </table>
             </div>
@@ -93,7 +93,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for user in users %}
+                        <!-- {% for user in users %}
                         <tr>
                             <td>
                                 <div class="user-cell">
@@ -107,7 +107,7 @@
                         <tr>
                             <td colspan="2" style="text-align: center;">Không có dữ liệu người dùng.</td>
                         </tr>
-                        {% endfor %}
+                        {% endfor %} -->
                     </tbody>
                 </table>
             </div>

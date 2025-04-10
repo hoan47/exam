@@ -1,59 +1,100 @@
 document.addEventListener('DOMContentLoaded', function () {
     loadFolders();
-    // Tạo thư mục mới
-    document.getElementById('createFolderBtn').addEventListener('click', () => {
-        const folderOrder = folderList.querySelectorAll('.folder-item').length + 1;
-        const folderName = prompt('Tạo tên thư mục:');
-        if (!folderName) return
+})
+
+// Tạo thư mục mới
+document.getElementById('createFolderBtn').addEventListener('click', () => {
+    const folderOrder = folderList.querySelectorAll('.folder-item').length + 1;
+    const folderName = prompt('Tạo tên thư mục:');
+    if (!folderName) return
+    $.ajax({
+        url: '/admin/exams/insert_folder/',
+        method: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({
+            name: folderName,
+            order: folderOrder
+        }),
+        success: function(data) {
+            if (data.status === 'success') {
+                console.log('Tạo thư mục thành công!');
+                loadFolders();
+            } else {
+                console.log('Thất bại: ' + data.message);
+            }
+        },
+        error: function() {
+            alert('Lỗi kết nối server!');
+        }
+    });
+});
+
+document.getElementById('folderList').addEventListener('click', function (e) {
+    const folderHeader = e.target.closest('.folder-header');
+    const createExamBtn = e.target.closest('.create-exam-btn');
+    const editExamBtn = e.target.closest('.edit-exam-btn');
+    const deleteExamBtn = e.target.closest('.delete-exam-btn');
+    const editFolderBtn = e.target.closest('.edit-folder-btn');
+    const deleteFolderBtn = e.target.closest('.delete-folder-btn');
+
+    // Ưu tiên xử lý nút tạo đề
+    if (createExamBtn) {
+        const folderItem = createExamBtn.closest('.folder-item');
+        if (!folderItem) return;
+        const folderId = folderItem.getAttribute('data-folder-id');
+        const examOrder = folderItem.querySelectorAll('.table-row').length + 1;
+
         $.ajax({
-            url: '/admin/exams/insert_folder/',
+            url: '/admin/exams/insert_exam/',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
-                name: folderName,
-                order: folderOrder
+                folder_id: folderId,
+                exam_order: examOrder
             }),
             success: function(data) {
                 if (data.status === 'success') {
-                    console.log('Tạo thư mục thành công!');
-                    loadFolders();
+                    examId = data._id;
+                    window.location.href = `/admin/exams/create_exam/?_id=${examId}`;
                 } else {
                     console.log('Thất bại: ' + data.message);
                 }
             },
             error: function() {
                 alert('Lỗi kết nối server!');
+                loadFolders();
             }
         });
-    });
-    
-    document.getElementById('folderList').addEventListener('click', function (e) {
-        const folderHeader = e.target.closest('.folder-header');
-        const createExamBtn = e.target.closest('.create-exam-btn');
-        const editExamBtn = e.target.closest('.edit-exam-btn');
-        const deleteExamBtn = e.target.closest('.delete-exam-btn');
-        const editFolderBtn = e.target.closest('.edit-folder-btn');
-        const deleteFolderBtn = e.target.closest('.delete-folder-btn');
-    
-        // Ưu tiên xử lý nút tạo đề
-        if (createExamBtn) {
-            const folderItem = createExamBtn.closest('.folder-item');
-            if (!folderItem) return;
-            const folderId = folderItem.getAttribute('data-folder-id');
-            const examOrder = folderItem.querySelectorAll('.table-row').length + 1;
+        return;
+    }
+
+    // Xử lý sửa đề
+    if (editExamBtn) {
+        const row = editExamBtn.closest('tr');
+        const examId = row.getAttribute('data-exam-id');
+        window.location.href = `/admin/exams/create_exam/?_id=${examId}`;
+        return;
+    }
+
+    // Xử lý xóa đề
+    if (deleteExamBtn) {
+        if (confirm('Bạn có chắc chắn muốn xóa bài kiểm tra này không?')) {
+            const row = deleteExamBtn.closest('tr');
+            const _id = row.getAttribute('data-exam-id');
 
             $.ajax({
-                url: '/admin/exams/insert_exam/',
+                url: '/admin/exams/delete_exam/',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    folder_id: folderId,
-                    exam_order: examOrder
+                    _id: _id,
                 }),
                 success: function(data) {
                     if (data.status === 'success') {
-                        examId = data._id;
-                        window.location.href = `/admin/exams/create_exam/?_id=${examId}`;
+                        console.log('Xóa thành công!');
+                        const list = row.parentElement;
+                        row.remove();
+                        reorderBySTT(list);
                     } else {
                         console.log('Thất bại: ' + data.message);
                     }
@@ -63,149 +104,59 @@ document.addEventListener('DOMContentLoaded', function () {
                     loadFolders();
                 }
             });
-            return;
         }
-    
-        // Xử lý sửa đề
-        if (editExamBtn) {
-            const row = editExamBtn.closest('tr');
-            const examId = row.getAttribute('data-exam-id');
-            window.location.href = `/admin/exams/create_exam/?_id=${examId}`;
-            return;
-        }
+        return;
+    }
 
-        // Xử lý xóa đề
-        if (deleteExamBtn) {
-            if (confirm('Bạn có chắc chắn muốn xóa bài kiểm tra này không?')) {
-                const row = deleteExamBtn.closest('tr');
-                const _id = row.getAttribute('data-exam-id');
-
-                $.ajax({
-                    url: '/admin/exams/delete_exam/',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        _id: _id,
-                    }),
-                    success: function(data) {
-                        if (data.status === 'success') {
-                            console.log('Xóa thành công!');
-                            const list = row.parentElement;
-                            row.remove();
-                            reorderBySTT(list);
-                        } else {
-                            console.log('Thất bại: ' + data.message);
-                        }
-                    },
-                    error: function() {
-                        alert('Lỗi kết nối server!');
-                        loadFolders();
-                    }
-                });
+    // Sửa tên thư mục
+    if (editFolderBtn) {
+        const folder = editFolderBtn.closest('.folder-item');
+        const _id = folder.getAttribute('data-folder-id');
+        const nameSpan = folder.querySelector('span');
+        const newName = prompt('Chỉnh sửa tên thư mục:', nameSpan.textContent);
+        if (!newName || newName.trim() === '' || newName === nameSpan.textContent) return;
+        $.ajax({
+            url: '/admin/exams/update_folder/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                _id: _id,
+                updates: {name: newName}
+            }),
+            success: function(data) {
+                if (data.status === 'success') {
+                    console.log('Cập nhật thành công!');
+                    nameSpan.textContent = newName;
+                } else {
+                    console.log('Thất bại: ' + data.message);
+                }
+            },
+            error: function() {
+                alert('Lỗi kết nối server!');
+                loadFolders()();
             }
-            return;
-        }
+        });
+        return;
+    }
 
-        // Sửa tên thư mục
-        if (editFolderBtn) {
-            const folder = editFolderBtn.closest('.folder-item');
+    // Mở/đóng thư mục
+    if (deleteFolderBtn) {
+        if (confirm('Bạn có chắc chắn muốn xóa thư mục này không?')) {
+            const folder = deleteFolderBtn.closest('.folder-item');
             const _id = folder.getAttribute('data-folder-id');
-            const nameSpan = folder.querySelector('span');
-            const newName = prompt('Chỉnh sửa tên thư mục:', nameSpan.textContent);
-            if (!newName || newName.trim() === '' || newName === nameSpan.textContent) return;
+
+
             $.ajax({
-                url: '/admin/exams/update_folder/',
+                url: '/admin/exams/delete_folder/',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
                     _id: _id,
-                    updates: {name: newName}
                 }),
                 success: function(data) {
                     if (data.status === 'success') {
-                        console.log('Cập nhật thành công!');
-                        nameSpan.textContent = newName;
-                    } else {
-                        console.log('Thất bại: ' + data.message);
-                    }
-                },
-                error: function() {
-                    alert('Lỗi kết nối server!');
-                    loadFolders()();
-                }
-            });
-            return;
-        }
-
-        // Mở/đóng thư mục
-        if (deleteFolderBtn) {
-            if (confirm('Bạn có chắc chắn muốn xóa thư mục này không?')) {
-                const folder = deleteFolderBtn.closest('.folder-item');
-                const _id = folder.getAttribute('data-folder-id');
-
-    
-                $.ajax({
-                    url: '/admin/exams/delete_folder/',
-                    method: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        _id: _id,
-                    }),
-                    success: function(data) {
-                        if (data.status === 'success') {
-                            console.log('Xóa thành công!');
-                            folder.remove();
-                        } else {
-                            console.log('Thất bại: ' + data.message);
-                        }
-                    },
-                    error: function() {
-                        alert('Lỗi kết nối server!');
-                        loadFolders()();
-                    }
-                });
-            }
-            return;
-
-        }
-
-        // Mở/đóng thư mục
-        if (folderHeader) {
-            const folderItem = folderHeader.closest('.folder-item');
-            const examList = folderItem.querySelector('.exam-list');
-            examList.classList.toggle('hidden');
-            return;
-        }
-    });
-
-    // Khởi tạo Sortable cho danh sách thư mục
-    const folderList = document.getElementById('folderList');
-    new Sortable(folderList, {
-        group: 'folder',
-        animation: 150,
-        handle: '.folder-header',
-        onEnd: (evt) => {
-            if (evt.newIndex === evt.oldIndex){
-                return;
-            }
-            const folderItems = document.querySelectorAll('.folder-item'); // Lấy tất cả thư mục
-            let updatedOrder = []; // Mảng chứa thông tin thứ tự mới của các thư mục
-            folderItems.forEach((folderItem, index) => {
-                const _id = folderItem.getAttribute('data-folder-id');
-                const order = index + 1;  // Thứ tự mới của thư mục (tính từ 1)
-                updatedOrder.push({ _id, updates: {order} });
-            });
-
-            $.ajax({
-                url: '/admin/exams/swap_folder/',
-                method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    updatedOrder: updatedOrder,
-                }),
-                success: function(data) {
-                    if (data.status === 'success') {
-                        console.log('Cập nhật thành công!');
+                        console.log('Xóa thành công!');
+                        folder.remove();
                     } else {
                         console.log('Thất bại: ' + data.message);
                     }
@@ -216,8 +167,59 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
         }
-    });
+        return;
+
+    }
+
+    // Mở/đóng thư mục
+    if (folderHeader) {
+        const folderItem = folderHeader.closest('.folder-item');
+        const examList = folderItem.querySelector('.exam-list');
+        examList.classList.toggle('hidden');
+        return;
+    }
 });
+
+// Khởi tạo Sortable cho danh sách thư mục
+const folderList = document.getElementById('folderList');
+new Sortable(folderList, {
+    group: 'folder',
+    animation: 150,
+    handle: '.folder-header',
+    onEnd: (evt) => {
+        if (evt.newIndex === evt.oldIndex){
+            return;
+        }
+        const folderItems = document.querySelectorAll('.folder-item'); // Lấy tất cả thư mục
+        let updatedOrder = []; // Mảng chứa thông tin thứ tự mới của các thư mục
+        folderItems.forEach((folderItem, index) => {
+            const _id = folderItem.getAttribute('data-folder-id');
+            const order = index + 1;  // Thứ tự mới của thư mục (tính từ 1)
+            updatedOrder.push({ _id, updates: {order} });
+        });
+
+        $.ajax({
+            url: '/admin/exams/swap_folder/',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                updatedOrder: updatedOrder,
+            }),
+            success: function(data) {
+                if (data.status === 'success') {
+                    console.log('Cập nhật thành công!');
+                } else {
+                    console.log('Thất bại: ' + data.message);
+                }
+            },
+            error: function() {
+                alert('Lỗi kết nối server!');
+                loadFolders()();
+            }
+        });
+    }
+});
+
 
 function loadFolders() {
     $.ajax({
@@ -284,8 +286,8 @@ function loadFolders() {
                                 <td class="px-4 py-3 whitespace-nowrap"><span class="badge badge-hard">${exam.status}</span></td>
                                 <td class="px-4 py-3 whitespace-nowrap text-gray-500">${exam.max_duration} phút</td>
                                 <td class="px-4 py-3 whitespace-nowrap"><span class="badge badge-free">${exam.access}</span></td>
-                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${new Date(exam.created_at).toLocaleDateString()}</td>
-                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${new Date(exam.updated_at).toLocaleDateString()}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${formatDate(exam.created_at)}</td>
+                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${formatDate(exam.updated_at)}</td>
                                 <td class="px-4 py-3 whitespace-nowrap text-right">
                                     <div class="flex justify-end space-x-1">
                                         <button class="edit-exam-btn action-btn bg-blue-100 text-blue-600 hover:bg-blue-200">
@@ -370,6 +372,12 @@ function reorderBySTT(tbody) {
     });
 }
 
+// Định dạng ngày tháng
+function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleString('vi-VN');
+}
 // Định dạng ngày tháng
 function formatDate(dateString) {
     if (!dateString) return 'N/A';

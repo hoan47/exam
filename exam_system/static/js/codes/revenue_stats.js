@@ -9,6 +9,39 @@ let nextParam = '';
 let selectedYear = null;
 let selectedMonth = null;
 let viewType = 'year';
+let packages = null;
+let users = null
+
+function showTables() {
+    // Gói
+    const packageTable = document.querySelector('.package-table tbody');
+    packageTable.innerHTML = '';
+    packages.forEach(pkg => {
+        const row = `<tr>
+            <td>${pkg.duration}</td>
+            <td class="number-cell">${pkg.total.toLocaleString()}</td>
+            <td class="percent-cell"><span class="percent-text">${pkg.percent.toFixed(2)}</span></td>
+        </tr>`;
+        packageTable.innerHTML += row;
+    });
+
+    // User
+    const userTable = document.querySelector('.user-table tbody');
+    userTable.innerHTML = '';
+    users.forEach(user => {
+        const row = `<tr>
+            <td>
+                <div class="user-cell">
+                    <div class="user-avatar">${user.email[0].toUpperCase()}</div>
+                    ${user.email}
+                </div>
+            </td>
+            <td class="number-cell">${user.total_revenue.toLocaleString()}</td>
+        </tr>`;
+        userTable.innerHTML += row;
+    });
+}
+
 
 // Hàm gọi API và cập nhật dữ liệu
 function updateChartData(view, year = null, month = null) {
@@ -31,6 +64,9 @@ function updateChartData(view, year = null, month = null) {
                 selectedYear = data.selected_year;
                 selectedMonth = data.selected_month;
                 viewType = data.view_type;
+                users = data.users;
+                packages = data.packages
+                showTables();
                 updateChart();
             } else {
                 console.error('Lỗi khi lấy dữ liệu biểu đồ');
@@ -90,9 +126,8 @@ function updateChart() {
     }).format(avgValue);
 
     // Find most popular package (assuming the first one in the list is the most popular)
-    if (document.querySelector('.package-table tbody tr td')) {
-        const popularPackage = document.querySelector('.package-table tbody tr td').textContent;
-        document.getElementById('popularPackage').textContent = popularPackage + ' tháng';
+    if (document.getElementById('popularPackage')) {
+        document.getElementById('popularPackage').textContent = packages[0]?.duration + ' tháng' || '-';
     }
 
     // Fill date selectors if needed

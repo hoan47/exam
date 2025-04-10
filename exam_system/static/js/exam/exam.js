@@ -24,7 +24,8 @@ $('#saveExamSettings').click(function() {
                 title: title,
                 status: status,
                 access: access,
-                duration: duration
+                duration: duration,
+                updated_at: new Date().toISOString()
             },
             part5: part5,
             part6: part6,
