@@ -20,7 +20,7 @@ Chọn: C`;
 
 function sendEditorContent(content) {
     $.ajax({
-        url: '/admin/exams/get_editor/', // URL của server
+        url: '/admin/get_editor/', // URL của server
         type: 'GET', // Sử dụng GET request
         data: { editor_content: content }, // Dữ liệu truyền vào dưới dạng query parameters
         success: function(response) {

@@ -15,7 +15,7 @@ $('#saveExamSettings').click(function() {
     const part7 = parsePart67Questions("7");
 
     $.ajax({
-        url: '/admin/exams/update_exam/',
+        url: '/admin/update_exam/',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -121,7 +121,7 @@ function parsePart67Questions(part){
 
 function loadExam() {
     $.ajax({
-        url: `/admin/exams/get_exam/?_id=${examId}`,
+        url: `/admin/get_exam/?_id=${examId}`,
         method: 'GET',
         success: function(response) {
             if (response.status === 'success') {

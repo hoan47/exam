@@ -22,7 +22,7 @@ function formatDate(dateString) {
 function loadCodes(page = 1) {
     currentPage = page;
     $.ajax({
-        url: '/admin/codes/get_codes/',
+        url: '/admin/get_codes/',
         method: 'GET',
         data: { page: page },
         success: function(response) {
@@ -36,7 +36,7 @@ function loadCodes(page = 1) {
                             <td><span class="package-code">${code.code}</span></td>
                             <td>${formatPrice(code.price)}</td>
                             <td>${code.duration} tháng</td>
-                            <td>${code.userid || 'Chưa có'}</td>
+                            <td>${code.user?.email || 'Chưa có'}</td>
                             <td>${code.applied_at ? formatDate(code.applied_at) : 'Chưa có'}</td>
                             <td>${formatDate(code.created_at)}</td>
                             <td>${formatDate(code.updated_at)}</td>
@@ -171,7 +171,7 @@ function editCode(buttonElement) {
         }
         
         $.ajax({
-            url: '/admin/codes/update_code/',
+            url: '/admin/update_code/',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -201,7 +201,7 @@ function deleteCode(buttonElement) {
     
     if (confirm(`Bạn có chắc chắn muốn xóa mã gói ${code.code}?`)) {
         $.ajax({
-            url: '/admin/codes/delete_code/',
+            url: '/admin/delete_code/',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ id: code.id }),
@@ -237,7 +237,7 @@ $('#savePackageBtn').click(function() {
     }
     
     $.ajax({
-        url: '/admin/codes/insert_code/',
+        url: '/admin/insert_code/',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({

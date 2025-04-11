@@ -8,7 +8,7 @@ document.getElementById('createFolderBtn').addEventListener('click', () => {
     const folderName = prompt('Tạo tên thư mục:');
     if (!folderName) return
     $.ajax({
-        url: '/admin/exams/insert_folder/',
+        url: '/admin/insert_folder/',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
@@ -45,7 +45,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
         const examOrder = folderItem.querySelectorAll('.table-row').length + 1;
 
         $.ajax({
-            url: '/admin/exams/insert_exam/',
+            url: '/admin/insert_exam/',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -55,7 +55,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
             success: function(data) {
                 if (data.status === 'success') {
                     examId = data._id;
-                    window.location.href = `/admin/exams/create_exam/?_id=${examId}`;
+                    window.location.href = `/admin/create_exam/?_id=${examId}`;
                 } else {
                     console.log('Thất bại: ' + data.message);
                 }
@@ -72,7 +72,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
     if (editExamBtn) {
         const row = editExamBtn.closest('tr');
         const examId = row.getAttribute('data-exam-id');
-        window.location.href = `/admin/exams/create_exam/?_id=${examId}`;
+        window.location.href = `/admin/create_exam/?_id=${examId}`;
         return;
     }
 
@@ -83,7 +83,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
             const _id = row.getAttribute('data-exam-id');
 
             $.ajax({
-                url: '/admin/exams/delete_exam/',
+                url: '/admin/delete_exam/',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -116,7 +116,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
         const newName = prompt('Chỉnh sửa tên thư mục:', nameSpan.textContent);
         if (!newName || newName.trim() === '' || newName === nameSpan.textContent) return;
         $.ajax({
-            url: '/admin/exams/update_folder/',
+            url: '/admin/update_folder/',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -147,7 +147,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
 
 
             $.ajax({
-                url: '/admin/exams/delete_folder/',
+                url: '/admin/delete_folder/',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
@@ -199,7 +199,7 @@ new Sortable(folderList, {
         });
 
         $.ajax({
-            url: '/admin/exams/swap_folder/',
+            url: '/admin/swap_folder/',
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
@@ -223,7 +223,7 @@ new Sortable(folderList, {
 
 function loadFolders() {
     $.ajax({
-        url: '/admin/exams/get_folders/',
+        url: '/admin/get_folders/',
         method: 'GET',
         success: function(response) {
             $('#folderList').empty();
@@ -326,7 +326,7 @@ function loadFolders() {
                                 updatedOrder.push({ _id, updates: {order} });
                             });
                             $.ajax({
-                                url: '/admin/exams/swap_exam/',
+                                url: '/admin/swap_exam/',
                                 method: 'POST',
                                 contentType: 'application/json',
                                 data: JSON.stringify({

@@ -216,7 +216,7 @@ const Part6 = (function () {
     
             return new Promise((resolve, reject) => {
                 $.ajax({
-                    url: '/admin/exams/get_editor/', // URL của API
+                    url: '/admin/get_editor/', // URL của API
                     type: 'GET', // Sử dụng GET request
                     data: { editor_content: question }, // Truyền dữ liệu qua query parameters
                     success: function(response) {

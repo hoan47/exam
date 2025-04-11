@@ -50,7 +50,7 @@ function updateChartData(view, year = null, month = null) {
     if (year) params.append('year', year);
     if (month) params.append('month', month);
 
-    fetch(`/admin/codes/get_revenue_stats/?${params.toString()}`)
+    fetch(`/admin/get_revenue_stats/?${params.toString()}`)
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
