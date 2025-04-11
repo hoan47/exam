@@ -15,7 +15,7 @@ from utils.utils import user_required
 def user_dashboard(request):
     try:
         user_data = request.session.get('user')
-        user = User.find_or_create(user_data.get('email'), user_data.get('name'))
+        user = User.upsert_by_email(user_data.get('email'), user_data.get('name'))
         if user is None:
             return redirect('user:login')
         return render(request, 'users/user_dashboard.html', {"user": user})

@@ -4,7 +4,7 @@ from datetime import datetime
 class User(Document):
     email = StringField(required=True, unique=True)
     name = StringField(required=True)
-    created_at = DateTimeField(default=datetime.utcnow)
+    created_at = DateTimeField(default=datetime.now)
 
     def to_json(self):
         return {
@@ -15,10 +15,11 @@ class User(Document):
         }
         
     @classmethod
-    def find_or_create(cls, email, name):
-        user = cls.objects(email=email).first()
+    def upsert_by_email(cls, email, name):
+        user = User.objects(email=email).first()
         if user:
-            return user
-        user = cls(email=email, name=name)
+            user.name = name
+        else:
+            user = User(email=email, name=name)
         user.save()
         return user

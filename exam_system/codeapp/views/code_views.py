@@ -53,12 +53,11 @@ def insert_code(request):
 @require_POST
 def update_code(request):
     try:
-        data = json.loads(request.body)  # Nhận dữ liệu từ client
-        id = data['id']
-        duration = data['duration']
-        price = data['price']
-        # Gọi phương thức update_code từ lớp Code
-        Code.update(id, duration=duration, price=price)
+        data = json.loads(request.body)
+        code = Code.find_by_id(data['id'])
+        code.duration = data['duration']
+        code.price = data['price']
+        code.save()
         return JsonResponse({'status': 'success', 'message': 'Cập nhật mã gói thành công!'})
 
     except Exception as e:
@@ -69,9 +68,8 @@ def update_code(request):
 def delete_code(request):
     try:
         data = json.loads(request.body)
-        id = data['id']
-        # Gọi phương thức delete_code từ lớp Code
-        Code.delete(id)
+        code = Code.find_by_id(data['id'])
+        code.delete()
         return JsonResponse({'status': 'success', 'message': 'Xóa mã gói thành công!'})
 
     except Exception as e:
