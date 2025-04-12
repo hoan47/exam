@@ -6,7 +6,7 @@ from django.contrib.auth import logout
 def login_view(request):
     try:
         # Kiểm tra session của admin
-        if 'admin_id' in request.session and request.session.get('role') == 'admin':
+        if 'admin' in request.session:
             return redirect('user:admin_dashboard')
         # Kiểm tra session của user
         elif 'user' in request.session:
@@ -19,7 +19,6 @@ def login_view(request):
 def logout_view(request):
     try:
         logout(request)
-        request.session.flush()
         return redirect('user:login')
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)

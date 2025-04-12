@@ -20,15 +20,23 @@ class ExamProcessor:
         matches = re.finditer(math, self.content, re.MULTILINE | re.DOTALL)
 
         questions = []
-
+        seen_questions = set()
+        
         for match in matches:
+            answers = "ABCD"
+            question_text = match.group(1).strip()
+            number = int(re.search(r'\d+', question_text).group())
+            if number is None or number in seen_questions:
+                continue
+            seen_questions.add(number)
             answers = "ABCD"
             # Lấy các đáp án và chuyển chúng thành chữ hoa
             for answer in [match.group(2), match.group(4), match.group(6), match.group(8)]:
                 answers = answers.replace(answer.upper(), "")
+
             if answers == "":
                 question = {
-                    "text": match.group(1) + " ",
+                    "text": question_text,
                     "option_A": match.group(3).strip(),
                     "option_B": match.group(5).strip(),
                     "option_C": match.group(7).strip(),
@@ -39,4 +47,4 @@ class ExamProcessor:
                 questions.append(question)
 
             # In kết quả dưới dạng JSON
-        return json.dumps(questions, indent=4, ensure_ascii=False)
+        return questions

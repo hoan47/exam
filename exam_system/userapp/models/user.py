@@ -11,7 +11,7 @@ class User(Document):
             "id": str(self.id),
             "email": self.email,
             "name": self.name,
-            "created_at": self.created_at
+            'created_at': self.created_at.isoformat() if self.created_at else None,
         }
         
     @classmethod

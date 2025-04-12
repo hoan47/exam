@@ -15,7 +15,7 @@ class Admin(Document):
 
     @classmethod
     def authenticate(cls, username, password):
-        admin = cls.objects(username=username).first()
+        admin = Admin.find_by_username(username)
         if admin and admin.check_password_hash(password):
             return admin
         return None

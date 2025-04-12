@@ -17,7 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.6.347/pdf.min.js" defer></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/7.0.0/tinymce.min.js" defer></script>
     <script>
-        const examId = "{{ exam_id }}";
+        const exam = JSON.parse('{{ exam_json|escapejs }}');
     </script>
     <script type="text/javascript" src="{% static 'js/exam/exam.js' %}" defer></script>
     <script type="text/javascript" src="{% static 'js/exam/part5.js' %}" defer id="part5-js"></script>
@@ -25,6 +25,8 @@
     <script type="text/javascript" src="{% static 'js/exam/part7.js' %}" defer id="part7-js"></script>
 </head>
 <body>
+    <pre>{{ exam_json }}</pre>
+
     <div class="header">
         <!-- Nút quay về -->
         <button class="btn btn-sm btn-outline-secondary me-2" onclick="showExitWarning()">
@@ -170,7 +172,7 @@
                     <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#examSettingsModal">
                         <i class="fas fa-cog me-1"></i> Vào cài đặt
                     </button>
-                    <button type="button" class="btn btn-danger" onclick="window.location.href='/admin/exams/exam_management/'">
+                    <button type="button" class="btn btn-danger" onclick="window.location.href='/admin/exam_management/'">
                         <i class="fas fa-sign-out-alt me-1"></i> Thoát ngay
                     </button>
                 </div>

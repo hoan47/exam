@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // Tạo thư mục mới
 document.getElementById('createFolderBtn').addEventListener('click', () => {
-    const folderOrder = folderList.querySelectorAll('.folder-item').length + 1;
+    const folderOrder = folderList.querySelectorAll('.folder-item').length;
     const folderName = prompt('Tạo tên thư mục:');
     if (!folderName) return
     $.ajax({
@@ -42,7 +42,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
         const folderItem = createExamBtn.closest('.folder-item');
         if (!folderItem) return;
         const folderId = folderItem.getAttribute('data-folder-id');
-        const examOrder = folderItem.querySelectorAll('.table-row').length + 1;
+        const examOrder = folderItem.querySelectorAll('.table-row').length;
 
         $.ajax({
             url: '/admin/insert_exam/',
@@ -54,8 +54,8 @@ document.getElementById('folderList').addEventListener('click', function (e) {
             }),
             success: function(data) {
                 if (data.status === 'success') {
-                    examId = data._id;
-                    window.location.href = `/admin/create_exam/?_id=${examId}`;
+                    exam = data.exam;
+                    window.location.href = `/admin/create_exam/?exam=${exam}`;
                 } else {
                     console.log('Thất bại: ' + data.message);
                 }
@@ -72,7 +72,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
     if (editExamBtn) {
         const row = editExamBtn.closest('tr');
         const examId = row.getAttribute('data-exam-id');
-        window.location.href = `/admin/create_exam/?_id=${examId}`;
+        window.location.href = `/admin/create_exam/?id=${examId}`;
         return;
     }
 
@@ -80,14 +80,14 @@ document.getElementById('folderList').addEventListener('click', function (e) {
     if (deleteExamBtn) {
         if (confirm('Bạn có chắc chắn muốn xóa bài kiểm tra này không?')) {
             const row = deleteExamBtn.closest('tr');
-            const _id = row.getAttribute('data-exam-id');
+            const id = row.getAttribute('data-exam-id');
 
             $.ajax({
                 url: '/admin/delete_exam/',
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    _id: _id,
+                    id: id,
                 }),
                 success: function(data) {
                     if (data.status === 'success') {
@@ -111,7 +111,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
     // Sửa tên thư mục
     if (editFolderBtn) {
         const folder = editFolderBtn.closest('.folder-item');
-        const _id = folder.getAttribute('data-folder-id');
+        const id = folder.getAttribute('data-folder-id');
         const nameSpan = folder.querySelector('span');
         const newName = prompt('Chỉnh sửa tên thư mục:', nameSpan.textContent);
         if (!newName || newName.trim() === '' || newName === nameSpan.textContent) return;
@@ -120,8 +120,8 @@ document.getElementById('folderList').addEventListener('click', function (e) {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
-                _id: _id,
-                updates: {name: newName}
+                id: id,
+                name: newName
             }),
             success: function(data) {
                 if (data.status === 'success') {
@@ -143,7 +143,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
     if (deleteFolderBtn) {
         if (confirm('Bạn có chắc chắn muốn xóa thư mục này không?')) {
             const folder = deleteFolderBtn.closest('.folder-item');
-            const _id = folder.getAttribute('data-folder-id');
+            const id = folder.getAttribute('data-folder-id');
 
 
             $.ajax({
@@ -151,7 +151,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
                 method: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    _id: _id,
+                    id: id,
                 }),
                 success: function(data) {
                     if (data.status === 'success') {
@@ -191,11 +191,11 @@ new Sortable(folderList, {
             return;
         }
         const folderItems = document.querySelectorAll('.folder-item'); // Lấy tất cả thư mục
-        let updatedOrder = []; // Mảng chứa thông tin thứ tự mới của các thư mục
+        let updates = []; // Mảng chứa thông tin thứ tự mới của các thư mục
         folderItems.forEach((folderItem, index) => {
-            const _id = folderItem.getAttribute('data-folder-id');
-            const order = index + 1;  // Thứ tự mới của thư mục (tính từ 1)
-            updatedOrder.push({ _id, updates: {order} });
+            const id = folderItem.getAttribute('data-folder-id');
+            const order = index;  // Thứ tự mới của thư mục (tính từ 0)
+            updates.push({ id, order});
         });
 
         $.ajax({
@@ -203,7 +203,7 @@ new Sortable(folderList, {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({
-                updatedOrder: updatedOrder,
+                updates: updates,
             }),
             success: function(data) {
                 if (data.status === 'success') {
@@ -232,7 +232,7 @@ function loadFolders() {
                 response.folders.forEach(folder => {
                     // Tạo phần tử HTML cho folder
                     let folderHtml = `
-                        <div class="folder-item rounded-lg overflow-hidden border border-gray-200" data-folder-id="${folder._id}" draggable="false">
+                        <div class="folder-item rounded-lg overflow-hidden border border-gray-200" data-folder-id="${folder.id}" draggable="false">
                             <div class="folder-header px-4 py-3 flex justify-between items-center">
                                 <div class="flex items-center">
                                     <i class="fas fa-folder text-indigo-500 mr-3 text-lg"></i>
@@ -253,7 +253,7 @@ function loadFolders() {
                                     </button>
                                 </div>
                             </div>
-                            <div class="exam-list" id="${folder._id}">
+                            <div class="exam-list" id="${folder.id}">
                                 <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
                                     <h4 class="text-sm font-medium text-gray-700">Danh sách đề thi</h4>
                                     <button class="create-exam-btn bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-md text-sm flex items-center transition-colors">
@@ -280,7 +280,7 @@ function loadFolders() {
                     // Lặp qua mỗi đề thi trong folder và thêm vào bảng
                     folder.exams.forEach((exam, index) => {
                         folderHtml += `
-                            <tr class="table-row" data-exam-id="${exam._id}">
+                            <tr class="table-row" data-exam-id="${exam.id}">
                                 <td class="px-4 py-3 whitespace-nowrap"><span class="stt-badge">${exam.order}</span></td>
                                 <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900">${exam.title}</td>
                                 <td class="px-4 py-3 whitespace-nowrap"><span class="badge badge-hard">${exam.status}</span></td>
@@ -319,18 +319,18 @@ function loadFolders() {
                 
                             reorderBySTT(evt.target);
                             const examElements = Array.from(evt.target.querySelectorAll('tr'));
-                            let updatedOrder = [];
+                            let updates = [];
                             examElements.forEach((exam, index) => {
-                                const _id = exam.getAttribute('data-exam-id');
-                                const order = index + 1;
-                                updatedOrder.push({ _id, updates: {order} });
+                                const id = exam.getAttribute('data-exam-id');
+                                const order = index;
+                                updates.push({ id, order });
                             });
                             $.ajax({
                                 url: '/admin/swap_exam/',
                                 method: 'POST',
                                 contentType: 'application/json',
                                 data: JSON.stringify({
-                                    updatedOrder: updatedOrder
+                                    updates: updates
                                 }),
                                 success: function(data) {
                                     if (data.status === 'success') {
@@ -368,7 +368,7 @@ function reorderBySTT(tbody) {
     rows.forEach((row, index) => {
         const sttCell = row.querySelector('td:nth-child(1)');
         let sttSpan = sttCell.querySelector('.stt-badge');
-        sttSpan.textContent = index + 1;
+        sttSpan.textContent = index;
     });
 }
 

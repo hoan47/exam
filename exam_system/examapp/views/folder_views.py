@@ -2,10 +2,7 @@ import json
 from bson import ObjectId
 from django.http import JsonResponse
 from django.shortcuts import render
-from examapp.models import Folder, Question
-from examapp.models.exam import Exam
-from examapp.models.passage import Passage
-from examapp.services.exam_processor import ExamProcessor
+from examapp.models import Folder
 from utils.utils import admin_required
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -17,11 +14,11 @@ def exam_management(request):
 @admin_required
 def get_folders(request):
     try:
-        folders = Folder.get_folders()
-
+        folders = Folder.get_all()
+        
         response = {
             'status': 'success',
-            'folders': folders
+            'folders': [folder.to_json() for folder in folders]
         }
         return JsonResponse(response)
     except Exception as e:
@@ -32,15 +29,12 @@ def get_folders(request):
 def swap_folder(request):
     try:
         data = json.loads(request.body)  # Nhận dữ liệu từ client
-        updatedOrder = data['updatedOrder']
-
-        for update in updatedOrder:
-            _id = update['_id']
-            updates = update['updates']
-            Folder.update_one(_id, updates)
-            
+        updates = data['updates']
+        for update in updates:
+            folder = Folder.find_by_id(update['id'])
+            folder.order = update['order']
+            folder.save()
         return JsonResponse({'status': 'success', 'message': 'Cập nhật thành công!'})
-
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': 'Có lỗi xảy ra: ' + str(e)})
     
@@ -48,12 +42,9 @@ def swap_folder(request):
 @require_POST
 def insert_folder(request):
     try:
-        data = json.loads(request.body)  # Nhận dữ liệu từ client
-        name = data['name']
-        order = data['order']
-        # Tạo object Code
-        new_folder = Folder(name, order)
-        new_folder.insert_one()
+        data = json.loads(request.body)
+        folder = Folder(name=data['name'], order=data['order'])
+        folder.save()
         return JsonResponse({'status': 'success', 'message': 'tạo thư mục thành công!'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': 'Có lỗi xảy ra: ' + str(e)})
@@ -63,9 +54,10 @@ def insert_folder(request):
 def update_folder(request):
     try:
         data = json.loads(request.body)  # Nhận dữ liệu từ client
-        _id = data['_id']
-        updates = data['updates']
-        Folder.update_one(_id, updates)
+        folder = Folder.find_by_id(data['id'])
+        folder.name = data['name']
+        folder.save()
+        
         return JsonResponse({'status': 'success', 'message': 'Cập nhật thành công!'})
 
     except Exception as e:
@@ -76,8 +68,8 @@ def update_folder(request):
 def delete_folder(request):
     try:
         data = json.loads(request.body)  # Nhận dữ liệu từ client
-        _id = data['_id']
-        Folder.delete_one_by_id(_id)
+        folder = Folder.find_by_id(data['id'])
+        folder.delete()
         return JsonResponse({'status': 'success', 'message': 'Xóa thư mục thành công!'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': 'Có lỗi xảy ra: ' + str(e)})

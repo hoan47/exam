@@ -106,6 +106,15 @@ DATABASES = {
     }
 }
 
+import os
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+        'LOCATION': os.path.join(BASE_DIR, 'cache_data'),  # thư mục chứa cache
+    }
+}
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -155,4 +164,4 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 
 # Session sẽ hết hạn sau 1 giờ (3600 giây)
-SESSION_COOKIE_AGE = 3600
+SESSION_COOKIE_AGE = 7200
