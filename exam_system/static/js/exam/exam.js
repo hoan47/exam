@@ -1,10 +1,8 @@
-const questionMap = new Map();
-let questionMapTMP = new Map();
-
 document.addEventListener('DOMContentLoaded', () => {
     showPart(5);
     loadExam();
 });
+
 $('#examSettingsModal').modal('hide');
 // Lưu cài đặt đề thi
 $('#saveExamSettings').click(function() {
@@ -12,30 +10,22 @@ $('#saveExamSettings').click(function() {
     const status = document.getElementById('examStatus').value;
     const access = document.getElementById('examAccess').value;
     const duration = parseInt(document.getElementById('examDuration').value);
-
-    questionMapTMP = new Map(questionMap);
-
     const part5 = parsePart5Questions();
     const part6 = parsePart67Questions("6");
     const part7 = parsePart67Questions("7");
-
     $.ajax({
         url: '/admin/update_exam/',
         method: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({
             id: exam.id,
-            updates:{
-                title: title,
-                status: status,
-                access: access,
-                duration: duration,
-                updated_at: new Date().toISOString()
-            },
+            title: title,
+            status: status,
+            access: access,
+            duration: duration,
             part5: part5,
             part6: part6,
             part7: part7,
-            deletes: Array.from(questionMapTMP.values())
         }),
         success: function(data) {
             if (data.status === 'success') {
@@ -66,10 +56,7 @@ function parsePart5Questions() {
         const correctAnswerMatch = correctAnswerRaw.match(/Đáp án đúng:\s*([A-D])/i);
         const correctAnswer = correctAnswerMatch ? correctAnswerMatch[1].toUpperCase() : null;
 
-        const questionNumber  = questionText.match(/\d+/);
-
         const question = {
-            id: questionMapTMP.get("5" + questionNumber),
             exam_id: exam.id,
             part: "5",
             text: questionText,
@@ -80,7 +67,6 @@ function parsePart5Questions() {
             correct_answer: correctAnswer,
             explanation: explanation.replace(/^Lời giải:\s*/, '')
         };
-        questionMapTMP.delete("5" + questionNumber)
         questions.push(question);
     });
 
@@ -108,12 +94,9 @@ function parsePart67Questions(part){
 
             const correctRaw = box.querySelector(".correct-answer")?.innerText;
             const correctAnswer = correctRaw.match(/Đáp án đúng:\s*([ABCD])/i)?.[1];
-
             const explanation = box.querySelector(".explanation")?.innerText.replace(/^Lời giải:\s*/, "").trim();
-            const questionNumber  = questionText.match(/\d+/);
 
             questions.push({
-                id: questionMapTMP.get(part + questionNumber),
                 exam_id: exam.id,
                 part: part,
                 text: questionText,
@@ -124,7 +107,6 @@ function parsePart67Questions(part){
                 correct_answer: correctAnswer,
                 explanation: explanation
             });
-            questionMapTMP.delete(part + questionNumber)
         });
         passages.push({passageText, questions})
     });
@@ -147,7 +129,6 @@ function questions(questions){
     questions.forEach((q) => {
         const questionNumber  = q.text.match(/\d+/);
 
-        questionMap.set(q.part+questionNumber , q.id);
         if (q.part === "5"){
             contextPart5 += `${q.text}\n(A) ${q.option_A}\n(B) ${q.option_B}\n(C) ${q.option_C}\n(D) ${q.option_D}\nLời giải: ${q.explanation}\nChọn: ${q.correct_answer}\n-------------------------------------------------------------------------------------------------------------------\n`
         }

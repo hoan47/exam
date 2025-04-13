@@ -54,8 +54,8 @@ document.getElementById('folderList').addEventListener('click', function (e) {
             }),
             success: function(data) {
                 if (data.status === 'success') {
-                    exam = data.exam;
-                    window.location.href = `/admin/create_exam/?exam=${exam}`;
+                    id = data.exam_id;
+                    window.location.href = `/admin/create_exam/?id=${id}`;
                 } else {
                     console.log('Thất bại: ' + data.message);
                 }

@@ -24,11 +24,11 @@ class ExamProcessor:
         
         for match in matches:
             answers = "ABCD"
-            question_text = match.group(1).strip()
-            number = int(re.search(r'\d+', question_text).group())
-            if number is None or number in seen_questions:
+            question_text = match.group(1)
+            number_str = re.search(r'\d+', question_text).group()
+            if number_str is None or number_str in seen_questions:
                 continue
-            seen_questions.add(number)
+            seen_questions.add(number_str)
             answers = "ABCD"
             # Lấy các đáp án và chuyển chúng thành chữ hoa
             for answer in [match.group(2), match.group(4), match.group(6), match.group(8)]:

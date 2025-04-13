@@ -25,7 +25,7 @@ const Part7 = (function () {
                     word-wrap: break-word;
                     overflow-x: hidden;
                     white-space: normal;
-                    line-height: 1.5; /* Khoảng cách dòng mặc định */
+                    line-height: 1; /* Khoảng cách dòng mặc định */
                 }
                 img {
                     max-width: 100%;
@@ -47,7 +47,7 @@ const Part7 = (function () {
             `,
 
             // Khoảng cách dòng có sẵn
-            lineheight_formats: "1 1.15 1.5 2 2.5 3",
+            lineheight_formats: "0.5 1 1.15 1.5 2 2.5 3",
             placeholder: 'Nhập nội dung đoạn văn...',
             setup: function (editor) {
                 editor.on('input change NodeChange', function () {
@@ -91,7 +91,7 @@ const Part7 = (function () {
                     word-wrap: break-word;
                     overflow-x: hidden;
                     white-space: normal;
-                    line-height: 1.5; /* Khoảng cách dòng mặc định */
+                    line-height: 1; /* Khoảng cách dòng mặc định */
                 }
                 img {
                     max-width: 100%;
@@ -113,7 +113,7 @@ const Part7 = (function () {
             `,
 
             // Khoảng cách dòng có sẵn
-            lineheight_formats: "1 1.15 1.5 2 2.5 3",
+            lineheight_formats: "0.5 1 1.15 1.5 2 2.5 3",
             placeholder: 'Nhập nội dung đoạn văn...',
             setup: function (editor) {
                 editor.on('input change NodeChange', function () {
@@ -526,20 +526,20 @@ Chọn: D
         loadGuideContent,
         insertSampleContent
     };
-    })();
+})();
     
     
-    document.addEventListener('DOMContentLoaded', () => {
-        Part7.initializeTinyMCE();
-        Part7.updateDeleteButtons();
-        Part7.loadGuideContent();
-        const editor = document.getElementById('part-7__question-editor-1');
-        if (editor) {
-            editor.addEventListener('input', () => {
-                Part7.handleQuestionChange(editor.id, editor.value);
-                if (!editor.value.trim()) {
-                    editor.value = '';
-                }
-            });
-        }
-    });
+document.addEventListener('DOMContentLoaded', () => {
+    Part7.initializeTinyMCE();
+    Part7.updateDeleteButtons();
+    Part7.loadGuideContent();
+    const editor = document.getElementById('part-7__question-editor-1');
+    if (editor) {
+        editor.addEventListener('input', () => {
+            Part7.handleQuestionChange(editor.id, editor.value);
+            if (!editor.value.trim()) {
+                editor.value = '';
+            }
+        });
+    }
+});

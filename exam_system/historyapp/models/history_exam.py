@@ -1,15 +1,19 @@
-import datetime
-from services.db import get_db
+from mongoengine import Document, ReferenceField, StringField, DateTimeField, CASCADE
+from datetime import datetime
 
-class HistoryExam:
-    @staticmethod
-    def get_collection():
-        return get_db()['history_exams']
+class HistoryExam(Document):
+    user = ReferenceField('User', required=True)
+    exam = ReferenceField('Exam', required=True, reverse_delete_rule=CASCADE)
+    mode = StringField(required=True, choices=["practice", "test"])
+    started_at = DateTimeField(default=datetime.utcnow)
+    completed_at = DateTimeField(null=True)
 
-    def __init__(self, user_id, exam_id, mode, parts_completed=None, started_at=None, completed_at=None):
-        self.user_id = user_id
-        self.exam_id = exam_id
-        self.mode = mode
-        self.parts_completed = parts_completed or []
-        self.started_at = started_at or datetime.datetime.now()
-        self.completed_at = completed_at
+    def to_json(self):
+        return {
+            "id": str(self.id),
+            "user": str(self.user.id),
+            "exam": str(self.exam.id),
+            "mode": self.mode,
+            "started_at": self.started_at.isoformat() if self.started_at else None,
+            "completed_at": self.completed_at.isoformat() if self.completed_at else None
+        }

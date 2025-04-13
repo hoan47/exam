@@ -7,6 +7,11 @@ class Folder(Document):
     created_at = DateTimeField(default=datetime.datetime.now)
     order = IntField(default=0)
 
+    def delete(self, *args, **kwargs):
+        for e in self.get_exams(False):
+            e.delete()
+        super().delete(*args, **kwargs)
+        
     def to_json(self):
         return {
             "id": str(self.id),
@@ -16,9 +21,12 @@ class Folder(Document):
             "exams": [exam.to_json() for exam in self.get_exams()]
         }
 
-    def get_exams(self):
+    def get_exams(self, is_original=True):
         from examapp.models.exam import Exam
-        return list(Exam.objects(folder=self).order_by('order'))
+        if is_original:
+            return list(Exam.objects(folder=self, version=0).order_by('order'))
+        else:
+            return list(Exam.objects(folder=self).order_by('order'))
 
     @classmethod
     def find_by_id(cls, id):

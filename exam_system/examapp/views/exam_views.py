@@ -61,9 +61,10 @@ def swap_exam(request):
 
         for update in updates:
             exam = Exam.find_by_id(update['id'])
-            exam.order = update['order']
+            copy_exam = Exam.find_by_id(update['id'], False)
+            exam.order = copy_exam.order = update['order']
             exam.save()
-            
+            copy_exam.save()
         return JsonResponse({'status': 'success', 'message': 'Cập nhật thành công!'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': 'Có lỗi xảy ra: ' + str(e)})
@@ -73,8 +74,9 @@ def swap_exam(request):
 def delete_exam(request):
     try:
         data = json.loads(request.body)  # Nhận dữ liệu từ client
-        _id = data['_id']
-        Exam.delete_one_by_id(_id)
+        id = data['id']
+        exam = Exam.find_by_id(id, True)
+        exam.delete()
         return JsonResponse({'status': 'success', 'message': 'xóa đề thi thành công!'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': 'Có lỗi xảy ra: ' + str(e)})
@@ -86,40 +88,79 @@ def insert_exam(request):
         data = json.loads(request.body)  # Nhận dữ liệu từ client
         folder_id = data.get('folder_id')
         exam_order = data.get('exam_order')
+        
         # Kiểm tra folder có tồn tại không
         folder = Folder.find_by_id(folder_id)
         if not folder:
             return JsonResponse({'status': 'error', 'message': 'Thư mục không tồn tại.'}, status=400)
 
-        # Tạo đối tượng Exam
+        # Tạo đối tượng Exam (bản chính, version = 0)
         exam = Exam(
             folder=folder,
             title=f"Đề số {exam_order}",
             status="draft",
             access="free",
             max_duration=60,
-            order=exam_order
+            order=exam_order,
+            version=0  # Đây là bản chính
         )
         exam.save()
-        
+        exam.create_copy()
+
         # Trả về JsonResponse với redirect tới trang tạo đề thi
-        return JsonResponse({'status': 'success', 'message': 'Tạo đề thi thành công!', 'exam': exam.to_json()})
+        return JsonResponse({'status': 'success', 'message': 'Tạo đề thi thành công!', 'exam_id': str(exam.id)})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': 'Có lỗi xảy ra: ' + str(e)})
-
+    
 @csrf_exempt
 @require_POST
 def update_exam(request):
     try:
         data = json.loads(request.body)  # Nhận dữ liệu từ client
-        exam_id = data['id']
-        updates = data['updates']
+        exam_id = data['id'] # id bản gốc
+        title = data['title']
+        status = data['status']
+        access = data['access']
+        duration = data['duration']
         part5 = data['part5']
         part6 = data['part6']
         part7 = data['part7']
-        deletes = data['deletes']
-        
+        # cập nhật bản gốc đồng thời tạo bản sao từ bản gốc
+        exam = Exam.find_by_id(exam_id, True)
+        exam.title = title
+        exam.status = status
+        exam.access = access
+        exam.max_duration = duration
+        exam.save()
+        Question.delete_by_exam_id(exam_id)
+        for q in part5:
+            question = Question(exam=exam,
+                                part=q['part'],
+                                text=q['text'],
+                                option_A=q['option_A'],
+                                option_B=q['option_B'],
+                                option_C=q['option_C'],
+                                option_D=q['option_D'],
+                                correct_answer=q['correct_answer'],
+                                explanation=q['explanation'])
+            question.save()
+        for p in ([p6 for p6 in part6] + [p7 for p7 in part7]):
+            passage = Passage(text=p['passageText'])
+            passage.save()
+            for q in p['questions']:
+                question = Question(exam=exam,
+                        part=q['part'],
+                        passage=passage,
+                        text=q['text'],
+                        option_A=q['option_A'],
+                        option_B=q['option_B'],
+                        option_C=q['option_C'],
+                        option_D=q['option_D'],
+                        correct_answer=q['correct_answer'],
+                        explanation=q['explanation'])
+                question.save()     
+        exam.delete_version()
+        exam.create_copy()
         return JsonResponse({'status': 'success', 'message': 'Cập nhật thành công!'})
-
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': 'Có lỗi xảy ra: ' + str(e)})
