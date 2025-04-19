@@ -7,19 +7,7 @@ from examapp.models.folder import Folder
 from userapp.models.user import User
 from utils.utils import user_required
 
-@csrf_exempt
-def get_warehouse(request):
-    try:
-        folders = Folder.get_all()
-        response = {
-            'status': 'success',
-            'warehouse': [folder.to_json() for folder in folders],
-        }
-        return JsonResponse(response)
-    except Exception as e:
-        return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
-    
-def warehouse(request):
+def history(request):
     try:
         user_data = request.session.get('user')
         if user_data:
@@ -27,11 +15,12 @@ def warehouse(request):
             if user is not None:
                 user.picture = user_data.get('picture')
                 user.expiry_at = user.get_expiry_at()
-                return render(request, 'student/warehouse.html', {
-                    'caller': 'warehouse',
+                return render(request, 'student/history.html', {
+                    'caller': 'history',
                     'user': user,
                     'user_json': json.dumps(user.to_json())
                 })
-        return render(request, 'student/warehouse.html', {'user': None})
+                
+        return render(request, 'student/history.html', {'user': None})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)

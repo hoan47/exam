@@ -22,4 +22,5 @@ urlpatterns = [
     path('update_exam/', views.admin_exam_views.update_exam, name='update_exam'),
     path('warehouse/', views.student_folder_views.warehouse, name='warehouse'),
     path('exam_detail/', views.student_exam_views.exam_detail, name='exam_detail'),
+    path('history/', views.student_history_views.history, name='history'),
 ]

@@ -45,16 +45,3 @@ body {
 .notification-badge {
     animation: pulse 2s infinite;
 }
-
-@keyframes breathe {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(0.99);
-    }
-}
-
-.advertisement {
-    animation: breathe 3s ease-in-out infinite;
-}

@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/header_user.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/footer_advertise.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/exam/warehouse.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -17,24 +16,9 @@
         const user = userJson ? JSON.parse(userJson) : undefined;
     </script>
     <script src="{% static 'js/header_user.js' %}" defer></script>
-    <script src="{% static 'js/exam/warehouse.js' %}" defer></script>
 </head>
 <body class="flex flex-col min-h-screen">
     {% include 'header_user.html' %}
-
-    <div id="contentContainer" class="mt-6 flex-grow">
-        <main id="examFolders" class="container mx-auto px-24 py-2">
-            <!-- Page Header -->
-            <div class="mb-8">
-                <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
-                    <span class="bg-gradient-to-r from-indigo-600 to-indigo-400 bg-clip-text text-transparent">Kho đề thi</span>
-                </h1>
-                <p class="text-gray-600">Chọn chuyên đề để bắt đầu luyện tập ngay hôm nay</p>
-            </div>
-        
-            <div id="folders" class="grid grid-cols-1 gap-6"></div>
-        </main>
-    </div>
 
     {% include 'footer_advertise.html' %}
 </body>

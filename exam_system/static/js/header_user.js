@@ -1,11 +1,15 @@
-let current_exam;
-
-loadSection('/warehouse/', 'navExams');
 document.getElementById("activateBtn").addEventListener("click", apply_code);
 document.getElementById('openPremiumModal')?.addEventListener('click', openPremiumModal);
 document.getElementById('closePremiumModal').addEventListener('click', closePremiumModal);
 
-
+document.addEventListener('DOMContentLoaded', function() {
+    if (caller == "warehouse") {
+        loadSection('navExams', false);
+    }
+    else if (caller == "history") {
+        loadSection('navHistory', false);
+    }
+});
 
 // Xử lý modal premium
 const premiumModal = document.getElementById('premiumModal');
@@ -47,8 +51,8 @@ document.querySelectorAll('.dropdown').forEach(dropdown => {
     });
 });
 
-function loadSection(url, activeBtnId) {
-    const navButtons = ['navExams', 'navPractice'];
+function loadSection(activeBtnId, load=true) {
+    const navButtons = ['navExams', 'navHistory'];
 
     // Tô sáng nút đang active
     navButtons.forEach(id => {
@@ -56,19 +60,15 @@ function loadSection(url, activeBtnId) {
     });
     document.getElementById(activeBtnId).classList.add('bg-white', 'text-blue-600', 'shadow', 'font-semibold');
 
-    fetch(url, {
-        method: 'POST',
-    })
-    .then(response => response.text())
-    .then(data => {
-        document.getElementById("contentContainer").innerHTML = data;
-        if (activeBtnId === 'navExams') {
-            Warehouse.render();
-        }
-    })
-    .catch(error => {
-        alert('Lỗi kết nối server!');
-    });
+    if (!load){
+        return;
+    }
+
+    if (activeBtnId === 'navExams'){
+        window.location = '/warehouse/'
+    } else{
+        window.location = '/history/'
+    }
 }
 
 function apply_code() {

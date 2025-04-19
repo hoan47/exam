@@ -1,11 +1,10 @@
-const Warehouse = (function () {
-    function render() {
-        fetch(`/get_warehouse/`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
+document.addEventListener('DOMContentLoaded', () => {
+    fetch(`/get_warehouse/`, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
         .then(response => response.json())
         .then(response => {
             try {
@@ -15,14 +14,13 @@ const Warehouse = (function () {
                 }
                 const container = document.getElementById("folders");
                 container.innerHTML = '';
-    
                 response.warehouse.forEach((folder) => {
                     const folderId = `folder_id-${folder.id}`;
                     const folderDiv = document.createElement("div");
                     folderDiv.className = "bg-gradient-to-b from-white to-gray-50 rounded-xl shadow-lg overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1 border border-gray-200";
-    
+
                     folderDiv.innerHTML = `
-                        <div onclick="Warehouse.toggleFolder('${folderId}')"
+                        <div onclick="toggleFolder('${folderId}')"
                             class="flex justify-between items-center px-6 py-5 cursor-pointer folder-header bg-gradient-to-r from-indigo-50 to-blue-50 hover:from-indigo-100 hover:to-blue-100 transition-all">
                             <div class="flex items-center">
                                 <div class="mr-4 w-12 h-12 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center shadow-sm">
@@ -48,7 +46,7 @@ const Warehouse = (function () {
                             <div class="grid grid-cols-1 gap-4">
                                 ${folder.exams.map((exam, idx) => `
                                     <div class="exam-item bg-white rounded-xl p-5 cursor-pointer shadow-md hover:shadow-lg transition-all border border-gray-200 hover:border-indigo-300 group"
-                                        data-exam='${JSON.stringify(exam)}' onclick="Warehouse.openExam(this)">
+                                        data-exam='${JSON.stringify(exam)}' onclick="openExam(this)">
                                         <div class="flex items-start gap-4">
                                             <div class="flex-shrink-0 mt-1 bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-sm font-bold w-10 h-10 rounded-lg flex items-center justify-center shadow-md">
                                                 ${idx + 1}
@@ -88,7 +86,7 @@ const Warehouse = (function () {
                             </div>
                         </div>
                     `;
-    
+
                     container.appendChild(folderDiv);
                 });
             } catch (e) {
@@ -100,40 +98,40 @@ const Warehouse = (function () {
             console.error('Error:', error);
             alert('Lỗi kết nối server!');
         });
-    }
+});
 
-    // Hàm toggle folder
-    function toggleFolder(id) {
-        const el = document.getElementById(id);
-        const icon = document.getElementById(`icon-${id}`);
-        el.classList.toggle("hidden");
-        icon.classList.toggle("rotate-180");
-    }
+// Hàm toggle folder
+function toggleFolder(id) {
+    const el = document.getElementById(id);
+    const icon = document.getElementById(`icon-${id}`);
+    el.classList.toggle("hidden");
+    icon.classList.toggle("rotate-180");
+}
 
-    // Hàm mở exam
-    function openExam(element) {
-        const exam = JSON.parse(element.getAttribute('data-exam'));
-        current_exam = exam;
-        if (!user){
-            window.location = '/login' //Nhảy ra login khi chưa đăng nhập.
-            return;
-        }
-        if (exam.access == "free"){
-            openExamFetch();
-            return;
-        }
-        // Kiểm tra nếu expiry_at là null
-        if (user.expiry_at === null) {
-            openPremiumModal();
-            return;
-        }
+// Hàm mở exam
+function openExam(element) {
+    const exam = JSON.parse(element.getAttribute('data-exam'));
+    current_exam = exam;
+    if (!user) {
+        window.location = '/login' //Nhảy ra login khi chưa đăng nhập.
+        return;
+    }
+    if (exam.access == "free") {
         openExamFetch();
+        return;
     }
+    // Kiểm tra nếu expiry_at là null
+    if (user.expiry_at === null) {
+        openPremiumModal();
+        return;
+    }
+    openExamFetch();
+}
 
-    function openExamFetch(){
-        fetch("/exam_detail/", {
-            method: 'POST',
-        })
+function openExamFetch() {
+    fetch("/exam_detail/", {
+        method: 'POST',
+    })
         .then(response => response.text())
         .then(data => {
             document.getElementById("contentContainer").innerHTML = data;
@@ -143,12 +141,4 @@ const Warehouse = (function () {
             console.log(error);
             alert('Lỗi kết nối server!');
         });
-    }
-
-    // Return các hàm cần thiết
-    return {
-        render,
-        toggleFolder,
-        openExam
-    };
-})();
+}
