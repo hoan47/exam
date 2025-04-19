@@ -4,7 +4,6 @@ import string
 
 from mongoengine import Document, StringField, IntField, FloatField, DateTimeField, ReferenceField
 from bson import ObjectId
-from userapp.models import User  # Đảm bảo bạn có model User tương ứng
 
 class Code(Document):
     code = StringField(required=True, unique=True)
@@ -30,7 +29,6 @@ class Code(Document):
     def save(self, *args, **kwargs):
         if not self.code:
             self.code = Code.generate_unique_code()
-        self.updated_at = datetime.datetime.now()
         return super().save(*args, **kwargs)
     
     @classmethod
@@ -44,6 +42,10 @@ class Code(Document):
     def find_by_id(cls, id):
         return cls.objects(id=ObjectId(id)).first()
 
+    @classmethod
+    def find_by_code(cls, code):
+        return cls.objects(code=code).first()
+    
     @classmethod
     def get_paginated_codes(cls, page=1, items_per_page=10):
         skip = (page - 1) * items_per_page

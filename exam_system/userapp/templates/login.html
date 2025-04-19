@@ -6,7 +6,7 @@
     <title>Đăng nhập - MochiMochi</title>
     {% load static %}
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/users/login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/user/login.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
@@ -57,7 +57,10 @@
                 </div>
             </div>
         </div>
-        
+            <!-- Tiếp tục mà không cần đăng nhập -->
+            <p class="text-center mt-4 text-sm text-gray-600">
+                <a href="/user_dashboard/" class="text-indigo-600 hover:text-indigo-800 font-medium">Tiếp tục mà không cần đăng nhập</a>
+            </p>
         <!-- Divider -->
         <div class="divider text-gray-500 my-6">HOẶC</div>
         {% if messages %}

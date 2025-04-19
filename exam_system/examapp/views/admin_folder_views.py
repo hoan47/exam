@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 
 @admin_required
 def exam_management(request):
-    return render(request, 'exams/admin/exam_management.html')
+    return render(request, 'admin/exam_management.html')
     
 @admin_required
 def get_folders(request):

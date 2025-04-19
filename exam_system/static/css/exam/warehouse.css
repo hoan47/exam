@@ -1,0 +1,77 @@
+:root {
+    --primary: #4f46e5;
+    --primary-light: #6366f1;
+    --primary-dark: #4338ca;
+    --secondary: #f59e0b;
+    --secondary-light: #fbbf24;
+    --success: #10b981;
+    --info: #3b82f6;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --dark: #1e293b;
+    --light: #f8fafc;
+}
+
+.gradient-bg {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+}
+
+.card-hover {
+    transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+}
+
+.exam-item {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+}
+
+.exam-item:hover {
+    border-left-color: var(--primary);
+    background-color: #f8fafc;
+}
+
+.premium-badge {
+    background: linear-gradient(45deg, #f59e0b, #f97316);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.folder-header {
+    transition: all 0.3s ease;
+}
+
+.folder-header:hover {
+    background-color: #f8fafc;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.floating {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.gradient-text {
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
+.shadow-soft {
+    box-shadow: 0 4px 20px -5px rgba(0,0,0,0.1);
+}

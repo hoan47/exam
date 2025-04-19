@@ -50,7 +50,7 @@ function updateChartData(view, year = null, month = null) {
     if (year) params.append('year', year);
     if (month) params.append('month', month);
 
-    fetch(`/admin/get_revenue_stats/?${params.toString()}`)
+    fetch(`/get_revenue_stats/?${params.toString()}`)
         .then(response => response.json())
         .then(data => {
             if (data.status === 'success') {
@@ -69,11 +69,12 @@ function updateChartData(view, year = null, month = null) {
                 showTables();
                 updateChart();
             } else {
-                console.error('Lỗi khi lấy dữ liệu biểu đồ');
+                alert('Lỗi khi lấy dữ liệu biểu đồ');
             }
         })
         .catch(error => {
-            console.error('Có lỗi xảy ra:', error);
+            console.error('Lỗi kết nối:', error);
+            alert('Lỗi kết nối với server!');
         });
 }
 

@@ -71,6 +71,6 @@ def admin_dashboard(request):
         
         if admin is None:
             return redirect('user:login')  # Redirect về login nếu không tìm thấy admin
-        return render(request, 'users/admin_dashboard.html', {"admin": admin})
+        return render(request, 'admin_dashboard.html', {"admin": admin})
     except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)

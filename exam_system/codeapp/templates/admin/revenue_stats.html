@@ -10,8 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/codes/revenue_stats.css' %}">
-    <script type="text/javascript" src="{% static 'js/codes/revenue_stats.js' %}" defer></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/code/revenue_stats.css' %}">
+    <script type="text/javascript" src="{% static 'js/code/revenue_stats.js' %}" defer></script>
 </head>
 <body>
     <div class="container">
@@ -42,7 +42,7 @@
             <div class="card-header">
                 <h2 id="section-title"></h2>
                 <div style="text-align: center;">
-                    <a href="#" class="back-button" style="display: none;" onclick="goBack()">Quay về</a>
+                    <a class="back-button" style="display: none;" onclick="goBack()">Quay về</a>
                 </div>
             </div>
             <div class="chart-container">
@@ -64,19 +64,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- {% for package in packages %}
-                        <tr>
-                            <td>{{ package.duration }}</td>
-                            <td class="number-cell">{{ package.total|intcomma }}</td>
-                            <td class="percent-cell">
-                                <span class="percent-text">{{ package.percent|floatformat:2 }}</span>
-                            </td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="3" style="text-align: center;">Không có dữ liệu gói.</td>
-                        </tr>
-                        {% endfor %} -->
                     </tbody>
                 </table>
             </div>
@@ -93,21 +80,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- {% for user in users %}
-                        <tr>
-                            <td>
-                                <div class="user-cell">
-                                    <div class="user-avatar">{{ user.username|first|upper }}</div>
-                                    {{ user.username }}
-                                </div>
-                            </td>
-                            <td class="number-cell">{{ user.total|intcomma }}</td>
-                        </tr>
-                        {% empty %}
-                        <tr>
-                            <td colspan="2" style="text-align: center;">Không có dữ liệu người dùng.</td>
-                        </tr>
-                        {% endfor %} -->
                     </tbody>
                 </table>
             </div>

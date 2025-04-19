@@ -13,11 +13,12 @@ $('#saveExamSettings').click(function() {
     const part5 = parsePart5Questions();
     const part6 = parsePart67Questions("6");
     const part7 = parsePart67Questions("7");
-    $.ajax({
-        url: '/admin/update_exam/',
+    fetch('/update_exam/', {
         method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
             id: exam.id,
             title: title,
             status: status,
@@ -26,20 +27,21 @@ $('#saveExamSettings').click(function() {
             part5: part5,
             part6: part6,
             part7: part7,
-        }),
-        success: function(data) {
+        })
+    })
+        .then(response => response.json())  // Chuyển đổi phản hồi thành JSON
+        .then(data => {
             if (data.status === 'success') {
                 $('#examSettingsModal').modal('hide');
                 alert('Cập nhật đề thi thành công!');
             } else {
-                alert('Có lỗi sãy ra!');
+                alert('Có lỗi sảy ra!');
             }
-        },
-        error: function() {
+        })
+        .catch(error => {
             alert('Lỗi kết nối server!');
             loadFolders();
-        }
-    });
+        });    
 });
 
 

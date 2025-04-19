@@ -1,0 +1,343 @@
+
+<main class="max-w-6xl mx-auto px-4 py-6">
+    <!-- Tiêu đề -->
+    <div class="text-center mb-12 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-xl p-8 text-white shadow-lg">
+        <h1 id="examTitle" class="text-4xl font-bold mb-4">Đề số 0</h1>
+        <div class="flex justify-center items-center space-x-4">
+            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
+                <i class="fas fa-crown mr-1"></i> Premium
+            </span>
+            <span class="bg-white bg-opacity-20 px-3 py-1 rounded-full text-sm">
+                <i class="fas fa-clock mr-1"></i> 20 phút
+            </span>
+        </div>
+    </div>
+    <!-- Các tùy chọn -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <!-- Luyện đề -->
+        <div class="card-hover bg-white p-6 rounded-xl cursor-pointer" onclick="ExamDetail.startPractice()">
+            <div class="flex items-start">
+                <div class="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-pen-fancy text-xl text-indigo-500"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-2">Luyện đề</h2>
+                    <p class="text-gray-600 mb-3">Làm đề không giới hạn thời gian, xem giải thích chi tiết sau mỗi
+                        câu hỏi.</p>
+                    <div class="flex items-center text-sm text-indigo-600 font-medium">
+                        <span>Bắt đầu ngay</span>
+                        <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Thi thử -->
+        <div class="card-hover bg-white p-6 rounded-xl cursor-pointer" onclick="ExamDetail.startMockTest()">
+            <div class="flex items-start">
+                <div class="w-12 h-12 bg-red-50 rounded-lg flex items-center justify-center mr-4">
+                    <i class="fas fa-stopwatch text-xl text-red-500"></i>
+                </div>
+                <div>
+                    <h2 class="text-xl font-semibold text-gray-800 mb-2">Thi thử</h2>
+                    <p class="text-gray-600 mb-3">Thi như thật với giới hạn thời gian, kiểm tra năng lực thực tế.
+                    </p>
+                    <div class="flex items-center text-sm text-red-600 font-medium">
+                        <span>Bắt đầu thi</span>
+                        <i class="fas fa-chevron-right ml-1 text-xs"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab điều hướng -->
+    <div class="flex border-b border-gray-200 mb-6">
+        <button id="statsTab" class="tab-active px-6 py-3 text-gray-700 font-medium" onclick="ExamDetail.showTab('stats')">
+            <i class="fas fa-chart-bar mr-2"></i>
+            Thống kê
+        </button>
+        <button id="historyTab" class="px-6 py-3 text-gray-500 hover:text-indigo-600" onclick="ExamDetail.showTab('history')">
+            <i class="fas fa-history mr-2"></i>
+            Lịch sử làm bài
+        </button>
+    </div>
+
+    <!-- Phần thống kê -->
+    <div id="statsSection" class="fade-in">
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-white rounded-lg shadow-sm p-4">
+                <div class="text-sm text-gray-500 mb-1">Số lượt làm</div>
+                <div class="text-2xl font-bold text-gray-800">5</div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4">
+                <div class="text-sm text-gray-500 mb-1">Điểm cao nhất</div>
+                <div class="text-2xl font-bold text-indigo-600">8.5<span class="text-lg text-gray-500">/10</span>
+                </div>
+            </div>
+            <div class="bg-white rounded-lg shadow-sm p-4">
+                <div class="text-sm text-gray-500 mb-1">Trung bình</div>
+                <div class="text-2xl font-bold text-gray-800">7.2<span class="text-lg text-gray-500">/10</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            <!-- Section Accuracy Chart -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tỉ lệ làm đúng theo phần</h3>
+                <div class="h-64">
+                    <canvas id="sectionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Progress Over Time Chart -->
+            <div class="bg-white rounded-xl shadow-sm p-6">
+                <h3 class="text-lg font-semibold text-gray-800 mb-4">Tiến bộ theo thời gian</h3>
+                <div class="h-64">
+                    <canvas id="progressChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Frequently Wrong Questions -->
+        <div class="bg-white rounded-xl shadow-sm p-6">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Câu hỏi thường sai</h3>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Câu hỏi</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Phần</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Số lần sai</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Tỉ lệ sai</th>
+                            <th scope="col"
+                                class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div
+                                        class="flex-shrink-0 h-10 w-10 bg-red-50 rounded-full flex items-center justify-center">
+                                        <span class="text-red-600 font-medium">7</span>
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="text-sm font-medium text-gray-900">Đọc hiểu</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Phần 5</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span
+                                    class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">4/5</span>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">80%</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                <button onclick="ExamDetail.viewQuestionDetail(7)"
+                                    class="text-indigo-600 hover:text-indigo-900">Xem</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Phần lịch sử -->
+    <div id="historySection" class="hidden fade-in bg-white rounded-xl shadow-sm p-6 mb-8">
+        <!-- No History State -->
+        <div id="noHistory" class="text-center py-12">
+            <div class="mx-auto w-20 h-20 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                <i class="fas fa-clock text-2xl text-gray-400"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-800 mb-2">Bạn chưa làm đề này</h3>
+            <p class="text-gray-500 mb-6">Hãy bắt đầu với chế độ Luyện đề hoặc Thi thử</p>
+            <button onclick="ExamDetail.startPractice()"
+                class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                Bắt đầu luyện đề
+            </button>
+            <button onclick="ExamDetail.startPractice()"
+            class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                Bắt đầu thi thử
+            </button>
+        </div>
+
+        <!-- History List -->
+        <div id="historyList" class="hidden space-y-4">
+            <!-- History Item -->
+            <div class="bg-white border border-gray-100 rounded-lg p-5 hover:border-indigo-100 transition-colors">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div class="mb-3 md:mb-0">
+                        <div class="flex items-center mb-1">
+                            <span class="font-semibold text-gray-800 mr-3">Lần 5</span>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded-full">Hoàn
+                                thành</span>
+                        </div>
+                        <div class="text-sm text-gray-600">
+                            <i class="far fa-clock mr-1"></i> 15/04/2025 - 14:30 • 45 phút
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <div class="text-center mr-6">
+                            <div class="text-xs text-gray-500 mb-1">Điểm số</div>
+                            <div class="text-xl font-bold text-indigo-600">8.5</div>
+                        </div>
+                        <button onclick="ExamDetail.viewHistoryDetail(1)"
+                            class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                            Xem chi tiết
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- History Detail -->
+        <div id="historyDetail" class="hidden">
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-1">Chi tiết lần thi</h3>
+                    <div class="text-sm text-gray-600">15/04/2025 - 14:30 | Chế độ: Thi thử</div>
+                </div>
+                <button onclick="ExamDetail.backToHistoryList()" class="text-gray-500 hover:text-gray-700 flex items-center">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Quay lại
+                </button>
+            </div>
+
+            <!-- Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+                <div class="bg-indigo-50 rounded-lg p-4">
+                    <div class="text-sm text-indigo-700 mb-2">Tổng điểm</div>
+                    <div class="text-2xl font-bold text-indigo-800">8.0 <span
+                            class="text-lg text-indigo-600">/10</span></div>
+                </div>
+
+                <div class="bg-white border border-gray-100 rounded-lg p-4">
+                    <div class="text-sm text-gray-700 mb-2">Số câu đúng</div>
+                    <div class="text-2xl font-bold text-gray-800">16 <span class="text-lg text-gray-600">/20</span>
+                    </div>
+                </div>
+
+                <div class="bg-white border border-gray-100 rounded-lg p-4">
+                    <div class="text-sm text-gray-700 mb-2">Thời gian làm</div>
+                    <div class="text-2xl font-bold text-gray-800">32 <span class="text-lg text-gray-600">phút</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section Breakdown -->
+            <h4 class="text-lg font-semibold text-gray-800 mb-4">Kết quả theo phần</h4>
+            <div class="bg-gray-50 rounded-lg p-6 mb-8">
+                <div class="h-64">
+                    <canvas id="detailSectionChart"></canvas>
+                </div>
+            </div>
+
+            <!-- Wrong Questions -->
+            <h4 class="text-lg font-semibold text-gray-800 mb-4">Câu hỏi làm sai</h4>
+            <div class="space-y-3">
+                <div class="border-l-4 border-red-500 bg-red-50 rounded-r-lg p-4">
+                    <div class="flex justify-between items-start mb-2">
+                        <span class="font-medium text-gray-800">Câu 7 (Phần 5)</span>
+                        <span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Đã chọn sai</span>
+                    </div>
+                    <p class="text-gray-700 mb-3">What is the main purpose of the announcement?</p>
+                    <div class="space-y-2 mb-3">
+                        <div class="flex items-center">
+                            <div
+                                class="w-5 h-5 flex items-center justify-center rounded-full bg-red-100 text-red-800 mr-2 text-xs">
+                                A</div>
+                            <span class="text-gray-700 line-through">To introduce new staff members</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div
+                                class="w-5 h-5 flex items-center justify-center rounded-full bg-green-100 text-green-800 mr-2 text-xs">
+                                B</div>
+                            <span class="text-gray-700 font-medium">To inform about office relocation</span>
+                        </div>
+                    </div>
+                    <button onclick="ExamDetail.viewQuestionDetail(7)"
+                        class="text-indigo-600 hover:text-indigo-800 text-xs font-medium flex items-center">
+                        <i class="fas fa-book-open mr-1"></i>
+                        Xem giải thích
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Modal xem chi tiết câu hỏi -->
+<div id="questionModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+    <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-2/3 lg:w-1/2 shadow-xl rounded-xl bg-white">
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h3 class="text-xl font-bold text-gray-800">Câu hỏi #<span id="questionNumber">7</span></h3>
+                <div class="text-sm text-gray-500">
+                    <span id="questionPart">Phần 5</span> • <span id="questionType">Đọc hiểu</span>
+                </div>
+            </div>
+            <button onclick="ExamDetail.closeQuestionModal()" class="text-gray-400 hover:text-gray-600">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="mb-6">
+            <p id="questionContent" class="text-gray-800 text-lg mb-4">What is the main purpose of the announcement?
+            </p>
+
+            <div class="space-y-3 mb-4">
+                <div class="flex items-start p-3 rounded-lg border border-gray-200">
+                    <div
+                        class="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-1">
+                        <span class="text-red-600 text-sm">A</span>
+                    </div>
+                    <span id="optionA" class="text-gray-700">To introduce new staff members</span>
+                </div>
+                <div class="flex items-start p-3 rounded-lg border border-green-200 bg-green-50">
+                    <div
+                        class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
+                        <span class="text-green-600 text-sm">B</span>
+                    </div>
+                    <span id="optionB" class="text-gray-700 font-medium">To inform about office relocation</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-blue-50 rounded-lg p-4 mb-6">
+            <div class="flex items-center mb-2">
+                <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-2">
+                    <i class="fas fa-info-circle text-blue-500 text-xs"></i>
+                </div>
+                <h4 class="font-medium text-blue-800">Giải thích</h4>
+            </div>
+            <p id="questionExplanation" class="text-blue-700 text-sm">The announcement clearly states that the
+                company will be moving to a new location starting next month and provides details about the new
+                address. There is no mention of new staff members or a company merger.</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="bg-gray-50 rounded-lg p-3">
+                <div class="text-xs text-gray-500 mb-1">Tỉ lệ làm đúng</div>
+                <div class="text-sm font-medium text-red-600">20%</div>
+            </div>
+            <div class="bg-gray-50 rounded-lg p-3">
+                <div class="text-xs text-gray-500 mb-1">Số lần bạn sai</div>
+                <div class="text-sm font-medium text-gray-800">4/5 lần</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -7,25 +7,27 @@ document.getElementById('createFolderBtn').addEventListener('click', () => {
     const folderOrder = folderList.querySelectorAll('.folder-item').length;
     const folderName = prompt('Tạo tên thư mục:');
     if (!folderName) return
-    $.ajax({
-        url: '/admin/insert_folder/',
+    fetch('/insert_folder/', {
         method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
             name: folderName,
             order: folderOrder
-        }),
-        success: function(data) {
-            if (data.status === 'success') {
-                console.log('Tạo thư mục thành công!');
-                loadFolders();
-            } else {
-                console.log('Thất bại: ' + data.message);
-            }
-        },
-        error: function() {
-            alert('Lỗi kết nối server!');
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Tạo thư mục thành công!');
+            loadFolders();
+        } else {
+            console.log('Thất bại: ' + data.message);
         }
+    })
+    .catch(() => {
+        alert('Lỗi kết nối server!');
     });
 });
 
@@ -44,26 +46,28 @@ document.getElementById('folderList').addEventListener('click', function (e) {
         const folderId = folderItem.getAttribute('data-folder-id');
         const examOrder = folderItem.querySelectorAll('.table-row').length;
 
-        $.ajax({
-            url: '/admin/insert_exam/',
+        fetch('/insert_exam/', {
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
                 folder_id: folderId,
                 exam_order: examOrder
-            }),
-            success: function(data) {
-                if (data.status === 'success') {
-                    id = data.exam_id;
-                    window.location.href = `/admin/create_exam/?id=${id}`;
-                } else {
-                    console.log('Thất bại: ' + data.message);
-                }
-            },
-            error: function() {
-                alert('Lỗi kết nối server!');
-                loadFolders();
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const id = data.exam_id;
+                window.location.href = `/create_exam/?id=${id}`;
+            } else {
+                console.log('Thất bại: ' + data.message);
             }
+        })
+        .catch(() => {
+            alert('Lỗi kết nối server!');
+            loadFolders();
         });
         return;
     }
@@ -72,7 +76,7 @@ document.getElementById('folderList').addEventListener('click', function (e) {
     if (editExamBtn) {
         const row = editExamBtn.closest('tr');
         const examId = row.getAttribute('data-exam-id');
-        window.location.href = `/admin/create_exam/?id=${examId}`;
+        window.location.href = `/create_exam/?id=${examId}`;
         return;
     }
 
@@ -82,27 +86,27 @@ document.getElementById('folderList').addEventListener('click', function (e) {
             const row = deleteExamBtn.closest('tr');
             const id = row.getAttribute('data-exam-id');
 
-            $.ajax({
-                url: '/admin/delete_exam/',
+            fetch('/delete_exam/', {
                 method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    id: id,
-                }),
-                success: function(data) {
-                    if (data.status === 'success') {
-                        console.log('Xóa thành công!');
-                        const list = row.parentElement;
-                        row.remove();
-                        reorderBySTT(list);
-                    } else {
-                        console.log('Thất bại: ' + data.message);
-                    }
+                headers: {
+                    'Content-Type': 'application/json',
                 },
-                error: function() {
-                    alert('Lỗi kết nối server!');
-                    loadFolders();
+                body: JSON.stringify({ id: id })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Xóa thành công!');
+                    const list = row.parentElement;
+                    row.remove();
+                    reorderBySTT(list);
+                } else {
+                    console.log('Thất bại: ' + data.message);
                 }
+            })
+            .catch(() => {
+                alert('Lỗi kết nối server!');
+                loadFolders();
             });
         }
         return;
@@ -115,26 +119,28 @@ document.getElementById('folderList').addEventListener('click', function (e) {
         const nameSpan = folder.querySelector('span');
         const newName = prompt('Chỉnh sửa tên thư mục:', nameSpan.textContent);
         if (!newName || newName.trim() === '' || newName === nameSpan.textContent) return;
-        $.ajax({
-            url: '/admin/update_folder/',
+        fetch('/update_folder/', {
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
                 id: id,
                 name: newName
-            }),
-            success: function(data) {
-                if (data.status === 'success') {
-                    console.log('Cập nhật thành công!');
-                    nameSpan.textContent = newName;
-                } else {
-                    console.log('Thất bại: ' + data.message);
-                }
-            },
-            error: function() {
-                alert('Lỗi kết nối server!');
-                loadFolders()();
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Cập nhật thành công!');
+                nameSpan.textContent = newName;
+            } else {
+                console.log('Thất bại: ' + data.message);
             }
+        })
+        .catch(() => {
+            alert('Lỗi kết nối server!');
+            loadFolders();
         });
         return;
     }
@@ -146,25 +152,27 @@ document.getElementById('folderList').addEventListener('click', function (e) {
             const id = folder.getAttribute('data-folder-id');
 
 
-            $.ajax({
-                url: '/admin/delete_folder/',
+            fetch('/delete_folder/', {
                 method: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    id: id,
-                }),
-                success: function(data) {
-                    if (data.status === 'success') {
-                        console.log('Xóa thành công!');
-                        folder.remove();
-                    } else {
-                        console.log('Thất bại: ' + data.message);
-                    }
+                headers: {
+                    'Content-Type': 'application/json'
                 },
-                error: function() {
-                    alert('Lỗi kết nối server!');
-                    loadFolders()();
+                body: JSON.stringify({
+                    id: id
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Xóa thành công!');
+                    folder.remove();
+                } else {
+                    console.log('Thất bại: ' + data.message);
                 }
+            })
+            .catch(() => {
+                alert('Lỗi kết nối server!');
+                loadFolders();
             });
         }
         return;
@@ -198,168 +206,154 @@ new Sortable(folderList, {
             updates.push({ id, order});
         });
 
-        $.ajax({
-            url: '/admin/swap_folder/',
+        fetch('/swap_folder/', {
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
-                updates: updates,
-            }),
-            success: function(data) {
-                if (data.status === 'success') {
-                    console.log('Cập nhật thành công!');
-                } else {
-                    console.log('Thất bại: ' + data.message);
-                }
+            headers: {
+                'Content-Type': 'application/json'
             },
-            error: function() {
-                alert('Lỗi kết nối server!');
-                loadFolders()();
+            body: JSON.stringify({
+                updates: updates
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                console.log('Cập nhật thành công!');
+            } else {
+                console.log('Thất bại: ' + data.message);
             }
+        })
+        .catch(() => {
+            alert('Lỗi kết nối server!');
+            loadFolders();
         });
     }
 });
 
 
 function loadFolders() {
-    $.ajax({
-        url: '/admin/get_folders/',
-        method: 'GET',
-        success: function(response) {
-            $('#folderList').empty();
-            if (response.status === 'success') {
-                // Lặp qua mỗi folder
-                response.folders.forEach(folder => {
-                    // Tạo phần tử HTML cho folder
-                    let folderHtml = `
-                        <div class="folder-item rounded-lg overflow-hidden border border-gray-200" data-folder-id="${folder.id}" draggable="false">
-                            <div class="folder-header px-4 py-3 flex justify-between items-center">
-                                <div class="flex items-center">
-                                    <i class="fas fa-folder text-indigo-500 mr-3 text-lg"></i>
-                                    <span class="font-medium text-gray-800">${folder.name}</span>
+    fetch('/get_folders/')
+    .then(response => response.json())
+    .then(response => {
+        const folderList = document.getElementById('folderList');
+        folderList.innerHTML = '';
+
+        if (response.status === 'success') {
+            response.folders.forEach(folder => {
+                let folderHtml = `
+                    <div class="folder-item rounded-lg overflow-hidden border border-gray-200" data-folder-id="${folder.id}" draggable="false">
+                        <div class="folder-header px-4 py-3 flex justify-between items-center">
+                            <div class="flex items-center">
+                                <i class="fas fa-folder text-indigo-500 mr-3 text-lg"></i>
+                                <span class="font-medium text-gray-800">${folder.name}</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="folder-footer px-4 py-2 text-sm text-gray-500">
+                                    <span>Thời gian tạo: ${formatDate(folder.created_at)}</span>
                                 </div>
-                                <div class="flex items-center space-x-2">
-                                    <div class="folder-footer px-4 py-2 text-sm text-gray-500">
-                                        <span>Thời gian tạo: ${formatDate(folder.created_at)}</span>
-                                    </div>
-                                    <button class="edit-folder-btn text-gray-500 hover:text-indigo-600 transition-colors">
+                                <button class="edit-folder-btn text-gray-500 hover:text-indigo-600 transition-colors">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="delete-folder-btn text-gray-500 hover:text-red-600 transition-colors">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <button class="toggle-folder-btn text-gray-500 hover:text-gray-700 transition-colors">
+                                    <i class="fas fa-chevron-down"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="exam-list" id="${folder.id}">
+                            <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
+                                <h4 class="text-sm font-medium text-gray-700">Danh sách đề thi</h4>
+                                <button class="create-exam-btn bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-md text-sm flex items-center transition-colors">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    Tạo đề thi mới
+                                </button>
+                            </div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên đề thi</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thời gian</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Truy cập</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày tạo</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cập nhật</th>
+                                            <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="bg-white divide-y divide-gray-200 sortable">`;
+
+                folder.exams.forEach((exam) => {
+                    folderHtml += `
+                        <tr class="table-row" data-exam-id="${exam.id}">
+                            <td class="px-4 py-3 whitespace-nowrap"><span class="stt-badge">${exam.order}</span></td>
+                            <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900">${exam.title}</td>
+                            <td class="px-4 py-3 whitespace-nowrap"><span class="badge badge-hard">${exam.status}</span></td>
+                            <td class="px-4 py-3 whitespace-nowrap text-gray-500">${exam.max_duration} phút</td>
+                            <td class="px-4 py-3 whitespace-nowrap"><span class="badge badge-free">${exam.access}</span></td>
+                            <td class="px-4 py-3 whitespace-nowrap text-gray-500">${formatDate(exam.created_at)}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-gray-500">${formatDate(exam.updated_at)}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-right">
+                                <div class="flex justify-end space-x-1">
+                                    <button class="edit-exam-btn action-btn bg-blue-100 text-blue-600 hover:bg-blue-200">
                                         <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="delete-folder-btn text-gray-500 hover:text-red-600 transition-colors">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                    <button class="toggle-folder-btn text-gray-500 hover:text-gray-700 transition-colors">
-                                        <i class="fas fa-chevron-down"></i>
+                                    <button class="delete-exam-btn action-btn bg-red-100 text-red-600 hover:bg-red-200">
+                                        <i class="fas fa-trash-alt"></i>
                                     </button>
                                 </div>
-                            </div>
-                            <div class="exam-list" id="${folder.id}">
-                                <div class="px-4 py-3 bg-gray-50 border-t border-gray-200 flex justify-between items-center">
-                                    <h4 class="text-sm font-medium text-gray-700">Danh sách đề thi</h4>
-                                    <button class="create-exam-btn bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-md text-sm flex items-center transition-colors">
-                                        <i class="fas fa-plus mr-2"></i>
-                                        Tạo đề thi mới
-                                    </button>
-                                </div>
-                                <div class="overflow-x-auto">
-                                    <table class="min-w-full divide-y divide-gray-200">
-                                        <thead class="bg-gray-50">
-                                            <tr>
-                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">STT</th>
-                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tên đề thi</th>
-                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Trạng thái</th>
-                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Thời gian</th>
-                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Truy cập</th>
-                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ngày tạo</th>
-                                                <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cập nhật</th>
-                                                <th class="px-4 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Thao tác</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody class="bg-white divide-y divide-gray-200 sortable">`;
-
-                    // Lặp qua mỗi đề thi trong folder và thêm vào bảng
-                    folder.exams.forEach((exam, index) => {
-                        folderHtml += `
-                            <tr class="table-row" data-exam-id="${exam.id}">
-                                <td class="px-4 py-3 whitespace-nowrap"><span class="stt-badge">${exam.order}</span></td>
-                                <td class="px-4 py-3 whitespace-nowrap font-medium text-gray-900">${exam.title}</td>
-                                <td class="px-4 py-3 whitespace-nowrap"><span class="badge badge-hard">${exam.status}</span></td>
-                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${exam.max_duration} phút</td>
-                                <td class="px-4 py-3 whitespace-nowrap"><span class="badge badge-free">${exam.access}</span></td>
-                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${formatDate(exam.created_at)}</td>
-                                <td class="px-4 py-3 whitespace-nowrap text-gray-500">${formatDate(exam.updated_at)}</td>
-                                <td class="px-4 py-3 whitespace-nowrap text-right">
-                                    <div class="flex justify-end space-x-1">
-                                        <button class="edit-exam-btn action-btn bg-blue-100 text-blue-600 hover:bg-blue-200">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                        <button class="delete-exam-btn action-btn bg-red-100 text-red-600 hover:bg-red-200">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>`;
-                    });
-
-                    // Kết thúc bảng
-                    folderHtml += `</tbody></table></div></div></div></div>`;
-
-                    // Thêm folder vào DOM
-                    $('#folderList').append(folderHtml);
+                            </td>
+                        </tr>`;
                 });
 
-                // Khởi tạo lại Sortable sau khi DOM đã thay đổi
-                document.querySelectorAll('tbody.sortable').forEach(tbody => {
-                    new Sortable(tbody, {
-                        animation: 150,
-                        onEnd: (evt) => {
-                            if (evt.oldIndex === evt.newIndex) {
-                                return;
+                folderHtml += `</tbody></table></div></div></div></div>`;
+                folderList.insertAdjacentHTML('beforeend', folderHtml);
+            });
+
+            document.querySelectorAll('tbody.sortable').forEach(tbody => {
+                new Sortable(tbody, {
+                    animation: 150,
+                    onEnd: (evt) => {
+                        if (evt.oldIndex === evt.newIndex) return;
+
+                        reorderBySTT(evt.target);
+                        const updates = Array.from(evt.target.querySelectorAll('tr')).map((tr, index) => ({
+                            id: tr.dataset.examId,
+                            order: index
+                        }));
+
+                        fetch('/swap_exam/', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ updates })
+                        })
+                        .then(res => res.json())
+                        .then(data => {
+                            if (data.status === 'success') {
+                                console.log('Cập nhật thành công!');
+                            } else {
+                                console.log('Thất bại: ' + data.message);
                             }
-                
-                            reorderBySTT(evt.target);
-                            const examElements = Array.from(evt.target.querySelectorAll('tr'));
-                            let updates = [];
-                            examElements.forEach((exam, index) => {
-                                const id = exam.getAttribute('data-exam-id');
-                                const order = index;
-                                updates.push({ id, order });
-                            });
-                            $.ajax({
-                                url: '/admin/swap_exam/',
-                                method: 'POST',
-                                contentType: 'application/json',
-                                data: JSON.stringify({
-                                    updates: updates
-                                }),
-                                success: function(data) {
-                                    if (data.status === 'success') {
-                                        console.log('Cập nhật thành công!');
-                                    } else {
-                                        console.log('Thất bại: ' + data.message);
-                                    }
-                                },
-                                error: function() {
-                                    alert('Lỗi kết nối server!');
-                                    loadFolders()();
-                                }
-                            });
-                        }
-                    });
+                        })
+                        .catch(() => {
+                            alert('Lỗi kết nối server!');
+                            loadFolders();
+                        });
+                    }
                 });
-                
-                const examLists = document.querySelectorAll('.exam-list');
-                examLists.forEach(examList => {
-                    examList.classList.add('hidden');
-                });
-            } else {
-                alert('Không thể tải dữ liệu folders!');
-            }
-        },
-        error: function() {
-            $('#folderList').empty();
-            alert('Lỗi kết nối với server!');
+            });
+
+            document.querySelectorAll('.exam-list').forEach(el => el.classList.add('hidden'));
+        } else {
+            alert('Không thể tải dữ liệu folders!');
         }
+    })
+    .catch(() => {
+        document.getElementById('folderList').innerHTML = '';
+        alert('Lỗi kết nối với server!');
     });
 }
 

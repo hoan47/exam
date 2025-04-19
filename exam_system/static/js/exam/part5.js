@@ -19,21 +19,23 @@ Chọn: C`;
 }
 
 function sendEditorContent(content) {
-    $.ajax({
-        url: '/admin/get_editor/', // URL của server
-        type: 'GET', // Sử dụng GET request
-        data: { editor_content: content }, // Dữ liệu truyền vào dưới dạng query parameters
-        success: function(response) {
-            try {
-                const questions = JSON.parse(response.content); // Giả sử dữ liệu trả về có trường 'content'
-                renderQuestions(questions);
-            } catch (e) {
-                console.error('Error parsing JSON:', e);
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
+    fetch(`/get_editor/?editor_content=${encodeURIComponent(content)}`, {
+        method: 'GET', // Sử dụng GET request
+        headers: {
+            'Content-Type': 'application/json' // Đảm bảo header là 'application/json'
         }
+    })
+    .then(response => response.json())  // Chuyển đổi phản hồi thành JSON
+    .then(data => {
+        try {
+            const questions = JSON.parse(data.content); // Giả sử dữ liệu trả về có trường 'content'
+            renderQuestions(questions);
+        } catch (e) {
+            console.error('Error parsing JSON:', e);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
     });
 }
 

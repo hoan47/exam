@@ -1,3 +1,4 @@
+import datetime
 from django.shortcuts import render
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
@@ -32,7 +33,7 @@ def get_codes(request):
 
 @admin_required
 def codes(request):
-    return render(request, 'codes/admin/codes.html')
+    return render(request, 'admin/codes.html')
 
 @csrf_exempt
 @require_POST
@@ -44,6 +45,7 @@ def insert_code(request):
         if not duration or price is None:
             return JsonResponse({'status': 'error', 'message': 'Thiếu dữ liệu'}, status=400)
         code = Code(duration=duration, price=price)
+        code.updated_at = datetime.datetime.now()
         code.save()
         return JsonResponse({'status': 'success', 'message': 'Tạo mã thành công!'})
     except Exception as e:
@@ -57,6 +59,7 @@ def update_code(request):
         code = Code.find_by_id(data['id'])
         code.duration = data['duration']
         code.price = data['price']
+        code.updated_at = datetime.datetime.now()
         code.save()
         return JsonResponse({'status': 'success', 'message': 'Cập nhật mã gói thành công!'})
 

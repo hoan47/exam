@@ -21,16 +21,16 @@ function formatDate(dateString) {
 // Tải danh sách mã gói
 function loadCodes(page = 1) {
     currentPage = page;
-    $.ajax({
-        url: '/admin/get_codes/',
+    fetch('/get_codes/?page=' + page, {
         method: 'GET',
-        data: { page: page },
-        success: function(response) {
-            if (response.status === 'success') {
-                const tableBody = $('#codesTable tbody');
-                tableBody.empty();
-
-                response.codes.forEach(code => {
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                const tableBody = document.querySelector('#codesTable tbody');
+                tableBody.innerHTML = '';
+    
+                data.codes.forEach(code => {
                     const row = `
                         <tr id="${code.id}">
                             <td><span class="package-code">${code.code}</span></td>
@@ -50,19 +50,18 @@ function loadCodes(page = 1) {
                             </td>
                         </tr>
                     `;
-                    tableBody.append(row);
+                    tableBody.innerHTML += row;
                 });
-
-                // Hiển thị phân trang
-                renderPagination(response.total_pages);
+    
+                renderPagination(data.total_pages);
             } else {
                 alert('Không thể tải dữ liệu mã gói!');
             }
-        },
-        error: function() {
+        })
+        .catch(error => {
+            console.error('Lỗi kết nối:', error);
             alert('Lỗi kết nối với server!');
-        }
-    });
+        });
 }
 
 // Hiển thị phân trang
@@ -170,28 +169,31 @@ function editCode(buttonElement) {
             return;
         }
         
-        $.ajax({
-            url: '/admin/update_code/',
+        fetch('/update_code/', {
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
                 id: code.id,
                 duration: parseInt(updatedDuration),
-                price: parseFloat(updatedPrice)
+                price: parseFloat(updatedPrice),
             }),
-            success: function(data) {
+        })
+            .then(response => response.json())  // Giải mã dữ liệu trả về từ server
+            .then(data => {
                 if (data.status === 'success') {
-                    loadCodes(currentPage);
-                    modal.hide();
+                    loadCodes(currentPage);  // Load lại dữ liệu
+                    modal.hide();  // Đóng modal
                     alert('Cập nhật thành công!');
                 } else {
-                    alert('Thất bại: ' + data.message);
+                    alert('Thất bại: ' + data.message);  // Hiển thị thông báo lỗi
                 }
-            },
-            error: function() {
+            })
+            .catch(error => {
+                console.error('Lỗi kết nối:', error);  // Xử lý lỗi kết nối
                 alert('Lỗi kết nối server!');
-            }
-        });
+            });
     });
 }
 
@@ -200,23 +202,26 @@ function deleteCode(buttonElement) {
     const code = JSON.parse(buttonElement.getAttribute('data-code'));
     
     if (confirm(`Bạn có chắc chắn muốn xóa mã gói ${code.code}?`)) {
-        $.ajax({
-            url: '/admin/delete_code/',
+        fetch('/delete_code/', {
             method: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ id: code.id }),
-            success: function(data) {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: code.id }),
+        })
+            .then(response => response.json())
+            .then(data => {
                 if (data.status === 'success') {
                     loadCodes(currentPage);
                     alert('Xóa thành công!');
                 } else {
                     alert('Thất bại: ' + data.message);
                 }
-            },
-            error: function() {
+            })
+            .catch(error => {
+                console.error('Lỗi kết nối:', error);
                 alert('Lỗi kết nối server!');
-            }
-        });
+            });
     }
 }
 
@@ -236,15 +241,18 @@ $('#savePackageBtn').click(function() {
         return;
     }
     
-    $.ajax({
-        url: '/admin/insert_code/',
+    fetch('/insert_code/', {
         method: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
             duration: parseInt(duration),
-            price: parseFloat(price)
+            price: parseFloat(price),
         }),
-        success: function(data) {
+    })
+        .then(response => response.json())
+        .then(data => {
             if (data.status === 'success') {
                 location.reload();
                 $('#createPackageModal').modal('hide');
@@ -253,11 +261,11 @@ $('#savePackageBtn').click(function() {
             } else {
                 alert('Thất bại: ' + data.message);
             }
-        },
-        error: function() {
+        })
+        .catch(error => {
+            console.error('Lỗi kết nối:', error);
             alert('Lỗi kết nối server!');
-        }
-    });
+        });
 });
 
 // Tạo options cho thời hạn

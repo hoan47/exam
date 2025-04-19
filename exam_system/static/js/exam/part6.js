@@ -215,24 +215,21 @@ const Part6 = (function () {
             if (!passage.trim() || !question.trim()) return Promise.resolve(null);  // Nếu không có passage hoặc question, trả về Promise resolve null
     
             return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: '/admin/get_editor/', // URL của API
-                    type: 'GET', // Sử dụng GET request
-                    data: { editor_content: question }, // Truyền dữ liệu qua query parameters
-                    success: function(response) {
-                        try {
-                            const questions = JSON.parse(response.content);
-                            // Trả về cả đoạn văn và câu hỏi nếu có dữ liệu hợp lệ
-                            resolve(questions.length > 0 && passage ? { passage, questions } : null);
-                        } catch (e) {
-                            console.error('Error parsing JSON:', e);
-                            resolve(null);  // Nếu có lỗi, resolve null
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
+                fetch('/get_editor/?editor_content=' + encodeURIComponent(question))
+                .then(response => response.json())  // Phân tích dữ liệu JSON trả về
+                .then(data => {
+                    try {
+                        const questions = data.content ? JSON.parse(data.content) : [];
+                        // Trả về cả đoạn văn và câu hỏi nếu có dữ liệu hợp lệ
+                        resolve(questions.length > 0 && passage ? { passage, questions } : null);
+                    } catch (e) {
+                        console.error('Error parsing JSON:', e);
                         resolve(null);  // Nếu có lỗi, resolve null
                     }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    resolve(null);  // Nếu có lỗi, resolve null
                 });
             });
         }).filter(request => request !== null); // Loại bỏ các phần tử null khỏi requests

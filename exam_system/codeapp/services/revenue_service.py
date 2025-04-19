@@ -5,7 +5,7 @@ from codeapp.models import Code
 class CodeRevenueService:
     @staticmethod
     def get_revenue_by_year():
-        return list(Code.objects.aggregate(
+        raw_data = list(Code.objects.aggregate(
             {
                 '$project': {
                     'year': { '$year': '$created_at' },
@@ -18,13 +18,35 @@ class CodeRevenueService:
                     'total': { '$sum': '$price' },
                     'counts': { '$sum': 1 }
                 }
-            },
-            { '$sort': { '_id': 1 } }
+            }
         ))
+
+        if not raw_data:
+            return []
+
+        # Tạo dict để tra nhanh, và lấy min/max luôn
+        raw_dict = {item['_id']: item for item in raw_data}
+        min_year = min(raw_dict.keys())
+        max_year = max(raw_dict.keys())
+
+        # Ghép dữ liệu đầy đủ cho từng năm
+        result = []
+        for year in range(min_year, max_year + 1):
+            if year in raw_dict:
+                result.append({
+                    '_id': year,
+                    'total': raw_dict[year]['total'],
+                    'counts': raw_dict[year]['counts']
+                })
+            else:
+                result.append({'_id': year, 'total': 0, 'counts': 0})
+
+        return result
+
 
     @staticmethod
     def get_revenue_by_month(year):
-        return list(Code.objects(
+        raw_data = list(Code.objects(
             created_at__gte=datetime.datetime(year, 1, 1),
             created_at__lte=datetime.datetime(year, 12, 31)
         ).aggregate(
@@ -34,16 +56,28 @@ class CodeRevenueService:
                     'total': { '$sum': '$price' },
                     'counts': { '$sum': 1 }
                 }
-            },
-            { '$sort': { '_id': 1 } }
+            }
         ))
+
+        raw_dict = {item['_id']: item for item in raw_data}
+        result = []
+        for month in range(1, 13):
+            if month in raw_dict:
+                result.append({
+                    '_id': month,
+                    'total': raw_dict[month]['total'],
+                    'counts': raw_dict[month]['counts']
+                })
+            else:
+                result.append({'_id': month, 'total': 0, 'counts': 0})
+        return result
 
     @staticmethod
     def get_revenue_by_day(year, month):
         start_date = datetime.datetime(year, month, 1)
         end_date = datetime.datetime(year + 1, 1, 1) if month == 12 else datetime.datetime(year, month + 1, 1)
 
-        return list(Code.objects(
+        raw_data = list(Code.objects(
             created_at__gte=start_date,
             created_at__lt=end_date
         ).aggregate(
@@ -53,9 +87,23 @@ class CodeRevenueService:
                     'total': { '$sum': '$price' },
                     'counts': { '$sum': 1 }
                 }
-            },
-            { '$sort': { '_id': 1 } }
+            }
         ))
+
+        raw_dict = {item['_id']: item for item in raw_data}
+        total_days = (end_date - start_date).days
+        result = []
+        for day in range(1, total_days + 1):
+            if day in raw_dict:
+                result.append({
+                    '_id': day,
+                    'total': raw_dict[day]['total'],
+                    'counts': raw_dict[day]['counts']
+                })
+            else:
+                result.append({'_id': day, 'total': 0, 'counts': 0})
+        return result
+
 
     @staticmethod
     def get_user_rankings(year, month, day, limit):

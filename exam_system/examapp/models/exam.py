@@ -25,8 +25,8 @@ class Exam(Document):
             exam.delete()
         super().delete(*args, **kwargs)
         
-    def to_json(self):
-        return {
+    def to_json(self, is_detail=False):
+        data = {
             "id": str(self.id),
             "title": self.title,
             "status": self.status,
@@ -35,9 +35,13 @@ class Exam(Document):
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
             "order": self.order,
-            "questions": [question.to_json() for question in self.get_questions()]
+            "total_users_attempted": self.get_total_users_attempted(),
+            "total_attemped": self.get_total_attemped(),
         }
-
+        if is_detail:
+            data["questions"] = [question.to_json() for question in self.get_questions()]
+        return data
+    
     def get_questions(self):
         from examapp.models.question import Question
         return list(Question.objects(exam=self))
@@ -49,6 +53,14 @@ class Exam(Document):
             has_history = HistoryExam.objects(exam=version).first()
             if not has_history:
                 version.delete()
+                
+    def get_total_users_attempted(self):
+        from historyapp.models.history_exam import HistoryExam
+        return len(HistoryExam.objects(exam=self).distinct('user'))
+
+    def get_total_attemped(self):
+        from historyapp.models.history_exam import HistoryExam
+        return len(HistoryExam.objects(exam=self))
 
     def create_copy(self):
         from examapp.models.question import Question

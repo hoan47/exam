@@ -12,7 +12,7 @@ def login_view(request):
         elif 'user' in request.session:
             return redirect('user:user_dashboard')
         else:
-            return render(request, 'users/login.html')
+            return render(request, 'login.html')
     except Exception as e:
             return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
         

@@ -3,7 +3,7 @@ from mongoengine import Document, ReferenceField, StringField, CASCADE
 class HistoryAnswer(Document):
     history_exam = ReferenceField('HistoryExam', required=True, reverse_delete_rule=CASCADE)
     question = ReferenceField('Question', required=True)
-    selected_option = StringField(required=True, choices=["A", "B", "C", "D"])
+    selected_option = StringField(choices=["A", "B", "C", "D"], null=True)
 
     def to_json(self):
         return {

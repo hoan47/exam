@@ -216,25 +216,24 @@ const Part7 = (function () {
             if (!passage.trim() || !question.trim()) return Promise.resolve(null);  // Nếu không có passage hoặc question, trả về Promise resolve null
     
             return new Promise((resolve, reject) => {
-                $.ajax({
-                    url: '/admin/get_editor/', // URL của API
-                    type: 'GET', // Sử dụng GET request
-                    data: { editor_content: question }, // Truyền dữ liệu qua query parameters
-                    success: function(response) {
+                fetch(`/get_editor/?editor_content=${encodeURIComponent(question)}`, {
+                    method: 'GET'  // Phương thức là GET
+                })
+                    .then(response => response.json())  // Phân tích dữ liệu JSON trả về
+                    .then(data => {
                         try {
-                            const questions = JSON.parse(response.content);
+                            const questions = data.content ? JSON.parse(data.content) : [];
                             // Trả về cả đoạn văn và câu hỏi nếu có dữ liệu hợp lệ
                             resolve(questions.length > 0 && passage ? { passage, questions } : null);
                         } catch (e) {
                             console.error('Error parsing JSON:', e);
                             resolve(null);  // Nếu có lỗi, resolve null
                         }
-                    },
-                    error: function(xhr, status, error) {
+                    })
+                    .catch(error => {
                         console.error('Error:', error);
                         resolve(null);  // Nếu có lỗi, resolve null
-                    }
-                });
+                    });
             });
         }).filter(request => request !== null); // Loại bỏ các phần tử null khỏi requests
     

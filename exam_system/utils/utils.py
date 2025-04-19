@@ -7,18 +7,15 @@ def admin_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         if 'admin' not in request.session:
-            return redirect('user:login')  # Redirect to login page if not admin
+            return redirect('user:login')
         return view_func(request, *args, **kwargs)
-    
     return _wrapped_view
-
 
 def user_required(view_func):
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
         if 'user' not in request.session:
-            return redirect('user:login')  # Redirect to login page if not admin
+            return redirect('user:user_dashboard')
         return view_func(request, *args, **kwargs)
-    
     return _wrapped_view
 
