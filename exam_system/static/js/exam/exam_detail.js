@@ -1,8 +1,32 @@
 const ExamDetail = (function () {
     function render(){
         showChart();
+        showInfo();
+        
     }
     
+    function showInfo(){
+        const titleEl = document.getElementById("examTitle");
+        const accessEl = document.getElementById("examAccess");
+        const durationEl = document.getElementById("examDuration");
+
+        // Gán tiêu đề đề thi
+        titleEl.textContent = current_exam.title;
+
+        // Gán trạng thái truy cập
+        if (current_exam.access === "free") {
+            accessEl.innerHTML = `<i class="fas fa-unlock mr-1"></i> Miễn phí`;
+            accessEl.classList.remove("text-yellow-300");
+            accessEl.classList.add("text-green-100");
+        } else {
+            accessEl.innerHTML = `<i class="fas fa-crown mr-1"></i> Premium`;
+            accessEl.classList.remove("text-green-100");
+            accessEl.classList.add("text-yellow-300");
+        }
+
+        // Gán thời gian làm bài
+        durationEl.innerHTML = `<i class="fas fa-clock mr-1"></i> ${current_exam.max_duration} phút`;
+    }
     function showChart() {
         // Section Accuracy Chart
         const sectionCtx = document.getElementById('sectionChart').getContext('2d');
@@ -122,12 +146,26 @@ const ExamDetail = (function () {
 
     // Start practice
     function startPractice() {
-        alert('Bắt đầu luyện đề...');
+        confirmStartExam('practice');
     }
 
     // Start mock test
     function startMockTest() {
-        alert('Bắt đầu thi thử...');
+        confirmStartExam('test');
+    }
+
+    function confirmStartExam(type) {
+        const isConfirmed = confirm(`Bạn có chắc muốn bắt đầu ${type}?`);
+        if (isConfirmed) {
+            if (type === 'practice') {
+                window.location = '/practice_mode/?id=' + ""
+            }
+            else{
+                window.location = '/test_mode/?id=' + ""
+            }
+        } else {
+            alert('Bạn đã hủy thao tác.');
+        }
     }
 
     // Return các hàm cần thiết

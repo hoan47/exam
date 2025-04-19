@@ -73,7 +73,4 @@ def get_revenue_stats(request):
 
 @admin_required
 def revenue_stats(request):
-    try:
-        return render(request, 'admin/revenue_stats.html')
-    except Exception as e:
-        return JsonResponse({'status': 'error', 'message': 'Internal server error'}, status=500)
+    return render(request, 'admin/revenue_stats.html')

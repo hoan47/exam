@@ -10,7 +10,7 @@ const Warehouse = (function () {
         .then(response => {
             try {
                 if (response.status != 'success') {
-                    showErrorToast('Không thể tải dữ liệu!');
+                    alert('Không thể tải dữ liệu!');
                     return;
                 }
                 const container = document.getElementById("folders");
@@ -93,12 +93,12 @@ const Warehouse = (function () {
                 });
             } catch (e) {
                 console.error('Error:', e);
-                showErrorToast('Lỗi xử lý dữ liệu!');
+                alert('Lỗi xử lý dữ liệu!');
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            showErrorToast('Lỗi kết nối server!');
+            alert('Lỗi kết nối server!');
         });
     }
 

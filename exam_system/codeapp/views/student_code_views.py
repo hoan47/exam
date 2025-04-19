@@ -26,7 +26,6 @@ def apply_code(request):
         code.user = User.find_by_id(user_id)
         code.applied_at = datetime.datetime.now()
         code.save()
-        
         return JsonResponse({'status': 'success', 'message': f' Kích hoạt thành công có hiệu lực tới {code.user.get_expiry_at().strftime('%d/%m/%Y')}. Vui lòng tải lại trang để cập nhật dữ liệu sau đó bạn có thể thi tất cả đề thi Premium'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
