@@ -11,6 +11,9 @@ urlpatterns = [
     path('get_warehouse/', views.student_folder_views.get_warehouse, name='get_warehouse'),
     path('practice_mode/', views.student_exam_views.practice_mode, name='practice_mode'),
     path('test_mode/', views.student_exam_views.test_mode, name='test_mode'),
+    path('warehouse/', views.student_folder_views.warehouse, name='warehouse'),
+    path('exam_detail/', views.student_exam_views.exam_detail, name='exam_detail'),
+    path('history/', views.student_history_views.history, name='history'),
     #post
     path('swap_folder/', views.admin_folder_views.swap_folder, name='swap_folder'),
     path('swap_exam/', views.admin_exam_views.swap_exam, name='swap_exam'),
@@ -20,7 +23,4 @@ urlpatterns = [
     path('delete_exam/', views.admin_exam_views.delete_exam, name='delete_exam'),
     path('insert_exam/', views.admin_exam_views.insert_exam, name='insert_exam'),
     path('update_exam/', views.admin_exam_views.update_exam, name='update_exam'),
-    path('warehouse/', views.student_folder_views.warehouse, name='warehouse'),
-    path('exam_detail/', views.student_exam_views.exam_detail, name='exam_detail'),
-    path('history/', views.student_history_views.history, name='history'),
 ]

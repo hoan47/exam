@@ -10,7 +10,7 @@ def login_view(request):
             return redirect('user:admin_dashboard')
         # Kiểm tra session của user
         elif 'user' in request.session:
-            return redirect('exam:warehouse')
+            return redirect('user:user_dashboard')
         else:
             return render(request, 'login.html')
     except Exception as e:

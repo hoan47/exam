@@ -6,24 +6,23 @@ from examapp.models.exam import Exam
 from userapp.models.user import User
 from utils.utils import user_required
 from django.views.decorators.http import require_POST
+from userapp.utils import get_user_from_session
 
-@csrf_exempt
 @user_required
 def exam_detail(request):
     try:
-        caller = request.get('caller', None)
-        user_data = request.session.get('user')
-        if user_data:
-            user = User.upsert_by_email(user_data.get('email'), user_data.get('name'))
-            if user is not None:
-                user.picture = user_data.get('picture')
-                user.expiry_at = user.get_expiry_at()
-                return render(request, 'student/exam_detail.html', {
-                    'caller': caller,
-                    'user': user,
-                    'user_json': json.dumps(user.to_json())
-                })
-        return render(request, 'student/exam_detail.html', {'user': None})
+        exam = Exam.get_by_id(request.GET.get('id'))
+        user = get_user_from_session(request)
+        
+        if user:
+            return render(request, 'student/exam_detail.html', {
+                'caller': request.GET.get('caller', "warehouse"),
+                'user': user,
+                'user_json': json.dumps(user.to_json()),
+                'exam': exam.tu_json()
+            })
+
+        return render('user:user_dashboard')
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 

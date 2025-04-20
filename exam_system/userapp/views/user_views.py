@@ -8,6 +8,13 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from django.views.decorators.http import require_POST
 
+from utils.utils import admin_required
+
+
+# User dashboard view
+def user_dashboard(request):
+    return redirect('exam:warehouse')
+
 # student
 @csrf_exempt
 @require_POST
@@ -20,4 +27,4 @@ def login_user(request):
     except ValueError:
         return HttpResponse(status=403)
     request.session['user'] = user_data
-    return redirect('exam:warehouse')
+    return redirect('user:user_dashboard')
