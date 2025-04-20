@@ -45,7 +45,6 @@ def insert_code(request):
         if not duration or price is None:
             return JsonResponse({'status': 'error', 'message': 'Thiếu dữ liệu'}, status=400)
         code = Code(duration=duration, price=price)
-        code.updated_at = datetime.datetime.now()
         code.save()
         return JsonResponse({'status': 'success', 'message': 'Tạo mã thành công!'})
     except Exception as e:
@@ -59,7 +58,6 @@ def update_code(request):
         code = Code.find_by_id(data['id'])
         code.duration = data['duration']
         code.price = data['price']
-        code.updated_at = datetime.datetime.now()
         code.save()
         return JsonResponse({'status': 'success', 'message': 'Cập nhật mã gói thành công!'})
 

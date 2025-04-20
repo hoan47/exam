@@ -4,7 +4,7 @@ def get_user_from_session(request):
     try:
         user_data = request.session.get('user')
         if user_data:
-            user = User.upsert_by_email(user_data.get('email'), user_data.get('name'))
+            user = User.find_by_email(user_data.get('email'))
             if user:
                 user.picture = user_data.get('picture')
                 user.expiry_at = user.get_expiry_at()

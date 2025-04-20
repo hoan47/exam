@@ -34,6 +34,10 @@ class User(Document):
         return cls.objects(id=ObjectId(id)).first()
     
     @classmethod
+    def find_by_email(cls, email):
+        return cls.objects(email=email).first()
+    
+    @classmethod
     def upsert_by_email(cls, email, name):
         user = User.objects(email=email).first()
         if user:

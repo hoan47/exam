@@ -29,6 +29,7 @@ class Code(Document):
     def save(self, *args, **kwargs):
         if not self.code:
             self.code = Code.generate_unique_code()
+        self.updated_at = datetime.datetime.now()
         return super().save(*args, **kwargs)
     
     @classmethod

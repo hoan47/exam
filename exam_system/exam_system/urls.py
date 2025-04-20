@@ -20,4 +20,5 @@ urlpatterns = [
     path('', include('userapp.urls')),
     path('', include('examapp.urls')),
     path('', include('codeapp.urls')),
+    path('', include('historyapp.urls')),
 ]

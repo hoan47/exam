@@ -111,13 +111,12 @@ function toggleFolder(id) {
 // Hàm mở exam
 function openExam(element) {
     const exam = JSON.parse(element.getAttribute('data-exam'));
-    current_exam = exam;
     if (!user) {
         window.location = '/login' //Nhảy ra login khi chưa đăng nhập.
         return;
     }
     if (exam.access == "free") {
-        openExamFetch();
+        window.location = '/exam_detail/?id=' + exam.id;
         return;
     }
     // Kiểm tra nếu expiry_at là null
@@ -125,20 +124,5 @@ function openExam(element) {
         openPremiumModal();
         return;
     }
-    openExamFetch();
-}
-
-function openExamFetch() {
-    fetch("/exam_detail/", {
-        method: 'POST',
-    })
-        .then(response => response.text())
-        .then(data => {
-            document.getElementById("contentContainer").innerHTML = data;
-            ExamDetail.render();
-        })
-        .catch(error => {
-            console.log(error);
-            alert('Lỗi kết nối server!');
-        });
+    window.location = '/exam_detail/?id=' + exam.id;
 }
