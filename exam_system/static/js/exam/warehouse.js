@@ -55,21 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
                                                 <h3 class="font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors mb-1">${exam.title}</h3>
                                                 <div class="flex flex-wrap items-center gap-2 mt-3">
                                                     <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                                        <i class="fas fa-question-circle text-blue-500"></i> ${exam.total_attemped} lượt
+                                                        <i class="fas fa-question-circle text-blue-500"></i> ${exam.stats.total_attempted} lượt
                                                     </span>
                                                     <span class="text-xs bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                                        <i class="fas fa-repeat text-yellow-500"></i> Đã làm ${exam.user_exam_attempts} lần
+                                                        <i class="fas fa-repeat text-yellow-500"></i> Đã làm ${exam.stats.user_exam_attempts} lần
                                                     </span>
                                                     <span class="text-xs bg-purple-50 text-purple-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                                        <i class="fas fa-users text-purple-500"></i> ${exam.total_participants} người
+                                                        <i class="fas fa-users text-purple-500"></i> ${exam.stats.total_participants} người
                                                     </span>
                                                     <span class="text-xs bg-amber-50 text-amber-700 px-3 py-1 rounded-full flex items-center gap-1">
                                                         <i class="fas fa-clock text-amber-500"></i> ${exam.max_duration} phút
                                                     </span>
                                                     <span class="text-xs bg-teal-50 text-teal-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                                        <i class="fas fa-list-ol text-teal-500"></i> ${exam.total_questions} câu
+                                                        <i class="fas fa-list-ol text-teal-500"></i> ${exam.stats.total_questions} câu
                                                     </span>
-                                                    ${exam.parts.map(part => `
+                                                    ${exam.stats.parts.map(part => `
                                                         <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full flex items-center gap-1">
                                                             <i class="fas fa-layer-group text-indigo-500"></i> Part ${part}
                                                         </span>`).join('')}

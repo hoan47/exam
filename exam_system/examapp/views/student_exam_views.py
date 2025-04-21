@@ -17,12 +17,14 @@ def exam_detail(request):
     try:
         user = get_user(request)
         exam = Exam.find_by_id(request.GET.get('id'))
+        history_exams = HistoryExam.get_history_by_exam(user, exam)
         if user and exam:
             return render(request, 'student/exam_detail.html', {
                 'caller': request.GET.get('caller', "warehouse"),
                 'user': user,
                 'user_json': json.dumps(user.to_json()),
-                'exam_json': json.dumps(exam.to_json(is_stats=True, user=user))
+                'exam_json': json.dumps(exam.to_json(is_stats=True, user=user)),
+                'history_exams_json': json.dumps([history_exam.to_json() for history_exam in history_exams])
             })
 
         return render('user:user_dashboard')

@@ -247,3 +247,22 @@
     .exam-results p { font-size: 16px; }
     .exam-results strong { font-size: 18px; }
 }
+
+.option-stat-container {
+    width: 100%;
+    font-size: 0.75rem;
+}
+
+.option-stat-container .progress-bar {
+    height: 4px;
+    border-radius: 2px;
+    overflow: hidden;
+}
+
+.option-stat-container .user-stat {
+    background-color: #6366f1; /* indigo-500 */
+}
+
+.option-stat-container .community-stat {
+    background-color: #9ca3af; /* gray-400 */
+}

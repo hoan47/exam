@@ -40,12 +40,7 @@ class Exam(Document):
         if is_questions:
             data["questions"] = [question.to_json() for question in self.get_questions()]
         if is_stats:
-            data["total_attemped"] = self.get_total_attemped()
-            data["user_exam_attempts"] = self.get_user_exam_attempts(user) if user else 0
-            data["total_participants"] = self.get_total_participants()
-            data["total_questions"] = len(data["questions"]) if data.get("questions") else len(self.get_questions())
-            data["parts"] = self.get_parts()
-            
+            data["stats"] = self.get_exam_stats(user)
         return data
     
     def get_questions(self):
@@ -60,22 +55,26 @@ class Exam(Document):
             if not has_history:
                 version.delete()
                 
-    def get_total_participants(self):
+    def get_exam_stats(self, user=None):
         from historyapp.models.history_exam import HistoryExam
-        return len(HistoryExam.objects(exam=self).distinct('user'))
-
-    def get_user_exam_attempts(self, user):
-        from historyapp.models.history_exam import HistoryExam
-        return len(HistoryExam.objects(exam=self, user=user))
-    
-    def get_total_attemped(self):
-        from historyapp.models.history_exam import HistoryExam
-        return len(HistoryExam.objects(exam=self))
-
-    def get_parts(self):
         from examapp.models.question import Question
-        parts = Question.objects(exam=self).distinct('part')
-        return parts
+        # Lấy tất cả các bài thi có original_exam giống với bài thi hiện tại (lấy tất cả các bản trừ bản chính)
+        related_exams = self.related_exams()
+        total_participants = len(HistoryExam.objects(exam__in=related_exams).distinct('user'))
+        user_exam_attempts = len(HistoryExam.objects(exam__in=related_exams, user=user)) if user else 0
+        total_attempted = len(HistoryExam.objects(exam__in=related_exams))
+        total_questions = len(Question.objects(exam__in=related_exams))
+        parts = Question.objects(exam__in=related_exams).distinct('part')
+
+        return {
+            'total_participants': total_participants,
+            'user_exam_attempts': user_exam_attempts,
+            'total_attempted': total_attempted,
+            'total_questions': total_questions,
+            'parts': parts
+        }
+    def related_exams(self):
+        return (Exam.objects(original_exam=self.original_exam if self.original_exam else self))
     
     def create_copy(self):
         from examapp.models.question import Question

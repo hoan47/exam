@@ -21,7 +21,7 @@ class HistoryExam(Document):
             "score": self.get_score()
         }
         if is_history_answers:
-            data["history_answers"] = [history_answer.to_json() for history_answer in self.get_history_answers()]
+            data["history_answers"] = [history_answer.to_json(user=self.user) for history_answer in self.get_history_answers()]
         
         return data
     
@@ -59,6 +59,16 @@ class HistoryExam(Document):
         histories = cls.objects(user=user).order_by('-started_at')
         latest_by_exam = OrderedDict()
         for history in histories:
-            if str(history.exam.id) not in latest_by_exam:
-                latest_by_exam[str(history.exam.id)] = history
+            if str(history.exam.original_exam.id) not in latest_by_exam:
+                latest_by_exam[str(history.exam.original_exam.id)] = history
         return list(latest_by_exam.values())
+    
+    @classmethod
+    def find_by_user(cls, user):
+        return list(cls.objects(user=user))
+    
+    @classmethod
+    def get_history_by_exam(cls, user, exam):
+        from examapp.models.exam import Exam
+        # Lấy tất cả các bài thi có original_exam giống với bài thi hiện tại (lấy tất cả các bản trừ bản chính)
+        return list(HistoryExam.objects(exam__in=exam.related_exams(), user=user))

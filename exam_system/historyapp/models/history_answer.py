@@ -7,10 +7,10 @@ class HistoryAnswer(Document):
     selected_option = StringField(choices=["A", "B", "C", "D", "X"], null=True, default=None) # "X" là không biết, null là không chọn
     checked = BooleanField(default=False) # Đánh dấu đã kiểm tra đáp án ở phần luyện đề
     
-    def to_json(self):
+    def to_json(self, user=None):
         return {
             "id": str(self.id),
-            "question": self.question.to_json(is_stats=True) if self.question else None,
+            "question": self.question.to_json(is_stats=True, user=user) if self.question else None,
             "selected_option": self.selected_option,
             "checked": self.checked
         }

@@ -171,4 +171,4 @@ ALLOWED_HOSTS = ['26.223.129.154', 'localhost', '127.0.0.1']
 
 
 # Session sẽ hết hạn sau 1 giờ (3600 giây)
-SESSION_COOKIE_AGE = 7200
+SESSION_COOKIE_AGE = 720000

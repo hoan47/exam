@@ -51,12 +51,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const optionsList = questionArea.querySelector(`#question-${questionId} .answer-options`);
         if (!questionData || !optionsList || !questionData.stats) return;
         const stats = questionData.stats;
+        const userStats = stats.user;  // Thống kê người dùng
+        const allStats = stats.all;    // Thống kê cộng đồng
+    
         optionsList.querySelectorAll('li').forEach(li => {
             const option = li.dataset.option;
-            const statValue = stats[option] !== undefined ? stats[option] : 0;
+            // Lấy tỷ lệ phân bổ cho người dùng và cộng đồng
+            const userStatValue = userStats.distribution[option] !== undefined ? userStats.distribution[option] : 0;
+            const allStatValue = allStats.distribution[option] !== undefined ? allStats.distribution[option] : 0;
+
             const statSpan = li.querySelector('.option-stat-value') || document.createElement('span');
             statSpan.className = 'option-stat-value';
-            statSpan.textContent = `${statValue}%`;
+            statSpan.innerHTML = `
+                <div style="font-weight: 200; color:#4361ee; font-size: 0.6rem; line-height: 1.5;">
+                    Bạn: ${userStatValue}%
+                </div>
+                <div style="font-weight: 200; color:#2d3748; font-size: 0.6rem; line-height: 1.5;">
+                    Cộng đồng: ${allStatValue}%
+                </div>
+            `;
             if (!li.querySelector('.option-stat-value')) li.appendChild(statSpan);
         });
     }
@@ -163,7 +176,148 @@ document.addEventListener('DOMContentLoaded', function() {
         questionBlock.appendChild(actionsDiv);
         const explanationDiv = document.createElement('div');
         explanationDiv.className = 'answer-explanation';
-        explanationDiv.innerHTML = `<strong>Giải thích:</strong> ${q.explanation}`;
+        // explanationDiv.innerHTML = `<strong>Giải thích:</strong> ${q.explanation}`; //Chỗ này sửa
+
+        explanationDiv.innerHTML = `
+            <div class="explanation-content" style="
+                color: #4a4a4a;
+                line-height: 1.6;
+                margin-bottom: 16px;
+            ">
+                <strong>Giải thích:</strong> ${q.explanation}
+            </div>
+            
+            <div class="stats-container" style="
+                display: flex;
+                gap: 16px;
+                flex-wrap: wrap;
+            ">
+                <!-- Thống kê cá nhân -->
+                <div class="user-stats" style="
+                    flex: 1;
+                    min-width: 200px;
+                    border-radius: 8px;
+                    padding: 12px;
+                    border: 1px solid #b3e5fc;
+                ">
+                    <h5 style="
+                        color: #4e73df;
+                        margin-top: 0;
+                        margin-bottom: 12px;
+                        font-size: 15px;
+                        display: flex;
+                        align-items: center;
+                    ">
+                        <i class="fas fa-user" style="margin-right: 8px;"></i>
+                        Thống kê cá nhân
+                    </h5>
+                    
+                    <div class="progress-container" style="margin-bottom: 12px;">
+                        <div style="
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 4px;
+                        ">
+                            <span>Đúng: ${q.stats.user.correct} (${q.stats.user.correct_percent}%)</span>
+                            <span>Sai: ${q.stats.user.wrong} (${q.stats.user.wrong_percent}%)</span>
+                        </div>
+                        <div class="progress" style="
+                            height: 10px;
+                            border-radius: 5px;
+                            background: #f56565;
+                            overflow: hidden;
+                        ">
+                            <div class="progress-bar bg-success" style="
+                                width: ${q.stats.user.correct_percent}%;
+                                height: 100%;
+                                background-color: #1cc88a;
+                            "></div>
+                            <div class="progress-bar bg-danger" style="
+                                width: ${q.stats.user.wrong_percent}%;
+                                height: 100%;
+                                background-color: #e74a3b;
+                            "></div>
+                        </div>
+                    </div>
+                    
+                    <div style="
+                        display: flex;
+                        justify-content: space-between;
+                        color: #6c757d;
+                        font-size: 13px;
+                    ">
+                        <span>Tổng: ${q.stats.user.total}</span>
+                        <span>Tỉ lệ đúng: ${q.stats.user.correct_percent}%</span>
+                    </div>
+                </div>
+                
+                <!-- Thống kê cộng đồng -->
+                <div class="community-stats" style="
+                    flex: 1;
+                    min-width: 200px;
+                    border-radius: 8px;
+                    padding: 12px;
+                    border: 1px solid #b3e5fc;
+                ">
+                    <h5 style="
+                        color: #4e73df;
+                        margin-top: 0;
+                        margin-bottom: 12px;
+                        font-size: 15px;
+                        display: flex;
+                        align-items: center;
+                    ">
+                        <i class="fas fa-users" style="margin-right: 8px;"></i>
+                        Thống kê cộng đồng
+                    </h5>
+                    
+                    <div class="progress-container" style="margin-bottom: 12px;">
+                        <div style="
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 4px;
+                        ">
+                            <span>Đúng: ${q.stats.all.correct} (${q.stats.all.correct_percent}%)</span>
+                            <span>Sai: ${q.stats.all.wrong} (${q.stats.all.wrong_percent}%)</span>
+                        </div>
+                        <div class="progress" style="
+                            height: 10px;
+                            border-radius: 5px;
+                            background: #f56565;
+                            overflow: hidden;
+                        ">
+                            <div class="progress-bar bg-success" style="
+                                width: ${q.stats.all.correct_percent}%;
+                                height: 100%;
+                                background-color: #1cc88a;
+                            "></div>
+                            <div class="progress-bar bg-danger" style="
+                                width: ${q.stats.all.wrong_percent}%;
+                                height: 100%;
+                                background-color: #e74a3b;
+                            "></div>
+                        </div>
+                    </div>
+                    
+                    <div style="
+                        display: flex;
+                        justify-content: space-between;
+                        color: #6c757d;
+                        font-size: 13px;
+                    ">
+                        <span>Tổng: ${q.stats.all.total}</span>
+                        <span>Tỉ lệ đúng: ${q.stats.all.correct_percent}%</span>
+                    </div>
+                </div>
+            </div>
+            <div style="
+                margin-top: 12px;
+                font-size: 13px;
+                color: #858796;
+                text-align: right;
+            ">
+            </div>
+        `;
         explanationDiv.style.display = 'none';
         questionBlock.appendChild(explanationDiv);
         return questionBlock;

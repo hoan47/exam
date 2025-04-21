@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log(exam)
     showInfo();
 });
 
@@ -26,12 +25,12 @@ function showInfo() {
     durationEl.innerHTML = `<i class="fas fa-clock mr-1"></i> ${exam.max_duration} phút`;
 
     document.getElementById("examQuestions").innerHTML =
-        `<i class="fas fa-question-circle mr-1 text-white/80"></i> ${exam.total_questions} câu`;
+        `<i class="fas fa-question-circle mr-1 text-white/80"></i> ${exam.stats.total_questions} câu`;
 
     const examPartsContainer = document.getElementById("examPartsContainer");
     examPartsContainer.innerHTML = ""; // Clear nếu có sẵn
 
-    exam.parts.forEach(part => {
+    exam.stats.parts.forEach(part => {
         const span = document.createElement("span");
         span.className = "bg-white/10 px-3 py-1 rounded-full";
         span.innerHTML = `<i class="fas fa-layer-group mr-1 text-white/80"></i> Part ${part}`;
@@ -113,9 +112,45 @@ function confirmStartExam(mode) {
             });
     }
 }
+function formatDate(isoString) {
+    const date = new Date(isoString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${day}/${month} ${hours}:${minutes}`;
+}
 
 
+const groupedByMode = history_exams.reduce((acc, item) => {
+    const mode = item.mode;
+    if (!acc[mode]) acc[mode] = {
+        dates: [],
+        weakQuestions: [],
+        correct: [],
+        wrong: [],
+        unknown: [],
+        noAnswer: [],
+    };
+    const wrongQuestions = item.history_answers.filter(ans => ans.question?.stats?.all?.wrong_percent >= 40);
+    const correct = item.history_answers.filter(answer => answer.selected_option === answer.question.correct_answer).length;
+    const wrong = item.history_answers.filter(answer => answer.selected_option != "X" && answer.selected_option != null && answer.selected_option !== answer.question.correct_answer).length;
+    const unknown = item.history_answers.filter(answer => answer.selected_option === "X").length;
+    const noAnswer = item.history_answers.filter(answer => answer.selected_option === null).length;
 
+    acc[mode].dates.push(formatDate(item.started_at));
+    acc[mode].weakQuestions.push(wrongQuestions);
+    acc[mode].correct.push(correct);
+    acc[mode].wrong.push(wrong);
+    acc[mode].unknown.push(unknown);
+    acc[mode].noAnswer.push(noAnswer);
+    
+
+    return acc;
+}, {});
+
+console.log(history_exams);
+console.log(groupedByMode);
 
 document.addEventListener('DOMContentLoaded', function () {
     // ========== CẤU HÌNH DỮ LIỆU ==========
@@ -123,9 +158,11 @@ document.addEventListener('DOMContentLoaded', function () {
         practice: {
             avgTime: 38,
             chart: {
-                labels: ['15/06', '18/06', '22/06', '25/06', '28/06', '02/07', '05/07'],
-                correct: [4, 5, 6, 7, 8, 7, 9],
-                wrong: [6, 5, 3, 2, 1, 2, 1],
+                labels: groupedByMode.practice.dates,
+                correct: groupedByMode.practice.correct,
+                wrong: groupedByMode.practice.wrong,
+                unknown: groupedByMode.practice.unknown,
+                noAnswer: groupedByMode.practice.noAnswer
             },
             weakQuestions: [
                 { id: 7, content: "Đọc hiểu đoạn văn practice", part: "Phần 7", wrongPercentage: 70, wrongTimes: 4, totalAttempts: 5 },
@@ -134,9 +171,11 @@ document.addEventListener('DOMContentLoaded', function () {
         test: {
             avgTime: 38,
             chart: {
-                labels: ['15/06', '18/06', '22/06', '25/06', '28/06', '02/07', '05/07'],
-                correct: [4, 5, 6, 7, 8, 7, 9],
-                wrong: [6, 5, 3, 2, 1, 2, 1],
+                labels: groupedByMode.test.dates,
+                correct: groupedByMode.test.correct,
+                wrong: groupedByMode.test.wrong,
+                unknown: groupedByMode.test.unknown,
+                noAnswer: groupedByMode.test.noAnswer
             },
             weakQuestions: [
                 { id: 7, content: "Đọc hiểu đoạn văn test", part: "Phần 5", wrongPercentage: 80, wrongTimes: 4, totalAttempts: 5 },
@@ -146,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // ========== HÀM TẠO GIAO DIỆN ==========
     function renderSection(dataConfig) {
-        const { avgTime, chart, weakQuestions } = dataConfig;
+        const { avgTime, chart, weakQuestions} = dataConfig;
         const totalAttempts = chart.labels.length; // Tính tổng số lần làm dựa vào labels
 
         const html = `
@@ -178,23 +217,40 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="chart-container bg-white rounded-xl p-5 shadow-sm border border-gray-100">
             <h3 class="text-lg font-semibold text-gray-800 mb-4">Tiến trình luyện tập</h3>
             
-            <div class="flex justify-center space-x-4 mb-4">
-            <div class="flex items-center">
-                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                <span class="text-sm text-gray-600">Số câu đúng</span>
-            </div>
-            <div class="flex items-center">
-                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-                <span class="text-sm text-gray-600">Số câu sai</span>
-            </div>
-            <div class="flex items-center">
-                <div class="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
-                <span class="text-sm text-gray-600">Số câu chưa làm</span>
-            </div>
+            <!-- Filter Controls -->
+            <div class="chart-filters flex flex-wrap gap-4 mb-4 p-3 rounded-lg">
+                <label class="filter-option flex items-center gap-2 cursor-pointer select-none">
+                    <input type="checkbox" id="correctToggle" checked 
+                        class="appearance-none w-5 h-5 border-2 border-green-500 rounded transition-all"
+                        style="background-color: #10B981;">
+                    <span class="text-green-600 font-medium">Câu đúng</span>
+                </label>
+                
+                <label class="filter-option flex items-center gap-2 cursor-pointer select-none">
+                    <input type="checkbox" id="wrongToggle" checked 
+                        class="appearance-none w-5 h-5 border-2 border-red-500 rounded transition-all"
+                        style="background-color: #EF4444;">
+                    <span class="text-red-600 font-medium">Câu sai</span>
+                </label>
+                
+                <label class="filter-option flex items-center gap-2 cursor-pointer select-none">
+                    <input type="checkbox" id="unknownToggle" checked 
+                        class="appearance-none w-5 h-5 border-2 border-yellow-500 rounded transition-all"
+                        style="background-color: #FBBF24;">
+                    <span class="text-yellow-600 font-medium">Không biết làm</span>
+                </label>
+                
+                <label class="filter-option flex items-center gap-2 cursor-pointer select-none">
+                    <input type="checkbox" id="noAnswerToggle" checked 
+                        class="appearance-none w-5 h-5 border-2 border-gray-400 rounded transition-all"
+                        style="background-color: #9CA3AF;">
+                    <span class="text-gray-600 font-medium">Không chọn đáp án</span>
+                </label>
             </div>
 
+            <!-- Chart Canvas -->
             <div class="chart-wrapper" style="position: relative; height: 400px; width: 100%;">
-            <canvas id="progressChart" height="400"></canvas>
+                <canvas id="progressChart" height="400"></canvas>
             </div>
         </div>
 
@@ -250,57 +306,100 @@ document.addEventListener('DOMContentLoaded', function () {
     `;
 
         document.getElementById('contentContainer').innerHTML = html;
+
+        const toggles = [
+            { id: "correctToggle", color: "#10B981" }, // green
+            { id: "wrongToggle", color: "#EF4444" },   // red
+            { id: "unknownToggle", color: "#F59E0B" }, // yellow
+            { id: "noAnswerToggle", color: "#9CA3AF" } // gray
+        ];
+    
+        toggles.forEach(({ id, color }) => {
+            const checkbox = document.getElementById(id);
+            if (!checkbox) return;
+    
+            // Gán màu ban đầu
+            checkbox.style.backgroundColor = checkbox.checked ? color : "transparent";
+    
+            // Bắt sự kiện toggle
+            checkbox.addEventListener("change", function () {
+                this.style.backgroundColor = this.checked ? color : "transparent";
+                renderChart(dataConfig.chart);
+            });
+        });
+
         renderChart(dataConfig.chart);
     }
 
     // ========== HÀM VẼ BIỂU ĐỒ ==========
+    let myChart = null;
     function renderChart(dataConfig) {
         const ctx = document.getElementById('progressChart').getContext('2d');
-        const { labels, correct, wrong } = dataConfig;
+        const { labels, correct, wrong, unknown, noAnswer } = dataConfig;
+        const datasets = [];
 
-        // Tính số câu chưa làm (tổng 1 lần = 10 câu)
-        const unanswered = correct.map((c, i) => {
-            const w = wrong[i] || 0;
-            const total = c + w;
-            return total < 10 ? 10 - total : 0;
-        });
+        if (document.getElementById('correctToggle')?.checked) {
+            datasets.push({
+                label: 'Câu đúng',
+                data: correct,
+                borderColor: '#10B981',
+                borderWidth: 3,
+                tension: 0.3,
+                pointBackgroundColor: '#10B981',
+                pointRadius: 5,
+                pointHoverRadius: 8
+            });
+        }
 
-        new Chart(ctx, {
+        if (document.getElementById('wrongToggle')?.checked) {
+            datasets.push({
+                label: 'Câu sai',
+                data: wrong,
+                borderColor: '#EF4444',
+                borderWidth: 3,
+                tension: 0.3,
+                pointBackgroundColor: '#EF4444',
+                pointRadius: 5,
+                pointHoverRadius: 8
+            });
+        }
+
+        if (document.getElementById('unknownToggle')?.checked) {
+            datasets.push({
+                label: 'Không biết làm',
+                data: unknown,
+                borderColor: '#FBBF24',
+                borderWidth: 3,
+                tension: 0.3,
+                pointBackgroundColor: '#FBBF24',
+                pointRadius: 5,
+                pointHoverRadius: 8
+            });
+        }
+
+        if (document.getElementById('noAnswerToggle')?.checked) {
+            datasets.push({
+                label: 'Không chọn đáp án',
+                data: noAnswer,
+                borderColor: '#9CA3AF',
+                borderWidth: 3,
+                tension: 0.3,
+                pointBackgroundColor: '#9CA3AF',
+                pointRadius: 5,
+                pointHoverRadius: 8
+            });
+        }
+
+        // ✅ Xóa biểu đồ cũ trước khi tạo biểu đồ mới
+        if (myChart) {
+            myChart.destroy();
+        }
+
+        myChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: labels,
-                datasets: [
-                    {
-                        label: 'Câu đúng',
-                        data: correct,
-                        borderColor: '#10B981',
-                        borderWidth: 3,
-                        tension: 0.3,
-                        pointBackgroundColor: '#10B981',
-                        pointRadius: 5,
-                        pointHoverRadius: 8
-                    },
-                    {
-                        label: 'Câu sai',
-                        data: wrong,
-                        borderColor: '#EF4444',
-                        borderWidth: 3,
-                        tension: 0.3,
-                        pointBackgroundColor: '#EF4444',
-                        pointRadius: 5,
-                        pointHoverRadius: 8
-                    },
-                    {
-                        label: 'Chưa làm',
-                        data: unanswered,
-                        borderColor: '#9CA3AF', // màu xám
-                        borderWidth: 3,
-                        tension: 0.3,
-                        pointBackgroundColor: '#9CA3AF',
-                        pointRadius: 5,
-                        pointHoverRadius: 8
-                    }
-                ]
+                datasets: datasets
             },
             options: {
                 responsive: true,
@@ -353,6 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }
+
 
     // ========== XỬ LÝ SỰ KIỆN ==========
     function switchTab(activeTab) {

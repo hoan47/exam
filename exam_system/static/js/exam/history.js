@@ -44,17 +44,17 @@ function renderHistory() {
                                 <div class="flex flex-wrap items-center gap-2 mt-3">
                                     <!-- Số lượt thi đã thực hiện -->
                                     <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                        <i class="fas fa-question-circle text-blue-500"></i> ${history_exam.exam.total_attemped} lượt
+                                        <i class="fas fa-question-circle text-blue-500"></i> ${history_exam.exam.stats.total_attempted} lượt
                                     </span>
                                     
                                     <!-- Số lần người dùng đã làm bài -->
                                     <span class="text-xs bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                        <i class="fas fa-repeat text-yellow-500"></i> Đã làm ${history_exam.exam.user_exam_attempts} lần
+                                        <i class="fas fa-repeat text-yellow-500"></i> Đã làm ${history_exam.exam.stats.user_exam_attempts} lần
                                     </span>
                                     
                                     <!-- Số người tham gia thi -->
                                     <span class="text-xs bg-purple-50 text-purple-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                        <i class="fas fa-users text-purple-500"></i> ${history_exam.exam.total_participants} người
+                                        <i class="fas fa-users text-purple-500"></i> ${history_exam.exam.stats.total_participants} người
                                     </span>
 
                                     <!-- Thời gian làm bài -->
@@ -64,11 +64,11 @@ function renderHistory() {
 
                                     <!-- Số câu hỏi trong bài thi -->
                                     <span class="text-xs bg-teal-50 text-teal-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                        <i class="fas fa-list-ol text-teal-500"></i> ${history_exam.exam.total_questions} câu
+                                        <i class="fas fa-list-ol text-teal-500"></i> ${history_exam.exam.stats.total_questions} câu
                                     </span>
 
                                     <!-- Các phần thi -->
-                                    ${history_exam.exam.parts.map(part => `
+                                    ${history_exam.exam.stats.parts.map(part => `
                                         <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full flex items-center gap-1">
                                             <i class="fas fa-layer-group text-indigo-500"></i> Part ${part}
                                         </span>`).join('')}
