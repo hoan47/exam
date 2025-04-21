@@ -4,13 +4,13 @@ const Part5 = (function () {
 function insertSampleContent() {
     const editor = document.getElementById('part-5__editor-1');
     if (!editor) return;
-    editor.value = `101. Its…………into Brazil has given Darrow Textiles Ltd an advantage over much of its competition.
+    editor.value = `101. Its_______into Brazil has given Darrow Textiles Ltd an advantage over much of its competition.
 (A) expansion   (B) process
 (C) creation    (D) action
 Lời giải: "Expansion" (sự mở rộng) là từ phù hợp nhất trong ngữ cảnh này.
 Chọn: A
 -------------------------------------------------------------------------------------------------------------------
-102. QIB will work…………to maintain sustainable growth and expansion plans.
+102. QIB will work_______to maintain sustainable growth and expansion plans.
 (A) Persisted   (B) Persistent
 (C) Persistently    (D) Persistence
 Lời giải: "Persistently" (liên tục) là trạng từ phù hợp.

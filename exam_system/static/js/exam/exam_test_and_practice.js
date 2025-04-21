@@ -1,8 +1,15 @@
 // scripts/common.js
+document.addEventListener('DOMContentLoaded', () => {
+    console.log(history_exam)
+});
+
 function parseExamData() {
-    const rawData = document.getElementById('exam-data').textContent;
     try {
-        return JSON.parse(rawData);
+        return rawData = {
+            exam: history_exam.exam,
+            questions: history_exam.history_answers.map(answer => answer.question),
+            passages: history_exam.history_answers.map(answer => answer.question.passage).filter(p => p !== null)
+        }
     } catch (e) {
         console.error('Error parsing JSON:', e);
         const errorContainer = document.getElementById('loading-error');
@@ -21,11 +28,11 @@ function extractQuestionDisplayId(text) {
 }
 
 function getPassageById(id, examData) {
-    return examData.passages.find(p => p._id === id);
+    return examData.passages.find(p => p.id === id);
 }
 
 function getQuestionById(id, examData) {
-    return examData.questions.find(q => q._id === id);
+    return examData.questions.find(q => q.id === id);
 }
 
 function createTab(part, isActive) {
@@ -37,7 +44,7 @@ function createTab(part, isActive) {
 }
 
 function createNavItem(q, switchTab, scrollToQuestion) {
-    const questionId = q._id;
+    const questionId = q.id;
     const displayId = extractQuestionDisplayId(q.text);
     const item = document.createElement('button');
     item.className = 'nav-item';
@@ -52,7 +59,7 @@ function createNavItem(q, switchTab, scrollToQuestion) {
 }
 
 function createQuestionElement(q, handleAnswerSelection, handleCheckAnswer, handleUnknownAnswer) {
-    const questionId = q._id;
+    const questionId = q.id;
     const displayId = extractQuestionDisplayId(q.text);
 
     const questionBlock = document.createElement('div');
@@ -90,6 +97,7 @@ function createQuestionElement(q, handleAnswerSelection, handleCheckAnswer, hand
         li.appendChild(input);
         li.appendChild(label);
         optionsList.appendChild(li);
+
 
         li.addEventListener('click', (e) => {
             if (!input.checked && handleAnswerSelection) {
@@ -141,14 +149,14 @@ function renderQuestions(examData, questionArea, navContainer, switchTab, scroll
             });
         } else {
             const questionsByPassage = partQuestions.reduce((acc, q) => {
-                const pId = q.passage_id;
+                const pId = q.passage.id;
                 if (!acc[pId]) acc[pId] = { passage: getPassageById(pId, examData), questions: [] };
                 acc[pId].questions.push(q);
                 return acc;
             }, {});
             Object.values(questionsByPassage).forEach(group => {
                 if (!group.passage) {
-                    console.error(`Passage not found for questions starting with ID: ${group.questions[0]?._id}`);
+                    console.error(`Passage not found for questions starting with ID: ${group.questions[0]?.id}`);
                     return;
                 }
                 const passageGroup = document.createElement('div');
@@ -173,5 +181,82 @@ function renderQuestions(examData, questionArea, navContainer, switchTab, scroll
                 passageGroup.appendChild(questionsContainer);
             });
         }
+    });
+}
+
+function updateSelectedOption(question_id, selected_option, checked=false){
+    fetch('/update_history_answer/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            'id': findHistoryAnswerIdByQuestionId(question_id),
+            'selected_option': selected_option,
+            'checked': checked
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Tạo thành công!');
+        } else {
+            console.log('Thất bại: ' + data.message);
+        }
+    })
+    .catch(() => {
+        alert('Lỗi kết nối server!');
+        loadFolders();
+    });
+}
+
+function findHistoryAnswerIdByQuestionId(questionId) {
+    const answer = history_exam.history_answers.find(
+        a => a.question && a.question.id === questionId
+    );
+    return answer.id;
+}
+
+
+function setAnswer(questionId, selectedOption) {
+    // Tìm phần tử question-block với data-question-id tương ứng
+    const questionBlock = document.querySelector(`.question-block[data-question-id="${questionId}"]`);
+
+    if (questionBlock) {
+        // Tìm tất cả các radio button của câu hỏi đó
+        const answerOptions = questionBlock.querySelectorAll('.answer-options li input[type="radio"]');
+
+        // Duyệt qua tất cả các radio button và kiểm tra xem có khớp với selectedOption không
+        answerOptions.forEach(input => {
+            if (input.value === selectedOption) {
+                // Đánh dấu radio button đã chọn
+                input.checked = true;
+            } else {
+                // Đảm bảo các radio button khác không được chọn
+                input.checked = false;
+            }
+        });
+    }
+}
+
+
+function submitExam(){
+    fetch('/update_history_exam/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            'id': history_exam.id
+        })
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.status === 'success') {
+            console.log('Tạo thành công!');
+            window.location.href = '/history/';
+        } else {
+            console.log('Thất bại: ' + data.message);
+        }
+    })
+    .catch(() => {
+        alert('Lỗi kết nối server!');
+        loadFolders();
     });
 }

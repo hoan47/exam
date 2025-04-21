@@ -8,28 +8,25 @@ document.addEventListener('DOMContentLoaded', function() {
     const questionArea = document.getElementById('question-area');
     const navContainer = document.getElementById('question-nav');
     const timerDisplay = document.getElementById('timerDisplay');
-    const submitModal = document.getElementById('submit-modal');
-    const confirmSubmit = document.getElementById('confirm-submit');
-    const cancelSubmit = document.getElementById('cancel-submit');
-    const scoreDisplay = document.getElementById('score-display');
 
     let answeredQuestions = new Set();
     let timerInterval = null;
-    let minutes = examData.exam.max_duration;
-    let seconds = 0;
 
     examTitleEl.textContent = examData.exam.title;
+    startTimer();
 
     function startTimer() {
-        timerInterval = setInterval(function() {
+        const completedAt = new Date(history_exam.completed_at);
+        const now = new Date();
+        let remainingMs = completedAt - now;
+    
+        let minutes = Math.floor(remainingMs / 60000);
+        let seconds = Math.floor((remainingMs % 60000) / 1000);
+        timerInterval = setInterval(function () {
             if (seconds === 0) {
                 if (minutes === 0) {
                     clearInterval(timerInterval);
-                    submitModal.style.display = 'flex';
-                    scoreDisplay.style.display = 'block';
-                    scoreDisplay.textContent = `Hết giờ! Điểm của bạn: ${calculateScore()}/${examData.questions.length}`;
-                    confirmSubmit.style.display = 'none';
-                    cancelSubmit.textContent = 'Đóng';
+                    submitExam();
                     return;
                 }
                 minutes--;
@@ -37,22 +34,11 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 seconds--;
             }
+    
             const displayMinutes = minutes < 10 ? `0${minutes}` : minutes;
             const displaySeconds = seconds < 10 ? `0${seconds}` : seconds;
             timerDisplay.textContent = `${displayMinutes}:${displaySeconds}`;
         }, 1000);
-    }
-
-    function calculateScore() {
-        let score = 0;
-        examData.questions.forEach(q => {
-            const questionId = q._id;
-            const selectedOption = document.querySelector(`input[name="q${questionId}"]:checked`);
-            if (selectedOption && selectedOption.value === q.correct_answer) {
-                score++;
-            }
-        });
-        return score;
     }
 
     function switchTab(partToShow) {
@@ -71,19 +57,16 @@ document.addEventListener('DOMContentLoaded', function() {
         const questionElement = questionArea.querySelector(`.question-block[data-question-id="${questionId}"]`);
         if (questionElement) {
             questionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            questionElement.style.backgroundColor = 'var(--primary-light)';
-            setTimeout(() => {
-                questionElement.style.backgroundColor = '';
-            }, 1000);
         }
     }
 
-    function handleAnswerSelection(questionId, selectedOption, optionsList) {
+    function handleAnswerSelection(questionId, selectedOption, optionsList, is_update=true) { //Lưu đáp án
         const navItem = navContainer.querySelector(`.nav-item[data-question-id="${questionId}"]`);
         if (navItem) {
             navItem.classList.add('answered');
             answeredQuestions.add(questionId);
         }
+        if (is_update) updateSelectedOption(questionId, selectedOption);
         const questionDiv = questionArea.querySelector(`[data-question-id="${questionId}"]`);
         let clearBtn = questionDiv.querySelector('.clear-answer-btn');
         if (!clearBtn) {
@@ -91,7 +74,8 @@ document.addEventListener('DOMContentLoaded', function() {
             clearBtn.className = 'clear-answer-btn';
             clearBtn.textContent = 'Xóa đáp án';
             questionDiv.appendChild(clearBtn);
-            clearBtn.addEventListener('click', function() {
+            clearBtn.addEventListener('click', function() { // Xóa đáp án
+                updateSelectedOption(questionId, null);
                 const radios = questionDiv.querySelectorAll(`input[name="q${questionId}"]`);
                 radios.forEach(r => r.checked = false);
                 navItem.classList.remove('answered');
@@ -129,28 +113,28 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     document.getElementById('submit-btn').addEventListener('click', function() {
-        submitModal.style.display = 'flex';
-        scoreDisplay.style.display = 'none';
-        confirmSubmit.style.display = 'inline-block';
-        cancelSubmit.textContent = 'Hủy';
-    });
-
-    confirmSubmit.addEventListener('click', function() {
-        clearInterval(timerInterval);
-        const score = calculateScore();
-        scoreDisplay.style.display = 'block';
-        scoreDisplay.textContent = `Bài thi đã nộp! Điểm của bạn: ${score}/${examData.questions.length}`;
-        confirmSubmit.style.display = 'none';
-        cancelSubmit.textContent = 'Xem lịch sử';
-    });
-
-    cancelSubmit.addEventListener('click', function() {
-        submitModal.style.display = 'none';
-        scoreDisplay.style.display = 'none';
-        if (cancelSubmit.textContent === 'Hủy') {
-            if (!timerInterval) startTimer();
+        if (!confirm('Bạn có chắc chắn muốn nộp bài?')) {
+            return;
         }
+        submitExam();
     });
 
-    startTimer();
+    for (let i = 0; i < history_exam.history_answers.length; i++) {
+        const answer = history_exam.history_answers[i];
+        const question = answer.question;
+        console.log("Question ID:", question.id);
+        console.log("Selected Option:", answer.selected_option);
+
+        if (answer.selected_option !== null) {
+            if (answer.selected_option === 'X') {
+                handleUnknownAnswer(question.id, answer.selected_option,
+                    document.querySelector(`.question-block[data-question-id="${question.id}"]`).querySelector('.answer-options'));
+            }
+            else {
+                handleAnswerSelection(question.id, answer.selected_option,
+                    document.querySelector(`.question-block[data-question-id="${question.id}"]`).querySelector('.answer-options'), false);
+                setAnswer(question.id, answer.selected_option);
+            }
+        }
+    }
 });

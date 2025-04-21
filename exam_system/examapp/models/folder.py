@@ -13,18 +13,21 @@ class Folder(Document):
             e.delete()
         super().delete(*args, **kwargs)
         
-    def to_json(self):
+    def to_json(self, is_exam_draft=True):
         return {
             "id": str(self.id),
             "name": self.name,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             "order": self.order,
-            "exams": [exam.to_json() for exam in self.get_exams()]
+            "exams": [exam.to_json() for exam in self.get_exams(is_exam_draft)]
         }
 
-    def get_exams(self):
+    def get_exams(self, is_exam_draft=True):
         from examapp.models.exam import Exam
-        return list(Exam.objects(folder=self, version=0).order_by('order'))
+        if is_exam_draft:
+            return list(Exam.objects(folder=self, version=0).order_by('order'))
+        else:
+            return list(Exam.objects(folder=self, version=0, status='active').order_by('order'))
 
     @classmethod
     def find_by_id(cls, id):

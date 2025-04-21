@@ -13,8 +13,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        const user = '{{ user_json|safe }}';
-        const exam = '{{ exam_json|safe }}';
+        const userJson = '{{ user_json|escapejs }}';
+        const user = userJson != 'None' ? JSON.parse(userJson) : undefined;
+        const examJson = '{{ exam_json|safe }}';
+        const exam = examJson != 'None' ? JSON.parse(examJson) : null;
     </script>
     <script src="{% static 'js/header_user.js' %}" defer></script>
     <script src="{% static 'js/exam/exam_detail.js' %}" defer></script>

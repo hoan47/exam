@@ -20,8 +20,7 @@ def insert_history_exam(request):
         
         user = User.find_by_id(user_id)
         exam = Exam.find_by_id(exam_id, False)
-        from datetime import datetime, timedelta
-        completed_at = datetime.now() + timedelta(minutes=exam.exam.max_duration) if mode == 'test' else None
+        completed_at = datetime.now() + timedelta(minutes=exam.max_duration) if mode == 'test' else None
         history_exam = HistoryExam(user=user, exam=exam, mode=mode, completed_at=completed_at)
         history_exam.save()
         for question in exam.get_questions():
@@ -29,5 +28,19 @@ def insert_history_exam(request):
             history_answer.save()
             
         return JsonResponse({'status': 'success', 'message': 'Tạo phiên thi thành công', 'history_exam_id': str(history_exam.id)})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'message': 'Có lỗi xảy ra: ' + str(e)})
+    
+@csrf_exempt
+@require_POST
+def update_history_exam(request):
+    try:
+        data = json.loads(request.body)  # Nhận dữ liệu từ client
+        id = data['id']
+        history_exam = HistoryExam.find_by_id(id)
+        if not history_exam.completed_at or datetime.now() < history_exam.completed_at:
+            history_exam.completed_at = datetime.now()
+        history_exam.save()
+        return JsonResponse({'status': 'success', 'message': 'Tạo phiên thi thành công'})
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': 'Có lỗi xảy ra: ' + str(e)})

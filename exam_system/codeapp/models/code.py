@@ -11,8 +11,8 @@ class Code(Document):
     price = FloatField(required=True)
     created_at = DateTimeField(default=datetime.datetime.now)
     updated_at = DateTimeField(default=datetime.datetime.now)
-    user = ReferenceField('User', null=True)
-    applied_at = DateTimeField(null=True)
+    user = ReferenceField('User', null=True, default=None)
+    applied_at = DateTimeField(null=True, default=None)
 
     def to_json(self):
         return {

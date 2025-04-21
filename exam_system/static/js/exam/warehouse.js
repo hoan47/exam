@@ -112,7 +112,7 @@ function toggleFolder(id) {
 function openExam(element) {
     const exam = JSON.parse(element.getAttribute('data-exam'));
     if (!user) {
-        window.location = '/login' //Nhảy ra login khi chưa đăng nhập.
+        window.location = '/login/' //Nhảy ra login khi chưa đăng nhập.
         return;
     }
     if (exam.access == "free") {
@@ -120,7 +120,7 @@ function openExam(element) {
         return;
     }
     // Kiểm tra nếu expiry_at là null
-    if (user.expiry_at === null) {
+    if (!user.expiry_at) {
         openPremiumModal();
         return;
     }

@@ -307,7 +307,7 @@ Chọn: D
 Lời giải:
 Đáp án (B) "to" là đáp án chính xác. Cụm từ "look forward to your reply" có nghĩa là "mong đợi phản hồi của bạn".
 Đáp án (A) "at", (C) "with", và (D) "from" không phù hợp với cụm động từ "look forward".
-Chọn: B2. QIB will work…………to maintain sustainable growth and expansion plans.
+Chọn: B2. QIB will work_______to maintain sustainable growth and expansion plans.
 (A) Persisted   (B) Persistent
 (C) Persistently    (D) Persistence
 Lời giải: "Persistently" (liên tục) là trạng từ phù hợp.

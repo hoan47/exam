@@ -1,6 +1,6 @@
 from userapp.models.user import User
 
-def get_user_from_session(request):
+def get_user(request):
     try:
         user_data = request.session.get('user')
         if user_data:

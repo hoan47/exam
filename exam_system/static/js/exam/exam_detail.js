@@ -170,7 +170,7 @@ function confirmStartExam(mode) {
         .then(data => {
             if (data.status === 'success') {
                 console.log('Tạo thành công!');
-                window.location.href = '/practice_mode/?id=' + data.history_exam_id;
+                window.location.href = `/${mode}_mode/`;
             } else {
                 console.log('Thất bại: ' + data.message);
             }

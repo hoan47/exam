@@ -12,8 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        const userJson = '{{ user_json|escapejs }}';
-        const user = userJson ? JSON.parse(userJson) : undefined;
+        const user = user ? JSON.parse('{{ user_json|escapejs }}') : undefined;
     </script>
     <script src="{% static 'js/header_user.js' %}" defer></script>
 </head>

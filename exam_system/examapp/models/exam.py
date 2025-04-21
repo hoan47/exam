@@ -56,11 +56,11 @@ class Exam(Document):
                 
     def get_total_users_attempted(self):
         from historyapp.models.history_exam import HistoryExam
-        return len(HistoryExam.objects(exam=self).distinct('user'))
+        return len(HistoryExam.objects(exam=Exam.find_by_id(self.id, False)).distinct('user'))
 
     def get_total_attemped(self):
         from historyapp.models.history_exam import HistoryExam
-        return len(HistoryExam.objects(exam=self))
+        return len(HistoryExam.objects(exam=Exam.find_by_id(self.id, False)))
 
     def create_copy(self):
         from examapp.models.question import Question

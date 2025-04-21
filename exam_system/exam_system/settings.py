@@ -159,9 +159,16 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 
+# Danh sách các nguồn tin cậy cho CSRF
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:8000',  # Thêm localhost vào danh sách nguồn tin cậy
+    'http://26.223.129.154:8000',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000'
 ]
+
+# Danh sách các host được phép truy cập
+ALLOWED_HOSTS = ['26.223.129.154', 'localhost', '127.0.0.1']
+
 
 # Session sẽ hết hạn sau 1 giờ (3600 giây)
 SESSION_COOKIE_AGE = 7200

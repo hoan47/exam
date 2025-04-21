@@ -7,17 +7,17 @@ from examapp.models.folder import Folder
 from userapp.models.user import User
 from utils.utils import redirect_if_ongoing_exam, user_required
 
-from userapp.utils import get_user_from_session
+from userapp.utils import get_user
 
 @user_required
 @redirect_if_ongoing_exam
 def history(request):
     try:
-        user = get_user_from_session(request)
+        user = get_user(request)
         return render(request, 'student/history.html', {
             'caller': 'history',
             'user': user,
-            'user_json': json.dumps(user.to_json()) if user else 'null'
+            'user_json': json.dumps(user.to_json()) if user else None,
         })
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)

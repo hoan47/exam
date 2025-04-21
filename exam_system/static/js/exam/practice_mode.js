@@ -9,20 +9,23 @@ document.addEventListener('DOMContentLoaded', function() {
     const navContainer = document.getElementById('question-nav');
     const submitBtn = document.getElementById('submit-exam-btn');
     const overlay = document.getElementById('submission-overlay');
-
     let userAnswers = {};
     let isSubmitted = false;
 
     examTitleEl.textContent = examData.exam.title;
 
+    
     function switchTab(partToShow) {
-        if (isSubmitted) return;
         tabsContainer.querySelectorAll('.tab').forEach(tab => {
             tab.classList.toggle('active', tab.dataset.part === partToShow);
         });
         questionArea.querySelectorAll('.part-content').forEach(pane => {
             pane.classList.toggle('active', pane.dataset.part === partToShow);
         });
+
+        
+        // Cuộn lên đầu phần nội dung
+        questionArea.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function scrollToQuestion(questionId) {
@@ -58,9 +61,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function handleAnswerSelection(questionId, selectedOption, optionsList) {
+    function handleAnswerSelection(questionId, selectedOption, optionsList, is_update=true) { //Lưu đáp án
         if (isSubmitted || userAnswers[questionId]?.checked) return;
         if (!userAnswers[questionId] || !userAnswers[questionId].checked) {
+            if (is_update) updateSelectedOption(questionId, selectedOption);
             userAnswers[questionId] = { ...userAnswers[questionId], selected: selectedOption, checked: false, correct: null };
             optionsList.querySelectorAll('li').forEach(li => {
                 li.classList.toggle('selected', li.dataset.option === selectedOption);
@@ -73,12 +77,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function handleCheckAnswer(questionId) {
+    function handleCheckAnswer(questionId, is_update=true) {
         if (isSubmitted) return;
+        
         const questionData = getQuestionById(questionId, examData);
         const userAnswer = userAnswers[questionId];
         if (!questionData || !userAnswer || userAnswer.checked) return;
         const selectedOption = userAnswer.selected;
+        if (is_update) updateSelectedOption(questionId, selectedOption, true);
         const isCorrect = selectedOption === questionData.correct_answer;
         userAnswer.checked = true;
         userAnswer.correct = isCorrect;
@@ -101,8 +107,9 @@ document.addEventListener('DOMContentLoaded', function() {
         if (unknownBtn) unknownBtn.disabled = true;
     }
 
-    function handleUnknownAnswer(questionId) {
+    function handleUnknownAnswer(questionId, is_update=true) {
         if (isSubmitted) return;
+        if (is_update) updateSelectedOption(questionId, "X");
         const questionData = getQuestionById(questionId, examData);
         if (!questionData || userAnswers[questionId]?.checked) return;
         userAnswers[questionId] = { selected: 'Unknown', checked: true, correct: false };
@@ -125,52 +132,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function handleSubmitExam() {
         if (isSubmitted) return;
-        if (!confirm('Bạn có chắc chắn muốn nộp bài không? Bạn sẽ không thể thay đổi câu trả lời sau khi nộp.')) {
+        if (!confirm('Bạn có chắc chắn muốn nộp bài?')) {
             return;
         }
-        isSubmitted = true;
-        let correctCount = 0;
-        Object.values(userAnswers).forEach(answer => {
-            if (answer.checked && answer.correct === true) {
-                correctCount++;
-            }
-        });
-        submitBtn.disabled = true;
-        tabsContainer.querySelectorAll('.tab').forEach(tab => tab.disabled = true);
-        navContainer.querySelectorAll('.nav-item').forEach(item => item.disabled = true);
-        questionArea.querySelectorAll('input[type="radio"], .check-answer-btn, .unknown-option').forEach(el => {
-            if (!el.disabled) el.disabled = true;
-        });
-        overlay.style.display = 'block';
-        examData.questions.forEach(q => {
-            if (!userAnswers[q._id] || !userAnswers[q._id].checked) {
-                const optionsList = questionArea.querySelector(`#question-${q._id} .answer-options`);
-                if (optionsList) {
-                    optionsList.querySelectorAll('li').forEach(li => {
-                        li.classList.add('checked');
-                        const option = li.dataset.option;
-                        if (option === q.correct_answer) li.classList.add('correct');
-                        const radio = li.querySelector('input[type="radio"]');
-                        if (radio) radio.disabled = true;
-                    });
-                    const explanationDiv = questionArea.querySelector(`#question-${q._id} .answer-explanation`);
-                    if (explanationDiv) explanationDiv.style.display = 'block';
-                    displayStatsOnOptions(q._id);
-                    updateNavItemStatus(q._id, 'incorrect');
-                    const checkBtn = questionArea.querySelector(`.check-answer-btn[data-question-id="${q._id}"]`);
-                    const unknownBtn = questionArea.querySelector(`.unknown-option[data-question-id="${q._id}"]`);
-                    if (checkBtn) checkBtn.disabled = true;
-                    if (unknownBtn) unknownBtn.disabled = true;
-                }
-            }
-        });
-        questionArea.innerHTML = `
-            <div class="exam-results">
-                <h2>Kết quả</h2>
-                <p>Bạn đã trả lời đúng <strong>${correctCount}</strong> / <strong>${examData.questions.length}</strong> câu.</p>
-            </div>
-        `;
-        questionArea.scrollTop = 0;
+        submitExam();
     }
 
     const parts = [...new Set(examData.questions.map(q => q.part))].sort();
@@ -185,15 +150,15 @@ document.addEventListener('DOMContentLoaded', function() {
         const checkBtn = document.createElement('button');
         checkBtn.className = 'check-answer-btn';
         checkBtn.textContent = 'Kiểm tra';
-        checkBtn.dataset.questionId = q._id;
+        checkBtn.dataset.questionId = q.id;
         checkBtn.style.display = 'none';
-        checkBtn.addEventListener('click', () => handleCheckAnswer(q._id));
+        checkBtn.addEventListener('click', () => handleCheckAnswer(q.id));
         actionsDiv.appendChild(checkBtn);
         const unknownBtn = document.createElement('button');
         unknownBtn.className = 'unknown-option';
         unknownBtn.textContent = 'Không biết';
-        unknownBtn.dataset.questionId = q._id;
-        unknownBtn.addEventListener('click', () => handleUnknownAnswer(q._id));
+        unknownBtn.dataset.questionId = q.id;
+        unknownBtn.addEventListener('click', () => handleUnknownAnswer(q.id));
         actionsDiv.appendChild(unknownBtn);
         questionBlock.appendChild(actionsDiv);
         const explanationDiv = document.createElement('div');
@@ -204,5 +169,35 @@ document.addEventListener('DOMContentLoaded', function() {
         return questionBlock;
     });
 
+    // Thêm sự kiện click cho các tab
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            switchTab(tab.dataset.part);
+        });
+    });
+
     submitBtn.addEventListener('click', handleSubmitExam);
+
+    for (let i = 0; i < history_exam.history_answers.length; i++) {
+        const answer = history_exam.history_answers[i];
+        const question = answer.question;
+        console.log("Question ID:", question.id);
+        console.log("Selected Option:", answer.selected_option);
+        console.log("Checked:", answer.checked);
+        if (answer.selected_option !== null) {
+            if (answer.selected_option === 'X') {
+                handleUnknownAnswer(question.id, answer.selected_option,
+                    document.querySelector(`.question-block[data-question-id="${question.id}"]`).querySelector('.answer-options'), false);
+            }
+            else {
+                handleAnswerSelection(question.id, answer.selected_option,
+                    document.querySelector(`.question-block[data-question-id="${question.id}"]`).querySelector('.answer-options'), false);
+                setAnswer(question.id, answer.selected_option);
+                if (answer.checked === true){
+                    handleCheckAnswer(question.id, false)
+                }
+            }
+        }
+    }
 });
+

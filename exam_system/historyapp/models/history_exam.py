@@ -1,5 +1,6 @@
+from bson import ObjectId
 from mongoengine import Document, ReferenceField, StringField, DateTimeField, CASCADE
-from datetime import datetime, timedelta
+from datetime import datetime
 
 
 class HistoryExam(Document):
@@ -16,7 +17,8 @@ class HistoryExam(Document):
             "exam": self.exam.to_json() if self.exam else None,
             "mode": self.mode,
             "started_at": self.started_at.isoformat() if self.started_at else None,
-            "completed_at": self.completed_at.isoformat() if self.completed_at else None
+            "completed_at": self.completed_at.isoformat() if self.completed_at else None,
+            "history_answers": [history_answer.to_json() for history_answer in self.get_history_answers()]
         }
         
     def get_history_answers(self):
@@ -25,6 +27,13 @@ class HistoryExam(Document):
     
     @classmethod
     def find_ongoing_exam(cls, user):
-        return cls.objects(user=user, completed_at__in=[None, {"$gt": datetime.now()}]).first()
-
-
+        return cls.objects(user=user).filter(__raw__={
+            "$or": [
+                {"completed_at": None},
+                {"completed_at": {"$gt": datetime.now()}}
+            ]
+        }).first()
+        
+    @classmethod
+    def find_by_id(cls, id):
+        return cls.objects(id=ObjectId(id)).first()
