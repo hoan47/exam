@@ -19,7 +19,7 @@ def insert_history_exam(request):
         mode = data['mode']
         
         user = User.find_by_id(user_id)
-        exam = Exam.find_by_id(exam_id, False)
+        exam = Exam.find_by_id(exam_id)
         completed_at = datetime.now() + timedelta(minutes=exam.max_duration) if mode == 'test' else None
         history_exam = HistoryExam(user=user, exam=exam, mode=mode, completed_at=completed_at)
         history_exam.save()

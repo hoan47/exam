@@ -5,9 +5,7 @@ from django.http import JsonResponse
 import json
 from codeapp.models import Code
 import json
-
 from userapp.models.user import User
-
 
 @csrf_exempt
 @require_POST

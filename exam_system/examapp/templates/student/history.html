@@ -8,17 +8,36 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/header_user.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/footer_advertise.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/exam/history.css' %}">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        const user = user ? JSON.parse('{{ user_json|escapejs }}') : undefined;
+        const userJson = '{{ user_json|escapejs }}';
+        const user = userJson != 'None' ? JSON.parse(userJson) : undefined;
+        const history_exams_json = '{{ history_exams_json|escapejs }}';
+        const history_exams = history_exams_json != 'None' ? JSON.parse(history_exams_json) : undefined;
     </script>
     <script src="{% static 'js/header_user.js' %}" defer></script>
+    <script src="{% static 'js/exam/history.js' %}" defer></script>
 </head>
 <body class="flex flex-col min-h-screen">
     {% include 'header_user.html' %}
 
+    <div class="mt-6 flex-grow">
+        <main class="container mx-auto px-24 pb-5">
+            <!-- Page Header -->
+            <div class="mb-8">
+                <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">
+                    <span class="bg-gradient-to-r from-indigo-600 to-indigo-400 bg-clip-text text-transparent">Lịch sử đề thi</span>
+                </h1>
+                <p class="text-gray-600">Các đề thi gần đây nhất mà bạn đã làm</p>
+            </div>
+        
+            <div id="historyContainer" class="grid grid-cols-1 gap-6"></div>
+        </main>
+    </div>
+    
     {% include 'footer_advertise.html' %}
 </body>
 

@@ -57,12 +57,22 @@ document.addEventListener('DOMContentLoaded', () => {
                                                     <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full flex items-center gap-1">
                                                         <i class="fas fa-question-circle text-blue-500"></i> ${exam.total_attemped} lượt
                                                     </span>
+                                                    <span class="text-xs bg-yellow-50 text-yellow-700 px-3 py-1 rounded-full flex items-center gap-1">
+                                                        <i class="fas fa-repeat text-yellow-500"></i> Đã làm ${exam.user_exam_attempts} lần
+                                                    </span>
                                                     <span class="text-xs bg-purple-50 text-purple-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                                        <i class="fas fa-users text-purple-500"></i> ${exam.total_users_attempted} người
+                                                        <i class="fas fa-users text-purple-500"></i> ${exam.total_participants} người
                                                     </span>
                                                     <span class="text-xs bg-amber-50 text-amber-700 px-3 py-1 rounded-full flex items-center gap-1">
                                                         <i class="fas fa-clock text-amber-500"></i> ${exam.max_duration} phút
                                                     </span>
+                                                    <span class="text-xs bg-teal-50 text-teal-700 px-3 py-1 rounded-full flex items-center gap-1">
+                                                        <i class="fas fa-list-ol text-teal-500"></i> ${exam.total_questions} câu
+                                                    </span>
+                                                    ${exam.parts.map(part => `
+                                                        <span class="text-xs bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full flex items-center gap-1">
+                                                            <i class="fas fa-layer-group text-indigo-500"></i> Part ${part}
+                                                        </span>`).join('')}
                                                     ${exam.access === "free" ? `
                                                         <span class="text-xs bg-gradient-to-r from-green-50 to-green-100 text-green-700 px-3 py-1 rounded-full flex items-center gap-1 border border-green-200">
                                                             <i class="fas fa-unlock-alt text-green-500"></i> Miễn phí
@@ -72,8 +82,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                                             <i class="fas fa-crown text-amber-500"></i> Premium
                                                         </span>
                                                     `}
-                                                    <span class="text-sm bg-white text-gray-600 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
-                                                        <i class="fas fa-calendar-alt"></i> ${new Date(exam.updated_at).toLocaleDateString('vi-VN')}
+                                                    <span class="text-xs bg-slate-100 text-slate-700 px-3 py-1 rounded-full flex items-center gap-1 shadow-sm">
+                                                        <i class="fas fa-calendar-alt text-slate-500"></i> Cập nhật ${new Date(exam.updated_at).toLocaleString('vi-VN')}
                                                     </span>
                                                 </div>
                                             </div>

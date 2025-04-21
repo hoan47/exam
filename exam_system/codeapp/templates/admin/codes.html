@@ -30,6 +30,31 @@
             </div>
         </div>
 
+        <!-- Bộ lọc mới thêm vào -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title">Bộ lọc</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label for="filterEmail" class="form-label">Email học viên</label>
+                        <input type="email" class="form-control" id="filterEmail" placeholder="Nhập email...">
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <div class="d-flex justify-content-end">
+                            <button class="btn btn-outline-secondary me-2" id="resetFilterBtn">
+                                <i class="fas fa-undo me-1"></i> Đặt lại
+                            </button>
+                            <button class="btn btn-primary" id="applyFilterBtn">
+                                <i class="fas fa-filter me-1"></i> Áp dụng
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="card">
             <div class="card-header">
                 <h5 class="card-title">Danh sách mã gói</h5>

@@ -22,7 +22,7 @@ def exam_detail(request):
                 'caller': request.GET.get('caller', "warehouse"),
                 'user': user,
                 'user_json': json.dumps(user.to_json()),
-                'exam_json': json.dumps(exam.to_json())
+                'exam_json': json.dumps(exam.to_json(is_stats=True, user=user))
             })
 
         return render('user:user_dashboard')

@@ -2,6 +2,22 @@
 document.addEventListener('DOMContentLoaded', function () {
     // Tải danh sách mã gói
     loadCodes();
+    // Lấy các phần tử
+    const applyFilterBtn = document.querySelector('#applyFilterBtn');
+    const resetFilterBtn = document.querySelector('#resetFilterBtn');
+    const filterEmailInput = document.querySelector('#filterEmail');
+
+    // Đăng ký sự kiện cho nút "Áp dụng"
+    applyFilterBtn.addEventListener('click', function() {
+        const email = filterEmailInput.value.trim(); // Lấy giá trị email
+        loadCodes(1, email); // Tải lại danh sách mã gói với email đã nhập
+    });
+
+    // Đăng ký sự kiện cho nút "Đặt lại"
+    resetFilterBtn.addEventListener('click', function() {
+        filterEmailInput.value = ''; // Làm trống ô nhập liệu email
+        loadCodes(1); // Tải lại danh sách mã gói mà không có bộ lọc
+    });
 });
 
 let currentPage = 1;
@@ -20,8 +36,15 @@ function formatDate(dateString) {
 
 // Tải danh sách mã gói
 function loadCodes(page = 1) {
+    const email = document.querySelector('#filterEmail').value.trim();  // Lấy giá trị email từ ô nhập liệu bộ lọc
     currentPage = page;
-    fetch('/get_codes/?page=' + page, {
+
+    // Thêm email vào URL nếu có giá trị
+    let url = '/get_codes/?page=' + page;
+    if (email) {
+        url += `&email=${encodeURIComponent(email)}`;
+    }
+    fetch(url, {
         method: 'GET',
     })
         .then(response => response.json())

@@ -8,10 +8,10 @@ urlpatterns = [
     path('create_exam/', views.admin_exam_views.create_exam, name='create_exam'),
     path('get_folders/', views.admin_folder_views.get_folders, name='get_folders'),
     path('get_editor/', views.admin_exam_views.get_editor, name='get_editor'),
-    path('get_warehouse/', views.student_folder_views.get_warehouse, name='get_warehouse'),
+    path('get_warehouse/', views.student_warehouse_views.get_warehouse, name='get_warehouse'),
     path('practice_mode/', views.student_exam_views.practice_mode, name='practice_mode'),
     path('test_mode/', views.student_exam_views.test_mode, name='test_mode'),
-    path('warehouse/', views.student_folder_views.warehouse, name='warehouse'),
+    path('warehouse/', views.student_warehouse_views.warehouse, name='warehouse'),
     path('exam_detail/', views.student_exam_views.exam_detail, name='exam_detail'),
     path('history/', views.student_history_views.history, name='history'),
     #post

@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    showChart();
+    console.log(exam)
     showInfo();
 });
 
@@ -24,86 +24,18 @@ function showInfo() {
 
     // Gán thời gian làm bài
     durationEl.innerHTML = `<i class="fas fa-clock mr-1"></i> ${exam.max_duration} phút`;
-}
 
-function showChart() {
-    // Section Accuracy Chart
-    const sectionCtx = document.getElementById('sectionChart').getContext('2d');
-    new Chart(sectionCtx, {
-        type: 'bar',
-        data: {
-            labels: ['Phần 5', 'Phần 6', 'Phần 7'],
-            datasets: [{
-                label: 'Tỉ lệ đúng',
-                data: [58, 72, 60],
-                backgroundColor: '#4f46e5',
-                borderRadius: 4
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        callback: function (value) {
-                            return value + '%';
-                        }
-                    }
-                }
-            }
-        }
-    });
+    document.getElementById("examQuestions").innerHTML =
+        `<i class="fas fa-question-circle mr-1 text-white/80"></i> ${exam.total_questions} câu`;
 
-    // Progress Over Time Chart
-    const progressCtx = document.getElementById('progressChart').getContext('2d');
-    new Chart(progressCtx, {
-        type: 'line',
-        data: {
-            labels: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6'],
-            datasets: [{
-                label: 'Điểm số',
-                data: [5.5, 6.2, 6.8, 7.1, 7.5, 8.0],
-                borderColor: '#4f46e5',
-                backgroundColor: 'rgba(79, 70, 229, 0.05)',
-                borderWidth: 2,
-                tension: 0.3,
-                fill: true
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: false,
-                    min: 5,
-                    max: 10
-                }
-            }
-        }
-    });
+    const examPartsContainer = document.getElementById("examPartsContainer");
+    examPartsContainer.innerHTML = ""; // Clear nếu có sẵn
 
-    // Detail Section Chart
-    const detailSectionCtx = document.getElementById('detailSectionChart').getContext('2d');
-    new Chart(detailSectionCtx, {
-        type: 'radar',
-        data: {
-            labels: ['Phần 5', 'Phần 6', 'Phần 7'],
-            datasets: [{
-                label: 'Kết quả',
-                data: [70, 85, 75],
-                backgroundColor: 'rgba(79, 70, 229, 0.2)',
-                borderColor: '#4f46e5',
-                borderWidth: 2
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false
-        }
+    exam.parts.forEach(part => {
+        const span = document.createElement("span");
+        span.className = "bg-white/10 px-3 py-1 rounded-full";
+        span.innerHTML = `<i class="fas fa-layer-group mr-1 text-white/80"></i> Part ${part}`;
+        examPartsContainer.appendChild(span);
     });
 }
 
@@ -155,7 +87,7 @@ function startMockTest() {
 
 function confirmStartExam(mode) {
     const isConfirmed = confirm(`Bạn có chắc muốn bắt đầu ${mode}?`);
-    
+
     if (isConfirmed) {
         fetch('/insert_history_exam/', {
             method: 'POST',
@@ -166,18 +98,285 @@ function confirmStartExam(mode) {
                 'mode': mode
             })
         })
-        .then(res => res.json())
-        .then(data => {
-            if (data.status === 'success') {
-                console.log('Tạo thành công!');
-                window.location.href = `/${mode}_mode/`;
-            } else {
-                console.log('Thất bại: ' + data.message);
-            }
-        })
-        .catch(() => {
-            alert('Lỗi kết nối server!');
-            loadFolders();
-        });
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    console.log('Tạo thành công!');
+                    window.location.href = `/${mode}_mode/`;
+                } else {
+                    console.log('Thất bại: ' + data.message);
+                }
+            })
+            .catch(() => {
+                alert('Lỗi kết nối server!');
+                loadFolders();
+            });
     }
 }
+
+
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // ========== CẤU HÌNH DỮ LIỆU ==========
+    const dataConfig = {
+        practice: {
+            avgTime: 38,
+            chart: {
+                labels: ['15/06', '18/06', '22/06', '25/06', '28/06', '02/07', '05/07'],
+                correct: [4, 5, 6, 7, 8, 7, 9],
+                wrong: [6, 5, 3, 2, 1, 2, 1],
+            },
+            weakQuestions: [
+                { id: 7, content: "Đọc hiểu đoạn văn practice", part: "Phần 7", wrongPercentage: 70, wrongTimes: 4, totalAttempts: 5 },
+            ]
+        },
+        test: {
+            avgTime: 38,
+            chart: {
+                labels: ['15/06', '18/06', '22/06', '25/06', '28/06', '02/07', '05/07'],
+                correct: [4, 5, 6, 7, 8, 7, 9],
+                wrong: [6, 5, 3, 2, 1, 2, 1],
+            },
+            weakQuestions: [
+                { id: 7, content: "Đọc hiểu đoạn văn test", part: "Phần 5", wrongPercentage: 80, wrongTimes: 4, totalAttempts: 5 },
+            ]
+        }
+    };
+
+    // ========== HÀM TẠO GIAO DIỆN ==========
+    function renderSection(dataConfig) {
+        const { avgTime, chart, weakQuestions } = dataConfig;
+        const totalAttempts = chart.labels.length; // Tính tổng số lần làm dựa vào labels
+
+        const html = `
+        <div class="stats-section space-y-6">
+        <!-- Thống kê nhanh -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <div class="stats-card bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 flex items-center">
+            <div class="icon bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                <i class="fas fa-calendar-check text-indigo-600 text-lg"></i>
+            </div>
+            <div>
+                <div class="stats-label text-gray-500 text-sm font-medium">Tổng số lần làm</div>
+                <div class="stats-value text-2xl font-bold text-gray-800 mt-1">${totalAttempts}</div>
+            </div>
+            </div>
+            
+            <div class="stats-card bg-white rounded-xl p-5 shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 flex items-center">
+            <div class="icon bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                <i class="fas fa-stopwatch text-purple-600 text-lg"></i>
+            </div>
+            <div>
+                <div class="stats-label text-gray-500 text-sm font-medium">Thời gian TB</div>
+                <div class="stats-value text-2xl font-bold text-gray-800 mt-1">${avgTime}<span class="text-gray-500 font-normal ml-1 text-base">phút</span></div>
+            </div>
+            </div>
+        </div>
+
+        <!-- Biểu đồ -->
+        <div class="chart-container bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+            <h3 class="text-lg font-semibold text-gray-800 mb-4">Tiến trình luyện tập</h3>
+            
+            <div class="flex justify-center space-x-4 mb-4">
+            <div class="flex items-center">
+                <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                <span class="text-sm text-gray-600">Số câu đúng</span>
+            </div>
+            <div class="flex items-center">
+                <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+                <span class="text-sm text-gray-600">Số câu sai</span>
+            </div>
+            <div class="flex items-center">
+                <div class="w-3 h-3 bg-gray-400 rounded-full mr-2"></div>
+                <span class="text-sm text-gray-600">Số câu chưa làm</span>
+            </div>
+            </div>
+
+            <div class="chart-wrapper" style="position: relative; height: 400px; width: 100%;">
+            <canvas id="progressChart" height="400"></canvas>
+            </div>
+        </div>
+
+        <!-- Câu hỏi yếu -->
+        <div class="weak-questions bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+            <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-semibold text-gray-800">Câu hỏi cần cải thiện</h3>
+            <span class="text-sm text-gray-500">${weakQuestions.length} câu hỏi</span>
+            </div>
+            
+            <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-50">
+                <tr class="text-left text-gray-500 text-sm">
+                    <th class="px-4 py-3 font-medium rounded-l-lg">Câu hỏi</th>
+                    <th class="px-4 py-3 font-medium">Phần</th>
+                    <th class="px-4 py-3 font-medium">Tỉ lệ sai</th>
+                    <th class="px-4 py-3 font-medium rounded-r-lg">Thao tác</th>
+                </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                ${weakQuestions.map(q => {
+            return `
+                    <tr class="hover:bg-gray-50 transition-colors">
+                    <td class="px-4 py-3">
+                        <div class="flex items-center">
+                        <div class="bg-red-100 text-red-600 w-8 h-8 rounded-full flex items-center justify-center font-bold mr-3">${q.id}</div>
+                        <div class="font-medium text-gray-800">${q.content}</div>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3 text-gray-600">${q.part}</td>
+                    <td class="px-4 py-3">
+                        <div class="flex items-center">
+                        <div class="w-24 bg-gray-200 rounded-full h-2 mr-2">
+                            <div class="bg-red-500 h-2 rounded-full" style="width: ${q.wrongPercentage}%"></div>
+                        </div>
+                        <span class="text-sm font-medium ${q.wrongPercentage > 50 ? 'text-red-600' : 'text-gray-600'}">${q.wrongPercentage}%</span>
+                        </div>
+                    </td>
+                    <td class="px-4 py-3">
+                        <button onclick="viewDetail(${q.id})" class="text-indigo-600 hover:text-indigo-800 font-medium text-sm px-3 py-1 rounded-md hover:bg-indigo-50 transition-colors">
+                        Xem
+                        </button>
+                    </td>
+                    </tr>
+                    `;
+        }).join('')}
+                </tbody>
+            </table>
+            </div>
+        </div>
+        </div>
+    `;
+
+        document.getElementById('contentContainer').innerHTML = html;
+        renderChart(dataConfig.chart);
+    }
+
+    // ========== HÀM VẼ BIỂU ĐỒ ==========
+    function renderChart(dataConfig) {
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        const { labels, correct, wrong } = dataConfig;
+
+        // Tính số câu chưa làm (tổng 1 lần = 10 câu)
+        const unanswered = correct.map((c, i) => {
+            const w = wrong[i] || 0;
+            const total = c + w;
+            return total < 10 ? 10 - total : 0;
+        });
+
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Câu đúng',
+                        data: correct,
+                        borderColor: '#10B981',
+                        borderWidth: 3,
+                        tension: 0.3,
+                        pointBackgroundColor: '#10B981',
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Câu sai',
+                        data: wrong,
+                        borderColor: '#EF4444',
+                        borderWidth: 3,
+                        tension: 0.3,
+                        pointBackgroundColor: '#EF4444',
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    },
+                    {
+                        label: 'Chưa làm',
+                        data: unanswered,
+                        borderColor: '#9CA3AF', // màu xám
+                        borderWidth: 3,
+                        tension: 0.3,
+                        pointBackgroundColor: '#9CA3AF',
+                        pointRadius: 5,
+                        pointHoverRadius: 8
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: '#1F2937',
+                        titleFont: { size: 14 },
+                        bodyFont: { size: 14 },
+                        padding: 12
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        suggestedMax: 10,
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)'
+                        },
+                        ticks: {
+                            stepSize: 2,
+                            font: {
+                                size: 12
+                            }
+                        },
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
+                            },
+                            maxRotation: 45,
+                            minRotation: 30
+                        }
+                    }
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false
+                }
+            }
+        });
+    }
+
+    // ========== XỬ LÝ SỰ KIỆN ==========
+    function switchTab(activeTab) {
+        // Đổi style nút
+        document.getElementById('practiceBtn').classList.toggle('active', activeTab === 'practice');
+        document.getElementById('mockBtn').classList.toggle('active', activeTab === 'mock');
+
+        // Hiển thị nội dung tương ứng
+        if (activeTab === 'practice') {
+            renderSection(dataConfig.practice);
+        } else {
+            renderSection(dataConfig.test);
+        }
+    }
+
+    // Gán sự kiện
+    document.getElementById('practiceBtn').addEventListener('click', () => switchTab('practice'));
+    document.getElementById('mockBtn').addEventListener('click', () => switchTab('mock'));
+
+    // Khởi tạo ban đầu
+    switchTab('practice');
+
+    // Hàm global để xem chi tiết (có thể mở modal/popup)
+    window.viewDetail = (id) => {
+        alert(`Xem chi tiết câu hỏi #${id}`);
+    };
+});

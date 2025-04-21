@@ -22,10 +22,11 @@ class Exam(Document):
         from examapp.models.question import Question
         Question.delete_by_exam_id(self.id)
         for exam in Exam.objects(original_exam=self):
-            exam.delete()
+            if exam != self:
+                exam.delete()
         super().delete(*args, **kwargs)
         
-    def to_json(self, is_detail=False):
+    def to_json(self, is_questions=False, is_stats=False, user=None):
         data = {
             "id": str(self.id),
             "title": self.title,
@@ -34,12 +35,17 @@ class Exam(Document):
             "max_duration": self.max_duration,
             'created_at': self.created_at.isoformat() if self.created_at else None,
             'updated_at': self.updated_at.isoformat() if self.updated_at else None,
-            "order": self.order,
-            "total_users_attempted": self.get_total_users_attempted(),
-            "total_attemped": self.get_total_attemped(),
+            "order": self.order
         }
-        if is_detail:
+        if is_questions:
             data["questions"] = [question.to_json() for question in self.get_questions()]
+        if is_stats:
+            data["total_attemped"] = self.get_total_attemped()
+            data["user_exam_attempts"] = self.get_user_exam_attempts(user) if user else 0
+            data["total_participants"] = self.get_total_participants()
+            data["total_questions"] = len(data["questions"]) if data.get("questions") else len(self.get_questions())
+            data["parts"] = self.get_parts()
+            
         return data
     
     def get_questions(self):
@@ -54,14 +60,23 @@ class Exam(Document):
             if not has_history:
                 version.delete()
                 
-    def get_total_users_attempted(self):
+    def get_total_participants(self):
         from historyapp.models.history_exam import HistoryExam
-        return len(HistoryExam.objects(exam=Exam.find_by_id(self.id, False)).distinct('user'))
+        return len(HistoryExam.objects(exam=self).distinct('user'))
 
+    def get_user_exam_attempts(self, user):
+        from historyapp.models.history_exam import HistoryExam
+        return len(HistoryExam.objects(exam=self, user=user))
+    
     def get_total_attemped(self):
         from historyapp.models.history_exam import HistoryExam
-        return len(HistoryExam.objects(exam=Exam.find_by_id(self.id, False)))
+        return len(HistoryExam.objects(exam=self))
 
+    def get_parts(self):
+        from examapp.models.question import Question
+        parts = Question.objects(exam=self).distinct('part')
+        return parts
+    
     def create_copy(self):
         from examapp.models.question import Question
         from examapp.models.passage import Passage
@@ -117,11 +132,10 @@ class Exam(Document):
 
             
     @classmethod
-    def find_by_id(cls, id, return_original=True):
-        # Nếu return_original là True, trả về bản gốc (version = 0)
-        if return_original:
-            return cls.objects(id=ObjectId(id), version=0).first()
+    def find_by_id(cls, id, is_original=True):
+        # Nếu is_original là True, trả về bản gốc (version = 0)
+        if is_original:
+            return cls.objects(id=ObjectId(id)).first()
         else:
             # Trả về bản sao mới nhất (version cao nhất)
             return cls.objects(original_exam=ObjectId(id)).order_by('-version').first()
-    

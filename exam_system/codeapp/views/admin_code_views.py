@@ -8,28 +8,44 @@ import json
 from codeapp.models import Code
 from django.shortcuts import render
 import json
+from userapp.models.user import User
 from utils.utils import admin_required
 
 @admin_required
 def get_codes(request):
     try:
         page = int(request.GET.get('page', 1))
-        items_per_page = 8  # Số mục mỗi trang
-        codes = Code.get_paginated_codes(page, items_per_page)
-        total_codes = Code.get_count()
-        if codes is None:
-            return JsonResponse({'status': 'error', 'message': 'Database connection failed'}, status=500)
-        # Tính toán phân trang
+        items_per_page = 8
+        email = request.GET.get('email')
+
+        query = {}
+        if email:
+            query['user__email'] = email
+
+        if email:
+            user = User.objects(email=email).first()
+            if user:
+                codes_query = Code.objects(user=user).order_by('-created_at')
+            else:
+                codes_query = Code.objects.none()
+        else:
+            codes_query = Code.objects.order_by('-created_at')
+            
+        total_codes = codes_query.count()
         total_pages = (total_codes + items_per_page - 1) // items_per_page
-        response = {
+
+        codes = codes_query.skip((page - 1) * items_per_page).limit(items_per_page)
+
+        return JsonResponse({
             'status': 'success',
             'codes': [code.to_json() for code in codes],
             'total_pages': total_pages,
-        }
-        return JsonResponse(response)
+        })
+
     except Exception as e:
         print(f"Error in get_codes view: {e}")
         return JsonResponse({'status': 'error', 'message': 'Internal server error'}, status=500)
+
 
 @admin_required
 def codes(request):

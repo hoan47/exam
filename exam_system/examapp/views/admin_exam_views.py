@@ -16,7 +16,7 @@ def create_exam(request):
         exam = Exam.find_by_id(id)
         exam.questions = exam.get_questions()
         if id and exam:
-            return render(request, 'admin/exam.html', { 'exam_json': json.dumps(exam.to_json(True)) }) # vì còn gửi exam qua bên js
+            return render(request, 'admin/exam.html', { 'exam_json': json.dumps(exam.to_json(is_questions=True)) }) # vì còn gửi exam qua bên js
         return JsonResponse({'status': 'error', 'message': 'Invalid parameter'}, status=400)
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
@@ -45,7 +45,7 @@ def swap_exam(request):
 
         for update in updates:
             exam = Exam.find_by_id(update['id'])
-            copy_exam = Exam.find_by_id(update['id'], False)
+            copy_exam = Exam.find_by_id(update['id'], is_original=False)
             exam.order = copy_exam.order = update['order']
             exam.save()
             copy_exam.save()
@@ -59,7 +59,7 @@ def delete_exam(request):
     try:
         data = json.loads(request.body)  # Nhận dữ liệu từ client
         id = data['id']
-        exam = Exam.find_by_id(id, True)
+        exam = Exam.find_by_id(id)
         exam.delete()
         return JsonResponse({'status': 'success', 'message': 'xóa đề thi thành công!'})
     except Exception as e:
@@ -107,7 +107,7 @@ def update_exam(request):
         part6 = data['part6']
         part7 = data['part7']
         # cập nhật bản gốc đồng thời tạo bản sao từ bản gốc
-        exam = Exam.find_by_id(exam_id, True)
+        exam = Exam.find_by_id(exam_id)
         exam.title = title
         exam.status = status
         exam.access = access

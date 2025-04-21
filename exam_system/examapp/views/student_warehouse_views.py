@@ -10,12 +10,14 @@ from userapp.utils import get_user
 def get_warehouse(request):
     try:
         folders = Folder.get_all()
+        user = get_user(request)
         response = {
             'status': 'success',
-            'warehouse': [folder.to_json(False) for folder in folders],
+            'warehouse': [folder.to_json(is_exam_stats=True, user=user, is_exam_draft=False, is_exam_original=False) for folder in folders],
         }
         return JsonResponse(response)
     except Exception as e:
+        print(str(e))
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 
 @redirect_if_ongoing_exam
