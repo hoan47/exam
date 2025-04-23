@@ -109,11 +109,8 @@
 
 .answer-explanation {
     margin-top: 16px;
-    padding: 16px;
-    background-color: var(--secondary-color);
     border-radius: 8px;
     font-size: 14px;
-    border-left: 4px solid var(--primary-color);
     display: none;
     animation: fadeIn 0.5s ease-in-out;
 }
@@ -123,7 +120,6 @@
 }
 
 .question-actions {
-    margin-top: 16px;
     margin-left: 44px;
     display: flex;
     gap: 10px;

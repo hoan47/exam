@@ -8,6 +8,7 @@ from examapp.models.exam import Exam
 from historyapp.models.history_answer import HistoryAnswer
 from historyapp.models.history_exam import HistoryExam
 from userapp.models.user import User
+from utils.utils import redirect_if_ongoing_exam
 
 @csrf_exempt
 @require_POST

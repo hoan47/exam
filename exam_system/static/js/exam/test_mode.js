@@ -126,11 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Selected Option:", answer.selected_option);
 
         if (answer.selected_option !== null) {
-            if (answer.selected_option === 'X') {
-                handleUnknownAnswer(question.id, answer.selected_option,
-                    document.querySelector(`.question-block[data-question-id="${question.id}"]`).querySelector('.answer-options'));
-            }
-            else {
+            if (answer.selected_option != 'X') {
                 handleAnswerSelection(question.id, answer.selected_option,
                     document.querySelector(`.question-block[data-question-id="${question.id}"]`).querySelector('.answer-options'), false);
                 setAnswer(question.id, answer.selected_option);

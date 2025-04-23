@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MochiMochi</title>
     {% load static %}
+    <link rel="icon" href="{% static 'images/exam-time.png' %}" type="image/png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/header_user.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/footer_advertise.css' %}">
@@ -23,14 +25,16 @@
     <script src="{% static 'js/header_user.js' %}" defer></script>
     <script src="{% static 'js/exam/exam_detail.js' %}" defer></script>
 </head>
+
 <body class="flex flex-col min-h-screen">
     {% include 'header_user.html' %}
 
     <div class="mt-6 flex-grow">
         <main class="max-w-6xl mx-auto px-4 py-6">
-            <div class="text-center mb-12 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-xl p-8 text-white shadow-md">
+            <div
+                class="text-center mb-12 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-xl p-8 text-white shadow-md">
                 <h1 id="examTitle" class="text-4xl font-bold mb-4"></h1>
-            
+
                 <div class="flex justify-center items-center flex-wrap gap-2 text-sm text-white/90" id="examInfo">
                     <span id="examAccess" class="bg-white/10 px-3 py-1 rounded-full">
                         <i class="fas fa-crown mr-1 text-yellow-300"></i>
@@ -44,8 +48,8 @@
                     <span id="examPartsContainer" class="flex gap-2"></span>
                 </div>
             </div>
-            
-            
+
+
             <!-- Các tùy chọn -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                 <!-- Luyện đề -->
@@ -56,7 +60,8 @@
                         </div>
                         <div>
                             <h2 class="text-xl font-semibold text-gray-800 mb-2">Luyện đề</h2>
-                            <p class="text-gray-600 mb-3">Làm đề không giới hạn thời gian, xem giải thích chi tiết sau mỗi
+                            <p class="text-gray-600 mb-3">Làm đề không giới hạn thời gian, xem giải thích chi tiết sau
+                                mỗi
                                 câu hỏi.</p>
                             <div class="flex items-center text-sm text-indigo-600 font-medium">
                                 <span>Bắt đầu ngay</span>
@@ -74,7 +79,8 @@
                         </div>
                         <div>
                             <h2 class="text-xl font-semibold text-gray-800 mb-2">Thi thử</h2>
-                            <p class="text-gray-600 mb-3">Thi như thật với giới hạn thời gian, kiểm tra năng lực thực tế của bản thân.
+                            <p class="text-gray-600 mb-3">Thi như thật với giới hạn thời gian, kiểm tra năng lực thực tế
+                                của bản thân.
                             </p>
                             <div class="flex items-center text-sm text-red-600 font-medium">
                                 <span>Bắt đầu thi</span>
@@ -84,51 +90,31 @@
                     </div>
                 </div>
             </div>
-
-            <!-- Tab điều hướng -->
-            <div class="flex border-b border-gray-200 mb-6">
-                <button id="statsTab" class="tab-active px-6 py-3 text-gray-700 font-medium" onclick="showTab('stats')">
-                    <i class="fas fa-chart-bar mr-2"></i>
-                    Thống kê
-                </button>
-                <button id="historyTab" class="px-6 py-3 text-gray-500 hover:text-indigo-600" onclick="showTab('history')">
-                    <i class="fas fa-history mr-2"></i>
-                    Lịch sử làm bài
-                </button>
-            </div>
-
             <!-- Phần thống kê -->
             <div id="statsSection" class="fade-in">
-                <!-- Quick Stats -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-white rounded-lg shadow-sm p-4">
-                        <div class="text-sm text-gray-500 mb-1">Số lượt làm</div>
-                        <div class="text-2xl font-bold text-gray-800">5</div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-sm p-4">
-                        <div class="text-sm text-gray-500 mb-1">Điểm cao nhất</div>
-                        <div class="text-2xl font-bold text-indigo-600">8.5<span class="text-lg text-gray-500">/10</span>
-                        </div>
-                    </div>
-                    <div class="bg-white rounded-lg shadow-sm p-4">
-                        <div class="text-sm text-gray-500 mb-1">Trung bình</div>
-                        <div class="text-2xl font-bold text-gray-800">7.2<span class="text-lg text-gray-500">/10</span>
-                        </div>
-                    </div>
-                </div>
-
                 <!-- Phần thống kê -->
-                <div class="container mx-auto p-4">
-                    <!-- Option Selector -->
-                    <div class="flex mb-6 bg-white rounded-lg shadow-sm p-2">
-                    <button id="practiceBtn" class="flex-1 py-2 px-4 rounded-md font-medium text-center transition-colors duration-200">
-                        Luyện đề
-                    </button>
-                    <button id="mockBtn" class="flex-1 py-2 px-4 rounded-md font-medium text-center transition-colors duration-200">
-                        Thi thử
-                    </button>
+                <div class="container mx-auto">
+                    <div class="flex mb-4 gap-3">
+                        <button
+                            id="practiceBtn"
+                            class="flex-1 py-2.5 px-4 rounded-md text-center transition-all duration-250
+                                   bg-amber-50 border border-amber-200 hover:bg-amber-100
+                                   text-amber-900 font-medium tracking-wide
+                                   focus:outline-none focus:ring-2 focus:ring-amber-400/50"
+                        >
+                            Luyện đề 5 đề gần nhất
+                        </button>
+                        <button
+                            id="mockBtn"
+                            class="flex-1 py-2.5 px-4 rounded-md text-center transition-all duration-250
+                                   bg-teal-50 border border-teal-200 hover:bg-teal-100
+                                   text-teal-900 font-medium tracking-wide
+                                   focus:outline-none focus:ring-2 focus:ring-teal-400/50"
+                        >
+                            Thi thử 5 đề gần nhất
+                        </button>
                     </div>
-                
+
                     <!-- Container sẽ được điền nội dung bằng JS -->
                     <div id="contentContainer"></div>
                 </div>
@@ -148,7 +134,7 @@
                         Bắt đầu luyện đề
                     </button>
                     <button onclick="startPractice()"
-                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
+                        class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium">
                         Bắt đầu thi thử
                     </button>
                 </div>
@@ -156,7 +142,8 @@
                 <!-- History List -->
                 <div id="historyList" class="hidden space-y-4">
                     <!-- History Item -->
-                    <div class="bg-white border border-gray-100 rounded-lg p-5 hover:border-indigo-100 transition-colors">
+                    <div
+                        class="bg-white border border-gray-100 rounded-lg p-5 hover:border-indigo-100 transition-colors">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
                             <div class="mb-3 md:mb-0">
                                 <div class="flex items-center mb-1">
@@ -189,7 +176,8 @@
                             <h3 class="text-xl font-bold text-gray-800 mb-1">Chi tiết lần thi</h3>
                             <div class="text-sm text-gray-600">15/04/2025 - 14:30 | Chế độ: Thi thử</div>
                         </div>
-                        <button onclick="backToHistoryList()" class="text-gray-500 hover:text-gray-700 flex items-center">
+                        <button onclick="backToHistoryList()"
+                            class="text-gray-500 hover:text-gray-700 flex items-center">
                             <i class="fas fa-arrow-left mr-2"></i>
                             Quay lại
                         </button>
@@ -205,13 +193,15 @@
 
                         <div class="bg-white border border-gray-100 rounded-lg p-4">
                             <div class="text-sm text-gray-700 mb-2">Số câu đúng</div>
-                            <div class="text-2xl font-bold text-gray-800">16 <span class="text-lg text-gray-600">/20</span>
+                            <div class="text-2xl font-bold text-gray-800">16 <span
+                                    class="text-lg text-gray-600">/20</span>
                             </div>
                         </div>
 
                         <div class="bg-white border border-gray-100 rounded-lg p-4">
                             <div class="text-sm text-gray-700 mb-2">Thời gian làm</div>
-                            <div class="text-2xl font-bold text-gray-800">32 <span class="text-lg text-gray-600">phút</span>
+                            <div class="text-2xl font-bold text-gray-800">32 <span
+                                    class="text-lg text-gray-600">phút</span>
                             </div>
                         </div>
                     </div>
@@ -230,7 +220,8 @@
                         <div class="border-l-4 border-red-500 bg-red-50 rounded-r-lg p-4">
                             <div class="flex justify-between items-start mb-2">
                                 <span class="font-medium text-gray-800">Câu 7 (Phần 5)</span>
-                                <span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Đã chọn sai</span>
+                                <span class="text-xs bg-red-100 text-red-800 px-2 py-0.5 rounded-full">Đã chọn
+                                    sai</span>
                             </div>
                             <p class="text-gray-700 mb-3">What is the main purpose of the announcement?</p>
                             <div class="space-y-2 mb-3">
@@ -259,67 +250,149 @@
         </main>
 
         <!-- Modal xem chi tiết câu hỏi -->
-        <div id="questionModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
-            <div class="relative top-10 mx-auto p-5 border w-11/12 md:w-2/3 lg:w-1/2 shadow-xl rounded-xl bg-white">
-                <div class="flex justify-between items-center mb-4">
-                    <div>
+        <div id="questionModal" class="hidden fixed inset-0 z-50 bg-gray-600/50 backdrop-blur-sm flex justify-center">
+            <!-- Modal container - to hơn nhưng vẫn nhỏ hơn màn hình -->
+            <div
+                class="transform w-full max-w-[1450px] bg-white rounded-2xl shadow-2xl border border-blue-200 my-10 mx-4 max-h-[calc(100vh-10px)] flex flex-col">
+                <!-- Header - sticky -->
+                <div
+                    class="p-6 border-b border-gray-100 flex justify-between items-start sticky top-0 bg-white z-10 rounded-t-2xl">
+                    <div class="flex items-center gap-3">
                         <h3 class="text-xl font-bold text-gray-800">Câu hỏi #<span id="questionNumber">7</span></h3>
-                        <div class="text-sm text-gray-500">
-                            <span id="questionPart">Phần 5</span> • <span id="questionType">Đọc hiểu</span>
-                        </div>
+                        <span id="questionPart"
+                            class="text-xs bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full flex items-center gap-1">
+                            <i class="fas fa-layer-group text-indigo-500 text-xs"></i>
+                            <span>Phần <span id="partNumber">5</span></span>
+                        </span>
                     </div>
-                    <button onclick="closeQuestionModal()" class="text-gray-400 hover:text-gray-600">
-                        <i class="fas fa-times"></i>
+                    <button onclick="closeQuestionModal()" class="text-gray-400 hover:text-gray-600 transition-colors p-2 rounded-full hover:bg-gray-100 w-6 h-6 flex items-center justify-center">
+                        <i class="fas fa-times text-sm"></i>
                     </button>
                 </div>
 
-                <div class="mb-6">
-                    <p id="questionContent" class="text-gray-800 text-lg mb-4">What is the main purpose of the announcement?
-                    </p>
-
-                    <div class="space-y-3 mb-4">
-                        <div class="flex items-start p-3 rounded-lg border border-gray-200">
-                            <div
-                                class="flex-shrink-0 w-6 h-6 rounded-full bg-red-100 flex items-center justify-center mr-3 mt-1">
-                                <span class="text-red-600 text-sm">A</span>
+                <!-- Nội dung scroll chung trái và phải -->
+                <div class="flex-1 overflow-y-auto p-4">
+                    <div class="flex gap-6">
+                        <!-- Cột trái (Đoạn văn) -->
+                        <div id="questionPassageContainer" class="hidden lg:w-1/2">
+                            <div class="p-5 rounded-lg border border-blue-100 h-full">
+                                <h4 class="font-medium text-gray-700 mb-3 flex items-center gap-2">
+                                    <i class="fas fa-align-left text-blue-500"></i>
+                                    Đoạn văn
+                                </h4>
+                                <div id="questionPassage" class="text-sm text-gray-700 whitespace-pre-line"></div>
                             </div>
-                            <span id="optionA" class="text-gray-700">To introduce new staff members</span>
                         </div>
-                        <div class="flex items-start p-3 rounded-lg border border-green-200 bg-green-50">
-                            <div
-                                class="flex-shrink-0 w-6 h-6 rounded-full bg-green-100 flex items-center justify-center mr-3 mt-1">
-                                <span class="text-green-600 text-sm">B</span>
+
+                        <!-- Cột phải (Câu hỏi, Đáp án, Giải thích, Thống kê) -->
+                        <div class="flex-1 space-y-4">
+                            <!-- Câu hỏi -->
+                            <div>
+                                <h4 class="font-medium text-gray-700 mb-2 flex items-center gap-2">
+                                    <i class="fas fa-question-circle text-blue-500"></i>
+                                    <strong>Câu hỏi</strong>
+                                </h4>
+                                <p id="questionContent" class="text-gray-800 text-lg"></p>
                             </div>
-                            <span id="optionB" class="text-gray-700 font-medium">To inform about office relocation</span>
-                        </div>
-                    </div>
-                </div>
 
-                <div class="bg-blue-50 rounded-lg p-4 mb-6">
-                    <div class="flex items-center mb-2">
-                        <div class="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center mr-2">
-                            <i class="fas fa-info-circle text-blue-500 text-xs"></i>
-                        </div>
-                        <h4 class="font-medium text-blue-800">Giải thích</h4>
-                    </div>
-                    <p id="questionExplanation" class="text-blue-700 text-sm">The announcement clearly states that the
-                        company will be moving to a new location starting next month and provides details about the new
-                        address. There is no mention of new staff members or a company merger.</p>
-                </div>
+                            <!-- Đáp án -->
+                            <div>
+                                <h4 class="font-medium text-gray-700 mb-3 flex items-center gap-2">
+                                    <i class="fas fa-list-ol text-blue-500"></i>
+                                    <strong>Đáp án</strong>
+                                </h4>
+                                <div class="space-y-2">
+                                    <!-- Option A (Correct Answer) -->
+                                    <div id="optionA-container"
+                                        class="flex items-center rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+                                        <div
+                                            class="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                                            <span class="text-gray-600">A</span>
+                                        </div>
+                                        <span id="optionA">process</span>
+                                    </div>
 
-                <div class="grid grid-cols-2 gap-4 mb-4">
-                    <div class="bg-gray-50 rounded-lg p-3">
-                        <div class="text-xs text-gray-500 mb-1">Tỉ lệ làm đúng</div>
-                        <div class="text-sm font-medium text-red-600">20%</div>
-                    </div>
-                    <div class="bg-gray-50 rounded-lg p-3">
-                        <div class="text-xs text-gray-500 mb-1">Số lần bạn sai</div>
-                        <div class="text-sm font-medium text-gray-800">4/5 lần</div>
+                                    <!-- Option B -->
+                                    <div id="optionB-container"
+                                        class="flex items-center rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+                                        <div
+                                            class="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                                            <span class="text-gray-600">B</span>
+                                        </div>
+                                        <span id="optionB">process</span>
+                                    </div>
+
+                                    <!-- Option C -->
+                                    <div id="optionC-container"
+                                        class="flex items-center rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+                                        <div
+                                            class="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                                            <span class="text-gray-600">C</span>
+                                        </div>
+                                        <span id="optionC">process</span>
+                                    </div>
+
+                                    <!-- Option D (Incorrect Answer) -->
+                                    <div id="optionD-container"
+                                        class="flex items-center rounded-lg border border-gray-200 bg-white hover:bg-gray-50 transition-colors">
+                                        <div
+                                            class="flex-shrink-0 w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center mr-3">
+                                            <span class="text-gray-600">D</span>
+                                        </div>
+                                        <span id="optionD">process</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Giải thích -->
+                            <div class="bg-blue-50 border border-blue-100 rounded-lg p-4">
+                                <div class="flex items-center mb-2">
+                                    <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-2">
+                                        <i class="fas fa-lightbulb text-blue-500"></i>
+                                    </div>
+                                    <h4 class="font-medium text-blue-800"><strong>Giải thích đáp án</strong></h4>
+
+                                </div>
+                                <p id="questionExplanation" class="text-blue-700 text-sm whitespace-pre-line"></p>
+                            </div>
+
+                            <!-- Thống kê -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <!-- Tỉ lệ làm đúng -->
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                                    <div class="text-xs text-gray-500 mb-1 flex items-center gap-1">
+                                        <i class="fas fa-check text-emerald-500"></i>
+                                        Tỉ lệ làm đúng
+                                    </div>
+                                    <div id="correctPercent" class="text-lg font-bold text-emerald-600">20%</div>
+                                    <div class="h-2 bg-gray-200 rounded-full mt-2">
+                                        <div id="correctPercentBar" class="h-2 rounded-full bg-emerald-500"
+                                            style="width: 20%"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Số lần sai -->
+                                <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                                    <div class="text-xs text-gray-500 mb-1 flex items-center gap-1">
+                                        <i class="fas fa-times text-rose-500"></i>
+                                        Số lần bạn sai
+                                    </div>
+                                    <div id="userWrongStats" class="text-lg font-bold text-gray-800">4/5 lần</div>
+                                    <div class="h-2 bg-gray-200 rounded-full mt-2">
+                                        <div id="userWrongBar" class="h-2 rounded-full bg-rose-500" style="width: 80%">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
     {% include 'footer_advertise.html' %}
 </body>
+
 </html>

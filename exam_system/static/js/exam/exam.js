@@ -40,8 +40,7 @@ $('#saveExamSettings').click(function() {
         })
         .catch(error => {
             alert('Lỗi kết nối server!');
-            loadFolders();
-        });    
+        });
 });
 
 
@@ -53,8 +52,8 @@ function parsePart5Questions() {
         const questionText = box.querySelector('.question-text')?.textContent;
         const options = box.querySelectorAll('.option');
         const correctAnswerRaw = box.querySelector('.correct-answer')?.innerText.trim();
-        const explanation = box.querySelector('.explanation')?.innerText.trim();
-
+        // Xử lý explanation để giữ \n
+        const explanation = getExplanationWithNewlines(box.querySelector('.explanation'));
         const correctAnswerMatch = correctAnswerRaw.match(/Đáp án đúng:\s*([A-D])/i);
         const correctAnswer = correctAnswerMatch ? correctAnswerMatch[1].toUpperCase() : null;
 
@@ -67,7 +66,7 @@ function parsePart5Questions() {
             option_C: options[2]?.innerText.replace(/^\(C\)\s*/, ''),
             option_D: options[3]?.innerText.replace(/^\(D\)\s*/, ''),
             correct_answer: correctAnswer,
-            explanation: explanation.replace(/^Lời giải:\s*/, '')
+            explanation: explanation
         };
         questions.push(question);
     });
@@ -96,7 +95,9 @@ function parsePart67Questions(part){
 
             const correctRaw = box.querySelector(".correct-answer")?.innerText;
             const correctAnswer = correctRaw.match(/Đáp án đúng:\s*([ABCD])/i)?.[1];
-            const explanation = box.querySelector(".explanation")?.innerText.replace(/^Lời giải:\s*/, "").trim();
+            // Xử lý explanation để giữ \n
+
+            const explanation = getExplanationWithNewlines(box.querySelector('.explanation'));
 
             questions.push({
                 exam_id: exam.id,
@@ -213,4 +214,51 @@ function showPart(partNumber) {
 function showExitWarning() {
     // Hiển thị modal nhắc nhở người dùng
     $('#exitWarningModal').modal('show');
+}
+
+function getExplanationWithNewlines(element) {
+    if (!element) return '';
+
+    function normalizeText(text) {
+        return text
+            .replace(/\s*\n\s*/g, '\n')  // Chuẩn hóa khoảng trắng quanh \n
+            .replace(/\n+/g, '\n')       // Loại bỏ nhiều \n liên tiếp
+            .trim();
+    }
+
+    // Hàm decode HTML entities (&gt; => >, &lt; => <)
+    function decodeHTMLEntities(str) {
+        const txt = document.createElement('textarea');
+        txt.innerHTML = str;
+        return txt.value;
+    }
+
+    let result = '';
+    const htmlContent = element.innerHTML;
+
+    if (htmlContent.includes('<br') || htmlContent.includes('<p') || htmlContent.includes('<div')) {
+        result = htmlContent
+            .replace(/<br\s*\/?>/gi, '\n')
+            .replace(/<\/p>\s*<p>/gi, '\n')
+            .replace(/<\/div>\s*<div>/gi, '\n')
+            .replace(/<[^>]+>/g, '') // Xóa hết thẻ HTML
+            .replace(/\s*\n\s*/g, '\n');
+
+        // 🔥 Quan trọng: decode ký tự HTML đã bị escape
+        result = decodeHTMLEntities(result);
+    } else {
+        result = element.textContent
+            .split('\n')
+            .map(line => line.trim())
+            .filter(line => line)
+            .join('\n');
+    }
+
+    return normalizeText(result.replace(/^Lời giải:\s*/, ''));
+}
+
+function decodeHTMLEntities(str) {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = str;
+    return txt.value;
 }

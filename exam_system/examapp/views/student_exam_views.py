@@ -17,14 +17,26 @@ def exam_detail(request):
     try:
         user = get_user(request)
         exam = Exam.find_by_id(request.GET.get('id'))
+        # Lấy bản cao nhất
+        exam = Exam.find_by_id(exam.id if exam.original_exam == None else exam.original_exam.id, is_original=False)
         history_exams = HistoryExam.get_history_by_exam(user, exam)
+        # Tìm index cuối cùng của mỗi mode
+        last_test_index = next((i for i in reversed(range(len(history_exams))) if history_exams[i].mode == "test"), None)
+        last_practice_index = next((i for i in reversed(range(len(history_exams))) if history_exams[i].mode == "practice"), None)
+        history_exams_json = []
+        for i, history_exam in enumerate(history_exams):
+            if i == last_test_index or i == last_practice_index:
+                history_exams_json.append(history_exam.to_json())  # mặc định is_question_stats=True
+            else:
+                history_exams_json.append(history_exam.to_json(is_question_stats=False))
+
         if user and exam:
             return render(request, 'student/exam_detail.html', {
                 'caller': request.GET.get('caller', "warehouse"),
                 'user': user,
                 'user_json': json.dumps(user.to_json()),
                 'exam_json': json.dumps(exam.to_json(is_stats=True, user=user)),
-                'history_exams_json': json.dumps([history_exam.to_json() for history_exam in history_exams])
+                'history_exams_json': json.dumps(history_exams_json)
             })
 
         return render('user:user_dashboard')

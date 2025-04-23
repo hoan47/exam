@@ -10,7 +10,7 @@ class HistoryExam(Document):
     started_at = DateTimeField(default=datetime.now)
     completed_at = DateTimeField(null=True, default=None)
     
-    def to_json(self, is_history_answers=True):
+    def to_json(self, is_history_answers=True, is_question_stats=True,):
         data = {
             "id": str(self.id),
             "user": self.user.to_json() if self.user else None,
@@ -21,7 +21,7 @@ class HistoryExam(Document):
             "score": self.get_score()
         }
         if is_history_answers:
-            data["history_answers"] = [history_answer.to_json(user=self.user) for history_answer in self.get_history_answers()]
+            data["history_answers"] = [history_answer.to_json(is_question_stats=is_question_stats, user=self.user) for history_answer in self.get_history_answers()]
         
         return data
     
@@ -43,12 +43,8 @@ class HistoryExam(Document):
     
     @classmethod
     def find_ongoing_exam(cls, user):
-        return cls.objects(user=user).filter(__raw__={
-            "$or": [
-                {"completed_at": None},
-                {"completed_at": {"$gt": datetime.now()}}
-            ]
-        }).first()
+        return cls.objects(user=user, completed_at=None).first()  or cls.objects(user=user, completed_at__gt=datetime.now()).first()
+
         
     @classmethod
     def find_by_id(cls, id):
@@ -68,7 +64,19 @@ class HistoryExam(Document):
         return list(cls.objects(user=user))
     
     @classmethod
-    def get_history_by_exam(cls, user, exam):
-        from examapp.models.exam import Exam
-        # Lấy tất cả các bài thi có original_exam giống với bài thi hiện tại (lấy tất cả các bản trừ bản chính)
-        return list(HistoryExam.objects(exam__in=exam.related_exams(), user=user))
+    def get_history_by_exam(cls, user, exam, number=5):
+        # Lấy 5 bài thi gần nhất cho mode "test"
+        test_exams = list(HistoryExam.objects(
+            exam__in=exam.related_exams(), 
+            user=user,
+            mode='test'
+        ).order_by("-started_at").limit(number))
+
+        # Lấy 5 bài thi gần nhất cho mode "practice"
+        practice_exams = list(HistoryExam.objects(
+            exam__in=exam.related_exams(),
+            user=user,
+            mode='practice'
+        ).order_by("-started_at").limit(number))
+        # Đảo ngược mảng để sắp xếp theo thời gian tăng dần
+        return test_exams[::-1] + practice_exams[::-1]

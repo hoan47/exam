@@ -8,9 +8,11 @@ from examapp.models.exam import Exam
 from historyapp.models.history_answer import HistoryAnswer
 from historyapp.models.history_exam import HistoryExam
 from userapp.models.user import User
+from utils.utils import redirect_if_ongoing_exam
 
 @csrf_exempt
 @require_POST
+@redirect_if_ongoing_exam
 def insert_history_exam(request):
     try:
         data = json.loads(request.body)  # Nhận dữ liệu từ client
@@ -20,6 +22,8 @@ def insert_history_exam(request):
         
         user = User.find_by_id(user_id)
         exam = Exam.find_by_id(exam_id)
+        # Lấy bản cao nhất
+        exam = Exam.find_by_id(exam.id if exam.original_exam == None else exam.original_exam.id, is_original=False)
         completed_at = datetime.now() + timedelta(minutes=exam.max_duration) if mode == 'test' else None
         history_exam = HistoryExam(user=user, exam=exam, mode=mode, completed_at=completed_at)
         history_exam.save()

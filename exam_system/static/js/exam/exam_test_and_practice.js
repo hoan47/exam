@@ -203,8 +203,8 @@ function updateSelectedOption(question_id, selected_option, checked=false){
         }
     })
     .catch(() => {
-        alert('Lỗi kết nối server!');
-        loadFolders();
+        alert('Đã có lỗi xãy ra');
+        location.reload();
     });
 }
 
@@ -256,7 +256,7 @@ function submitExam(){
         }
     })
     .catch(() => {
-        alert('Lỗi kết nối server!');
-        loadFolders();
+        alert('Đã có lỗi xãy ra');
+        location.reload();
     });
 }

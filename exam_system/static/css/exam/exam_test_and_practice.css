@@ -28,7 +28,7 @@ body {
 
 .quiz-container {
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -50,7 +50,6 @@ body {
 .part-tabs {
     display: flex;
     gap: 8px;
-    margin-bottom: 20px;
     overflow-x: auto;
     padding: 8px 4px;
     position: sticky;
@@ -86,13 +85,13 @@ body {
     box-shadow: 0 4px 8px rgba(67, 97, 238, 0.2);
 }
 
-.main-content { display: flex; gap: 20px; flex: 1; }
+.main-content { display: flex; gap: 10px; flex: 1; }
 
 .question-area {
     flex: 1;
     background-color: var(--white-color);
-    border-radius: 12px;
-    padding: 24px;
+    border-radius: 10px;
+    padding: 10px;
     box-shadow: var(--shadow);
     display: flex;
     flex-direction: column;
@@ -105,9 +104,9 @@ body {
 .part-5-container { display: flex; flex-direction: column; gap: 28px; }
 
 .question-block {
-    margin-bottom: 20px;
-    padding-bottom: 24px;
-    border-bottom: 1px dashed var(--border-color);
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 2px dashed var(--border-color);
     position: relative;
 }
 
@@ -133,8 +132,8 @@ body {
 .answer-options { list-style: none; margin-top: 18px; margin-left: 44px; }
 
 .answer-options li {
-    margin-bottom: 12px;
-    padding: 10px 12px;
+    margin-bottom: 6px;
+    padding: 5px 6px;
     border-radius: 8px;
     transition: background-color 0.2s, border-color 0.2s;
     border: 1px solid var(--border-color);
@@ -160,7 +159,7 @@ body {
 
 .passage-group { display: flex; gap: 24px; margin-bottom: 36px; }
 .passage-container { flex: 1; min-width: 300px; }
-.passage { background-color: var(--secondary-color); padding: 20px; border-radius: 10px; height: 100%; overflow: auto; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05); }
+.passage {  padding: 10px; border-radius: 10px; height: 100%; overflow: auto; border: 1px solid #b3e5fc; }
 .passage-instructions { font-weight: 600; margin-bottom: 16px; color: var(--primary-color); }
 .passage-content { white-space: pre-line; line-height: 1.6; font-size: 15px; }
 .passage-content table { width: 100%; border-collapse: collapse; margin: 16px 0; border-radius: 6px; overflow: hidden; }
@@ -173,7 +172,7 @@ body {
 
 .sidebar { width: 240px; display: flex; flex-direction: column; gap: 16px; position: sticky; top: 80px; align-self: flex-start; }
 
-.question-nav { background-color: var(--white-color); padding: 16px; border-radius: 12px; box-shadow: var(--shadow); flex-grow: 1; max-height: calc(100vh - 150px); overflow-y: auto; }
+.question-nav { background-color: var(--white-color); padding: 8px; border-radius: 12px; box-shadow: var(--shadow); flex-grow: 1; max-height: calc(100vh - 150px); overflow-y: auto; }
 .question-nav h3 { margin-bottom: 12px; color: var(--primary-color); font-size: 15px; font-weight: 600; }
 .nav-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 16px; }
 .nav-item {

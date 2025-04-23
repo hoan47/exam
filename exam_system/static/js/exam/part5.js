@@ -70,25 +70,77 @@ function renderQuestions(questions) {
 async function readPDFFile(file) {
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-    let text = '';
-
-    for (let i = 1; i <= pdf.numPages; i++) {
+    const numPages = pdf.numPages;
+    
+    let fullText = '';  // <-- Khai báo fullText ở đây để cộng dồn nội dung từ tất cả các trang
+    
+    // Xử lý từng trang
+    for (let i = 1; i <= numPages; i++) {
         const page = await pdf.getPage(i);
         const textContent = await page.getTextContent();
+        
+        // Trích xuất thông tin về viewport để tính toán khoảng cách
+        const viewport = page.getViewport({ scale: 1.0 });
+        const pageWidth = viewport.width;
+        
+        // Sắp xếp các phần tử văn bản theo thứ tự đọc tự nhiên hơn
+        // (từ trên xuống dưới, từ trái sang phải)
+        const textItems = textContent.items.sort((a, b) => {
+            const yDiff = b.transform[5] - a.transform[5];
+            
+            // Nếu cùng dòng (hoặc gần cùng dòng), thì so sánh tọa độ x (cột)
+            if (Math.abs(yDiff) < 3) {
+                return a.transform[4] - b.transform[4];
+            }
+            
+            return yDiff;
+        });
+        
         let pageText = '';
         let lastY = null;
-        textContent.items.forEach(item => {
-            if (lastY !== null && Math.abs(lastY - item.transform[5]) > 5) {
-                pageText += '\n';
+        let lastX = 0;
+        let isNewParagraph = false;
+        
+        // Xử lý từng phần tử văn bản trên trang
+        textItems.forEach(item => {
+            const currentY = item.transform[5];
+            const currentX = item.transform[4];
+            const fontSize = Math.sqrt(item.transform[0] * item.transform[0] + item.transform[1] * item.transform[1]);
+            
+            // Xử lý xuống dòng và phân đoạn
+            if (lastY !== null) {
+                if (Math.abs(lastY - currentY) > fontSize * 1.5) {
+                    if (Math.abs(lastY - currentY) > fontSize * 2.5 || currentX < pageWidth * 0.1) {
+                        pageText += '\n\n';
+                        isNewParagraph = true;
+                    } else {
+                        pageText += '\n';
+                        isNewParagraph = false;
+                    }
+                } else if (currentX > lastX + fontSize * 1.5 && !isNewParagraph) {
+                    const spaceCount = Math.min(Math.floor((currentX - lastX) / (fontSize * 0.6)), 10);
+                    pageText += ' '.repeat(spaceCount);
+                }
             }
-            pageText += item.str + ' ';
-            lastY = item.transform[5];
+            
+            pageText += item.str;
+            
+            lastY = currentY;
+            lastX = currentX + (item.width || 0);
         });
-        text += pageText.trim() + '\n\n';
+        
+        // Xử lý các dấu ngắt dòng liên tiếp và chuẩn hóa văn bản
+        pageText = pageText.replace(/\n{3,}/g, '\n\n')
+                        .replace(/\s+\n/g, '\n')
+                        .replace(/\n\s+/g, '\n')
+                        .trim();
+        
+        fullText += `--- Trang ${i} ---\n\n${pageText}\n\n`;
     }
-
-    return text;
+    
+    return fullText;  // Trả về fullText sau khi xử lý xong tất cả các trang
 }
+
 
 // Hàm xử lý khi chọn file
 async function readFile(event) {
@@ -103,8 +155,8 @@ async function readFile(event) {
         readPDFFile(file)
             .then(text => {
                 editor.value = text;
-                sendEditorContent(editor.innerText);
                 fileInput.value = ''; // Reset input để đọc lại cùng file
+                sendEditorContent(editor.value);
             })
             .catch(error => console.error('Error reading PDF:', error));
     } else {

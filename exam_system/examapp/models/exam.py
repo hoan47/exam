@@ -29,6 +29,7 @@ class Exam(Document):
     def to_json(self, is_questions=False, is_stats=False, user=None):
         data = {
             "id": str(self.id),
+            "folder_name": self.folder.name if self.folder else None,
             "title": self.title,
             "status": self.status,
             "access": self.access,
@@ -63,8 +64,8 @@ class Exam(Document):
         total_participants = len(HistoryExam.objects(exam__in=related_exams).distinct('user'))
         user_exam_attempts = len(HistoryExam.objects(exam__in=related_exams, user=user)) if user else 0
         total_attempted = len(HistoryExam.objects(exam__in=related_exams))
-        total_questions = len(Question.objects(exam__in=related_exams))
-        parts = Question.objects(exam__in=related_exams).distinct('part')
+        total_questions = len(Question.objects(exam=self))
+        parts = Question.objects(exam=self).distinct('part')
 
         return {
             'total_participants': total_participants,
@@ -73,6 +74,7 @@ class Exam(Document):
             'total_questions': total_questions,
             'parts': parts
         }
+        
     def related_exams(self):
         return (Exam.objects(original_exam=self.original_exam if self.original_exam else self))
     

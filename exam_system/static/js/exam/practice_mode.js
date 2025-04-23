@@ -63,10 +63,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const statSpan = li.querySelector('.option-stat-value') || document.createElement('span');
             statSpan.className = 'option-stat-value';
             statSpan.innerHTML = `
-                <div style="font-weight: 200; color:#4361ee; font-size: 0.6rem; line-height: 1.5;">
+                <div style="font-weight: 400; color:#4361ee; font-size: 0.6rem; line-height: 1.5;">
                     Bạn: ${userStatValue}%
                 </div>
-                <div style="font-weight: 200; color:#2d3748; font-size: 0.6rem; line-height: 1.5;">
+                <div style="font-weight: 400; color:#2d3748; font-size: 0.6rem; line-height: 1.5;">
                     Cộng đồng: ${allStatValue}%
                 </div>
             `;
@@ -128,12 +128,22 @@ document.addEventListener('DOMContentLoaded', function() {
         userAnswers[questionId] = { selected: 'Unknown', checked: true, correct: false };
         updateNavItemStatus(questionId, 'incorrect');
         const optionsList = questionArea.querySelector(`#question-${questionId} .answer-options`);
-        optionsList.querySelectorAll('li').forEach(li => {
-            li.classList.add('checked');
-            li.classList.remove('selected');
-            const radio = li.querySelector('input[type="radio"]');
-            if (radio) { radio.checked = false; radio.disabled = true; }
-        });
+        if (optionsList) {
+            optionsList.querySelectorAll('li').forEach(li => {
+                li.classList.add('checked');
+                li.classList.remove('selected');
+                const option = li.dataset.option;
+                if (option === questionData.correct_answer) {
+                    li.classList.add('correct');
+                }
+                const radio = li.querySelector('input[type="radio"]');
+                if (radio) {
+                    radio.checked = false;
+                    radio.disabled = true;
+                }
+            });
+        }
+
         const explanationDiv = questionArea.querySelector(`#question-${questionId} .answer-explanation`);
         if (explanationDiv) explanationDiv.style.display = 'block';
         displayStatsOnOptions(questionId);
@@ -183,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 color: #4a4a4a;
                 line-height: 1.6;
                 margin-bottom: 16px;
+                white-space: pre-line;
             ">
                 <strong>Giải thích:</strong> ${q.explanation}
             </div>
@@ -196,8 +207,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="user-stats" style="
                     flex: 1;
                     min-width: 200px;
+                    max-width: 600px;
                     border-radius: 8px;
-                    padding: 12px;
+                    padding: 6px;
                     border: 1px solid #b3e5fc;
                 ">
                     <h5 style="
@@ -209,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         align-items: center;
                     ">
                         <i class="fas fa-user" style="margin-right: 8px;"></i>
-                        Thống kê cá nhân
+                        Cá nhân
                     </h5>
                     
                     <div class="progress-container" style="margin-bottom: 12px;">
@@ -218,8 +230,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             justify-content: space-between;
                             margin-bottom: 4px;
                         ">
-                            <span>Đúng: ${q.stats.user.correct} (${q.stats.user.correct_percent}%)</span>
-                            <span>Sai: ${q.stats.user.wrong} (${q.stats.user.wrong_percent}%)</span>
+                            <span style="font-weight: 400;">Đúng: ${q.stats.user.correct} (${q.stats.user.correct_percent}%)</span>
+                            <span style="font-weight: 400;">Sai: ${q.stats.user.wrong} (${q.stats.user.wrong_percent}%)</span>
                         </div>
                         <div class="progress" style="
                             height: 10px;
@@ -246,8 +258,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         color: #6c757d;
                         font-size: 13px;
                     ">
-                        <span>Tổng: ${q.stats.user.total}</span>
-                        <span>Tỉ lệ đúng: ${q.stats.user.correct_percent}%</span>
+                        <span style="font-weight: 600;">Tổng: ${q.stats.user.total}</span>
                     </div>
                 </div>
                 
@@ -255,8 +266,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 <div class="community-stats" style="
                     flex: 1;
                     min-width: 200px;
+                    max-width: 600px;
                     border-radius: 8px;
-                    padding: 12px;
+                    padding: 6px;
                     border: 1px solid #b3e5fc;
                 ">
                     <h5 style="
@@ -268,7 +280,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         align-items: center;
                     ">
                         <i class="fas fa-users" style="margin-right: 8px;"></i>
-                        Thống kê cộng đồng
+                        Cộng đồng
                     </h5>
                     
                     <div class="progress-container" style="margin-bottom: 12px;">
@@ -277,8 +289,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             justify-content: space-between;
                             margin-bottom: 4px;
                         ">
-                            <span>Đúng: ${q.stats.all.correct} (${q.stats.all.correct_percent}%)</span>
-                            <span>Sai: ${q.stats.all.wrong} (${q.stats.all.wrong_percent}%)</span>
+                            <span style="font-weight: 400;">Đúng: ${q.stats.all.correct} (${q.stats.all.correct_percent}%)</span>
+                            <span style="font-weight: 400;">Sai: ${q.stats.all.wrong} (${q.stats.all.wrong_percent}%)</span>
                         </div>
                         <div class="progress" style="
                             height: 10px;
@@ -305,8 +317,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         color: #6c757d;
                         font-size: 13px;
                     ">
-                        <span>Tổng: ${q.stats.all.total}</span>
-                        <span>Tỉ lệ đúng: ${q.stats.all.correct_percent}%</span>
+                        <span style="font-weight: 600;">Tổng: ${q.stats.all.total}</span>
                     </div>
                 </div>
             </div>

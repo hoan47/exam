@@ -9,18 +9,9 @@ from django.views.decorators.http import require_POST
 
 @admin_required
 def exam_management(request):
-    return render(request, 'admin/exam_management.html')
-    
-@admin_required
-def get_folders(request):
     try:
         folders = Folder.get_all()
-        
-        response = {
-            'status': 'success',
-            'folders': [folder.to_json() for folder in folders]
-        }
-        return JsonResponse(response)
+        return render(request, 'admin/exam_management.html', { 'folders_json': json.dumps([folder.to_json() for folder in folders]) })
     except Exception as e:
         return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
 

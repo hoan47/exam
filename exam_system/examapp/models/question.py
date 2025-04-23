@@ -1,6 +1,7 @@
 from mongoengine import Document, StringField, ReferenceField, CASCADE
 from bson import ObjectId
 
+
 class Question(Document):
     exam = ReferenceField('Exam', required=True)
     part = StringField(required=True, choices=["5", "6", "7"])
@@ -11,7 +12,7 @@ class Question(Document):
     option_C = StringField(required=True)
     option_D = StringField(required=True)
     correct_answer = StringField(required=True, choices=["A", "B", "C", "D"])
-    explanation = StringField()
+    explanation = StringField(required=True)
 
     def to_json(self, is_answer=True, is_stats=False, user=None):
         data = {
@@ -93,12 +94,10 @@ class Question(Document):
             "option_D": self.option_D,
             "correct_answer": self.correct_answer,
         }
+        questions = list(Question.objects(__raw__=query))
         if self.passage and self.passage.text:
-            query["passage.text"] = self.passage.text  # So sánh trực tiếp với passage.text
-        else:
-            query["passage.text"] = None  # Nếu không có passage hoặc passage.text là None
-
-        return list(Question.objects(__raw__=query))
+            return [q for q in questions if q.passage and q.passage.text == self.passage.text]
+        return [q for q in questions if not q.passage]
     
     @classmethod
     def delete_by_exam_id(cls, exam_id):

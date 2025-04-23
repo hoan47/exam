@@ -55,20 +55,20 @@ def is_exam_permission(view_func): # kiểm tra quyền truy cập xem đề
     def _wrapped_view(request, *args, **kwargs):
         try:
             exam = Exam.find_by_id(request.GET.get('id'))
-            if exam:
-                if exam.status == "draft":
-                    return redirect('user:user_dashboard')
-                if exam.access == 'premium':
-                    user_data = request.session.get('user')
-                    if user_data:
-                        user = User.find_by_email(user_data['email'])
-                        if user:
-                            user.expiry_at = user.get_expiry_at()
-                            # Kiểm tra người dùng và quyền truy cập
-                            if user.expiry_at is None:
-                                return redirect('user:user_dashboard')
-            else:
+            if exam is None:
                 return redirect('user:user_dashboard') # Xử lý trường hợp không tìm thấy exam
+            if exam.status == "draft":
+                return redirect('user:user_dashboard')
+            if exam.access == 'premium':
+                user_data = request.session.get('user')
+                if user_data:
+                    user = User.find_by_email(user_data['email'])
+                    if user:
+                        user.expiry_at = user.get_expiry_at()
+                        # Kiểm tra người dùng và quyền truy cập
+                        if user.expiry_at is None:
+                            return redirect('user:user_dashboard')
+
             return view_func(request, *args, **kwargs)
         except Exception as e:
             print(f"Lỗi trong is_exam_permission: {e}")

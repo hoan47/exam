@@ -40,7 +40,7 @@ function renderHistory() {
                         onclick="openExam('${history_exam.exam.id}')">
                         <div class="flex items-start gap-4">
                             <div class="flex-1 min-w-0">
-                                <h3 class="font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors mb-1">${history_exam.exam.title}</h3>
+                                <h3 class="font-semibold text-gray-800 group-hover:text-indigo-600 transition-colors mb-1">${history_exam.exam.folder_name + " - " + history_exam.exam.title}</h3>
                                 <div class="flex flex-wrap items-center gap-2 mt-3">
                                     <!-- Số lượt thi đã thực hiện -->
                                     <span class="text-xs bg-blue-50 text-blue-700 px-3 py-1 rounded-full flex items-center gap-1">
@@ -86,12 +86,12 @@ function renderHistory() {
 
                                     <!-- Thời điểm bắt đầu thi -->
                                     <span class="text-xs bg-orange-50 text-orange-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                        <i class="fas fa-play-circle text-orange-500"></i> Làm lúc ${new Date(history_exam.started_at).toLocaleString('vi-VN')}
+                                        <i class="fas fa-play-circle text-orange-500"></i> Làm ${new Date(history_exam.started_at).toLocaleString('vi-VN')}
                                     </span>
 
                                     <!-- Thời điểm nộp bài -->
                                     <span class="text-xs bg-lime-50 text-lime-700 px-3 py-1 rounded-full flex items-center gap-1">
-                                        <i class="fas fa-check-circle text-lime-500"></i> Nộp lúc ${new Date(history_exam.completed_at).toLocaleString('vi-VN')}
+                                        <i class="fas fa-check-circle text-lime-500"></i> Nộp ${new Date(history_exam.completed_at).toLocaleString('vi-VN')}
                                     </span>
 
                                     <!-- Điểm (nếu có) -->
@@ -113,5 +113,5 @@ function renderHistory() {
 
 // Hàm xử lý khi nhấn vào một đề
 function openExam(id) {
-    window.location = '/exam_detail/?id=' + id;
+    window.location = `/exam_detail/?id=${id}&caller=history`;
 }
