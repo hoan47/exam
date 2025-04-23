@@ -289,7 +289,7 @@ const groupedByMode = history_exams.reduce((acc, history_exam) => {
 
     // Tính thời gian làm (thời gian bắt đầu và kết thúc)
     const examTime = new Date(history_exam.completed_at) - new Date(history_exam.started_at);  // Thời gian làm bài tính bằng ms
-    const score = correct;  // Điểm (có thể thay đổi nếu cần, ví dụ nhân hệ số)
+    const score = history_exam.score;;  // Điểm (có thể thay đổi nếu cần, ví dụ nhân hệ số)
 
     // Cập nhật stats
     acc[mode].stats.dates.push(formatDate(history_exam.started_at));
@@ -340,7 +340,7 @@ const dataConfig = {
         // Tính averageTime (chuyển từ ms sang phút)
         averageTime: isNaN(groupedByMode.practice?.stats?.averageTime / (1000 * 60)) ? 0 : (groupedByMode.practice?.stats?.averageTime / (1000 * 60)).toFixed(2),
         // Tính averageScore
-        averageScore: isNaN(groupedByMode.practice?.stats?.correct.reduce((sum, score) => sum + score, 0) / groupedByMode.practice?.stats?.correct.length) ? 0 : (groupedByMode.practice?.stats?.correct.reduce((sum, score) => sum + score, 0) / groupedByMode.practice?.stats?.correct.length).toFixed(2),
+        averageScore: isNaN(groupedByMode.practice?.stats?.averageScore) ? 0 : (groupedByMode.practice?.stats?.averageScore).toFixed(2),
         // Tính avgTime (thời gian trung bình làm)
         avgTime: groupedByMode.practice?.stats?.averageTimeInMinutes ?? 0,
         chart: {

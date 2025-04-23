@@ -62,18 +62,3 @@ body {
     display: flex;
     gap: 10px; /* Khoảng cách giữa các nút */
 }
-
-
-.flex > button {
-    /* Các style mặc định cho nút */
-    background-color: #f0f0f0;
-    color: #333;
-    border: 1px solid #ccc;
-}
-
-.flex > button.active {
-    /* Style khi nút có class 'active' */
-    background-color: #007bff; /* Màu xanh dương */
-    color: white;
-    border-color: #007bff;
-}
