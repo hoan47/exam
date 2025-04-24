@@ -5,9 +5,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gán sự kiện
     document.getElementById('practiceBtn').addEventListener('click', () => switchTab('practice'));
     document.getElementById('mockBtn').addEventListener('click', () => switchTab('mock'));
-
-
-
 });
 
 function showInfo() {
@@ -700,22 +697,22 @@ function renderChart(dataConfig) {
 }
 
 
-// ========== XỬ LÝ SỰ KIỆN ==========
 function switchTab(activeTab) {
-    // Đổi style nút
     const practiceBtn = document.getElementById('practiceBtn');
     const mockBtn = document.getElementById('mockBtn');
-    practiceBtn.classList.toggle('active', activeTab === 'practice');
-    mockBtn.classList.toggle('active', activeTab === 'mock');
 
-
-    // Hiển thị nội dung tương ứng
+    // Cập nhật trạng thái aria-selected
     if (activeTab === 'practice') {
-        renderSection(dataConfig.practice);
+        practiceBtn.setAttribute('aria-selected', 'true');
+        mockBtn.setAttribute('aria-selected', 'false');
+        renderSection(dataConfig.practice); // Hiển thị nội dung cho phần 'practice'
     } else {
-        renderSection(dataConfig.test);
+        mockBtn.setAttribute('aria-selected', 'true');
+        practiceBtn.setAttribute('aria-selected', 'false');
+        renderSection(dataConfig.test); // Hiển thị nội dung cho phần 'test'
     }
 }
+
 
 
 function toggleQuestionDetails(id) {

@@ -62,3 +62,15 @@ body {
     display: flex;
     gap: 10px; /* Khoảng cách giữa các nút */
 }
+
+/* Đặt màu sắc khi phần tử được chọn */
+button[aria-selected="true"] {
+    background-color: #58a6ff  !important; 
+    color: white !important;
+    border-color: #fbbf24 !important;     /* amber-400 */
+}
+
+/* Đặt màu sắc cho các phần tử chưa được chọn */
+button[aria-selected="false"]:hover {
+    background-color: #ecf0f1;
+}
