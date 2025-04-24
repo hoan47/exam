@@ -164,11 +164,11 @@ CSRF_TRUSTED_ORIGINS = [
     'http://26.223.129.154:8000',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
-    'https://27d9-14-187-80-86.ngrok-free.app',
+    'https://9376-2405-4800-5b04-6580-2465-cb44-9b38-af80.ngrok-free.app',
 ]
 
 # Danh sách các host được phép truy cập
-ALLOWED_HOSTS = ['26.223.129.154', 'localhost', '127.0.0.1', '27d9-14-187-80-86.ngrok-free.app']
+ALLOWED_HOSTS = ['26.223.129.154', 'localhost', '127.0.0.1', '9376-2405-4800-5b04-6580-2465-cb44-9b38-af80.ngrok-free.app']
 
 
 # Session sẽ hết hạn sau 1 giờ (3600 giây)

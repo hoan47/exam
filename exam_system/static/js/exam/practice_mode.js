@@ -1,5 +1,5 @@
 // scripts/practice.js
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const examData = parseExamData();
     if (!examData) return;
 
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     examTitleEl.textContent = examData.exam.title;
 
-    
+
     function switchTab(partToShow) {
         tabsContainer.querySelectorAll('.tab').forEach(tab => {
             tab.classList.toggle('active', tab.dataset.part === partToShow);
@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             pane.classList.toggle('active', pane.dataset.part === partToShow);
         });
 
-        
+
         // Cuộn lên đầu phần nội dung
         questionArea.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const stats = questionData.stats;
         const userStats = stats.user;  // Thống kê người dùng
         const allStats = stats.all;    // Thống kê cộng đồng
-    
+
         optionsList.querySelectorAll('li').forEach(li => {
             const option = li.dataset.option;
             // Lấy tỷ lệ phân bổ cho người dùng và cộng đồng
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function handleAnswerSelection(questionId, selectedOption, optionsList, is_update=true) { //Lưu đáp án
+    function handleAnswerSelection(questionId, selectedOption, optionsList, is_update = true) { //Lưu đáp án
         if (isSubmitted || userAnswers[questionId]?.checked) return;
         if (!userAnswers[questionId] || !userAnswers[questionId].checked) {
             if (is_update) updateSelectedOption(questionId, selectedOption);
@@ -90,14 +90,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    function handleCheckAnswer(questionId, is_update=true) {
+    function handleCheckAnswer(questionId, is_update = true) {
         if (isSubmitted) return;
-        
         const questionData = getQuestionById(questionId, examData);
         const userAnswer = userAnswers[questionId];
         if (!questionData || !userAnswer || userAnswer.checked) return;
         const selectedOption = userAnswer.selected;
-        if (is_update) updateSelectedOption(questionId, selectedOption, true);
+        if (is_update){ 
+            updateSelectedOption(questionId, selectedOption, true);
+            updateStats(questionData, selectedOption);
+            updateStatsDisplay(questionData);
+        }
         const isCorrect = selectedOption === questionData.correct_answer;
         userAnswer.checked = true;
         userAnswer.correct = isCorrect;
@@ -120,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (unknownBtn) unknownBtn.disabled = true;
     }
 
-    function handleUnknownAnswer(questionId, is_update=true) {
+    function handleUnknownAnswer(questionId, is_update = true) {
         if (isSubmitted) return;
         if (is_update) updateSelectedOption(questionId, "X");
         const questionData = getQuestionById(questionId, examData);
@@ -187,7 +190,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const explanationDiv = document.createElement('div');
         explanationDiv.className = 'answer-explanation';
         // explanationDiv.innerHTML = `<strong>Giải thích:</strong> ${q.explanation}`; //Chỗ này sửa
-
         explanationDiv.innerHTML = `
             <div class="explanation-content" style="
                 color: #4a4a4a;
@@ -230,8 +232,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             justify-content: space-between;
                             margin-bottom: 4px;
                         ">
-                            <span style="font-weight: 400;">Đúng: ${q.stats.user.correct} (${q.stats.user.correct_percent}%)</span>
-                            <span style="font-weight: 400;">Sai: ${q.stats.user.wrong} (${q.stats.user.wrong_percent}%)</span>
+                            <span id="user-correct-${q.id}" style="font-weight: 400;">Đúng: ${q.stats.user.correct} (${q.stats.user.correct_percent}%)</span>
+                            <span id="user-wrong-${q.id}" style="font-weight: 400;">Sai: ${q.stats.user.wrong} (${q.stats.user.wrong_percent}%)</span>
                         </div>
                         <div class="progress" style="
                             height: 10px;
@@ -239,12 +241,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             background: #f56565;
                             overflow: hidden;
                         ">
-                            <div class="progress-bar bg-success" style="
+                            <div id="user-correct-bar-${q.id}" class="progress-bar bg-success" style="
                                 width: ${q.stats.user.correct_percent}%;
                                 height: 100%;
                                 background-color: #1cc88a;
                             "></div>
-                            <div class="progress-bar bg-danger" style="
+                            <div id="user-wrong-bar-${q.id}" class="progress-bar bg-danger" style="
                                 width: ${q.stats.user.wrong_percent}%;
                                 height: 100%;
                                 background-color: #e74a3b;
@@ -258,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         color: #6c757d;
                         font-size: 13px;
                     ">
-                        <span style="font-weight: 600;">Tổng: ${q.stats.user.total}</span>
+                        <span id="user-total-${q.id}" style="font-weight: 600;">Tổng: ${q.stats.user.total}</span>
                     </div>
                 </div>
                 
@@ -289,8 +291,8 @@ document.addEventListener('DOMContentLoaded', function() {
                             justify-content: space-between;
                             margin-bottom: 4px;
                         ">
-                            <span style="font-weight: 400;">Đúng: ${q.stats.all.correct} (${q.stats.all.correct_percent}%)</span>
-                            <span style="font-weight: 400;">Sai: ${q.stats.all.wrong} (${q.stats.all.wrong_percent}%)</span>
+                            <span id="all-correct-${q.id}" style="font-weight: 400;">Đúng: ${q.stats.all.correct} (${q.stats.all.correct_percent}%)</span>
+                            <span id="all-wrong-${q.id}" style="font-weight: 400;">Sai: ${q.stats.all.wrong} (${q.stats.all.wrong_percent}%)</span>
                         </div>
                         <div class="progress" style="
                             height: 10px;
@@ -298,12 +300,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             background: #f56565;
                             overflow: hidden;
                         ">
-                            <div class="progress-bar bg-success" style="
+                            <div id="all-correct-bar-${q.id}" class="progress-bar bg-success" style="
                                 width: ${q.stats.all.correct_percent}%;
                                 height: 100%;
                                 background-color: #1cc88a;
                             "></div>
-                            <div class="progress-bar bg-danger" style="
+                            <div id="all-wrong-bar-${q.id}" class="progress-bar bg-danger" style="
                                 width: ${q.stats.all.wrong_percent}%;
                                 height: 100%;
                                 background-color: #e74a3b;
@@ -317,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         color: #6c757d;
                         font-size: 13px;
                     ">
-                        <span style="font-weight: 600;">Tổng: ${q.stats.all.total}</span>
+                        <span id="all-total-${q.id}" style="font-weight: 600;">Tổng: ${q.stats.all.total}</span>
                     </div>
                 </div>
             </div>
@@ -358,7 +360,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 handleAnswerSelection(question.id, answer.selected_option,
                     document.querySelector(`.question-block[data-question-id="${question.id}"]`).querySelector('.answer-options'), false);
                 setAnswer(question.id, answer.selected_option);
-                if (answer.checked === true){
+                if (answer.checked === true) {
                     handleCheckAnswer(question.id, false)
                 }
             }
@@ -366,3 +368,79 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
+function updateStats(question, userAnswer) {
+    const correctAnswer = question.correct_answer;
+
+    // Hàm phụ cập nhật cho 1 object stats (user hoặc all)
+    function updateSingleStats(stats) {
+        // Kiểm tra sự tồn tại của stats.distribution trước khi khởi tạo _distributionCount
+        if (!stats.distribution) {
+            console.error('Distribution is undefined or invalid', stats);
+            return; // Không tiếp tục nếu distribution không hợp lệ
+        }
+
+        // Tính lại _distributionCount (dựa trên dữ liệu phân phối ban đầu) chỉ khi lần đầu tiên
+        if (!stats._distributionCount) {
+            stats._distributionCount = {
+                A: Math.round(stats.distribution.A * stats.total / 100), 
+                B: Math.round(stats.distribution.B * stats.total / 100), 
+                C: Math.round(stats.distribution.C * stats.total / 100), 
+                D: Math.round(stats.distribution.D * stats.total / 100), 
+            };
+        }
+
+        // Cộng thêm 1 lượt chọn cho đáp án người dùng vừa chọn
+        stats._distributionCount[userAnswer] += 1;
+
+        // Tăng tổng số lần làm bài sau khi người dùng chọn đáp án
+        stats.total += 1;
+
+        // Cập nhật số câu đúng/sai
+        if (userAnswer === correctAnswer) {
+            stats.correct += 1;
+        } else {
+            stats.wrong += 1;
+        }
+
+        // Tính lại phần trăm đúng/sai
+        stats.correct_percent = +(stats.correct / stats.total * 100).toFixed(2);
+        stats.wrong_percent = +(stats.wrong / stats.total * 100).toFixed(2);
+
+        // Tính lại tổng và phân phối phần trăm
+        const totalChoices = stats._distributionCount.A + stats._distributionCount.B +
+            stats._distributionCount.C + stats._distributionCount.D;
+
+        stats.distribution = {
+            A: +(stats._distributionCount.A / totalChoices * 100).toFixed(1),
+            B: +(stats._distributionCount.B / totalChoices * 100).toFixed(1),
+            C: +(stats._distributionCount.C / totalChoices * 100).toFixed(1),
+            D: +(stats._distributionCount.D / totalChoices * 100).toFixed(1),
+        };
+    }
+
+    // Cập nhật cho cả user và all
+    updateSingleStats(question.stats.user);
+    updateSingleStats(question.stats.all);
+}
+
+
+
+function updateStatsDisplay(q) {
+    const uc = q.stats.user.correct, uw = q.stats.user.wrong, ut = q.stats.user.total;
+    const ucp = q.stats.user.correct_percent, uwp = q.stats.user.wrong_percent;
+
+    const ac = q.stats.all.correct, aw = q.stats.all.wrong, at = q.stats.all.total;
+    const acp = q.stats.all.correct_percent, awp = q.stats.all.wrong_percent;
+
+    document.getElementById(`user-correct-${q.id}`).textContent = `Đúng: ${uc} (${ucp}%)`;
+    document.getElementById(`user-wrong-${q.id}`).textContent = `Sai: ${uw} (${uwp}%)`;
+    document.getElementById(`user-total-${q.id}`).textContent = `Tổng: ${ut}`;
+    document.getElementById(`user-correct-bar-${q.id}`).style.width = `${ucp}%`;
+    document.getElementById(`user-wrong-bar-${q.id}`).style.width = `${uwp}%`;
+
+    document.getElementById(`all-correct-${q.id}`).textContent = `Đúng: ${ac} (${acp}%)`;
+    document.getElementById(`all-wrong-${q.id}`).textContent = `Sai: ${aw} (${awp}%)`;
+    document.getElementById(`all-total-${q.id}`).textContent = `Tổng: ${at}`;
+    document.getElementById(`all-correct-bar-${q.id}`).style.width = `${acp}%`;
+    document.getElementById(`all-wrong-bar-${q.id}`).style.width = `${awp}%`;
+}
