@@ -9,7 +9,7 @@ class Exam(Document):
     title = StringField(required=True)
     status = StringField(choices=["active", "draft"], default="draft")
     access = StringField(choices=["free", "premium"], default="free")
-    max_duration = IntField(required=True)  # Tính bằng phút
+    max_duration = IntField(required=True)
     created_at = DateTimeField(default=datetime.datetime.now)
     updated_at = DateTimeField(default=datetime.datetime.now)
     order = IntField(default=0)

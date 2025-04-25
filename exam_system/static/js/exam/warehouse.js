@@ -2,6 +2,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById("folders");
     container.innerHTML = '';
     warehouse.forEach((folder) => {
+        if (folder.exams && Array.isArray(folder.exams)) {
+            folder.exams.sort((a, b) => a.order - b.order);
+        }
         const folderId = `folder_id-${folder.id}`;
         const folderDiv = document.createElement("div");
         folderDiv.className = "bg-gradient-to-b from-white to-gray-50 rounded-xl shadow-lg overflow-hidden transition-all hover:shadow-xl hover:-translate-y-1 border border-gray-200";
@@ -28,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </svg>
                 </div>
             </div>
-
+            
             <div id="${folderId}" class="hidden px-6 py-4 bg-gradient-to-b from-gray-50 to-white">
                 <div class="grid grid-cols-1 gap-4">
                     ${folder.exams.map((exam, idx) => `

@@ -1,0 +1,622 @@
+[
+  {
+    "_id": {
+      "$oid": "68072c41f581038043de2789"
+    },
+    "folder": {
+      "$oid": "6804fd5a22b7d2f1644695e1"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 5 buổi 1",
+    "status": "active",
+    "access": "free",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-22T12:42:25.041Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:45:16.364Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "68073db7c093a363cb88069c"
+    },
+    "folder": {
+      "$oid": "6804fd5a22b7d2f1644695e1"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 5 buổi 2",
+    "status": "active",
+    "access": "free",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-22T13:56:55.451Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:45:16.361Z"
+    },
+    "order": 0
+  },
+  {
+    "_id": {
+      "$oid": "6807460bc093a363cb8806f0"
+    },
+    "folder": {
+      "$oid": "6804fd5a22b7d2f1644695e1"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 5 buổi 3",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-22T14:32:27.473Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:45:16.368Z"
+    },
+    "order": 2
+  },
+  {
+    "_id": {
+      "$oid": "6807d498fe817c3f09bf8032"
+    },
+    "folder": {
+      "$oid": "6804fd5a22b7d2f1644695e1"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 5 buổi 4",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 60,
+    "created_at": {
+      "$date": "2025-04-23T00:40:40.062Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:45:16.371Z"
+    },
+    "order": 3
+  },
+  {
+    "_id": {
+      "$oid": "6807d76efe817c3f09bf8087"
+    },
+    "folder": {
+      "$oid": "6807d768fe817c3f09bf8086"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 6 buổi 1",
+    "status": "active",
+    "access": "free",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-23T00:52:46.195Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:46:13.066Z"
+    },
+    "order": 0
+  },
+  {
+    "_id": {
+      "$oid": "6808851d50dc8fd0d51cb7df"
+    },
+    "folder": {
+      "$oid": "6807d768fe817c3f09bf8086"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 6 buổi 2",
+    "status": "active",
+    "access": "free",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-23T13:13:49.705Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:46:13.071Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "68088a75ae56ca2bf8cb6f8b"
+    },
+    "folder": {
+      "$oid": "6804fd5a22b7d2f1644695e1"
+    },
+    "original_exam": {
+      "$oid": "68072c41f581038043de2789"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 5 buổi 1",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-23T13:36:37.751Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-23T13:36:37.751Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "68088aadae56ca2bf8cb6fdd"
+    },
+    "folder": {
+      "$oid": "6804fd5a22b7d2f1644695e1"
+    },
+    "original_exam": {
+      "$oid": "6807460bc093a363cb8806f0"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 5 buổi 3",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-23T13:37:33.671Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:45:16.368Z"
+    },
+    "order": 2
+  },
+  {
+    "_id": {
+      "$oid": "68088ad2ae56ca2bf8cb7006"
+    },
+    "folder": {
+      "$oid": "6804fd5a22b7d2f1644695e1"
+    },
+    "original_exam": {
+      "$oid": "6807d498fe817c3f09bf8032"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 5 buổi 4",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 60,
+    "created_at": {
+      "$date": "2025-04-23T13:38:10.178Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:45:16.372Z"
+    },
+    "order": 3
+  },
+  {
+    "_id": {
+      "$oid": "68088b06ae56ca2bf8cb701c"
+    },
+    "folder": {
+      "$oid": "6807d768fe817c3f09bf8086"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 6 buổi 3",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-23T13:39:02.493Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:46:13.074Z"
+    },
+    "order": 2
+  },
+  {
+    "_id": {
+      "$oid": "680890007c7ac636b7038f0d"
+    },
+    "folder": {
+      "$oid": "6807d768fe817c3f09bf8086"
+    },
+    "original_exam": {
+      "$oid": "68088b06ae56ca2bf8cb701c"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 6 buổi 3",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-23T14:00:16.837Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:46:13.075Z"
+    },
+    "order": 2
+  },
+  {
+    "_id": {
+      "$oid": "680890457c7ac636b7038f3d"
+    },
+    "folder": {
+      "$oid": "6807d768fe817c3f09bf8086"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 6 buổi 4",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-23T14:01:25.370Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:46:13.078Z"
+    },
+    "order": 3
+  },
+  {
+    "_id": {
+      "$oid": "680894687c7ac636b7038fb1"
+    },
+    "folder": {
+      "$oid": "6808945d7c7ac636b7038fb0"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 7 buổi 1",
+    "status": "active",
+    "access": "free",
+    "max_duration": 100,
+    "created_at": {
+      "$date": "2025-04-23T14:19:04.950Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-23T14:59:15.580Z"
+    },
+    "order": 0
+  },
+  {
+    "_id": {
+      "$oid": "68089dd31019b35c811bd611"
+    },
+    "folder": {
+      "$oid": "6808945d7c7ac636b7038fb0"
+    },
+    "original_exam": {
+      "$oid": "680894687c7ac636b7038fb1"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 7 buổi 1",
+    "status": "active",
+    "access": "free",
+    "max_duration": 100,
+    "created_at": {
+      "$date": "2025-04-23T14:59:15.624Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-23T14:59:15.624Z"
+    },
+    "order": 0
+  },
+  {
+    "_id": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "folder": {
+      "$oid": "6804fd5a22b7d2f1644695e1"
+    },
+    "original_exam": {
+      "$oid": "68072c41f581038043de2789"
+    },
+    "version": 2,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 5 buổi 1",
+    "status": "active",
+    "access": "free",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-23T19:45:15.173Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:45:16.365Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "6808e15da93b356c2cadff3c"
+    },
+    "folder": {
+      "$oid": "6807d768fe817c3f09bf8086"
+    },
+    "original_exam": {
+      "$oid": "6807d76efe817c3f09bf8087"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 6 buổi 1",
+    "status": "active",
+    "access": "free",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-23T19:47:25.898Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:46:13.067Z"
+    },
+    "order": 0
+  },
+  {
+    "_id": {
+      "$oid": "6809ebfbee56bfbe41288735"
+    },
+    "folder": {
+      "$oid": "6804fd5a22b7d2f1644695e1"
+    },
+    "original_exam": {
+      "$oid": "68073db7c093a363cb88069c"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 5 buổi 2",
+    "status": "active",
+    "access": "free",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-24T14:44:59.319Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:45:16.362Z"
+    },
+    "order": 0
+  },
+  {
+    "_id": {
+      "$oid": "680a0a70ff9fd736bc8c537a"
+    },
+    "folder": {
+      "$oid": "6808945d7c7ac636b7038fb0"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 7 buổi 2",
+    "status": "active",
+    "access": "free",
+    "max_duration": 60,
+    "created_at": {
+      "$date": "2025-04-24T16:54:56.936Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-24T21:31:33.255Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "680a0bc8ff9fd736bc8c53b3"
+    },
+    "folder": {
+      "$oid": "6807d768fe817c3f09bf8086"
+    },
+    "original_exam": {
+      "$oid": "6808851d50dc8fd0d51cb7df"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 6 buổi 2",
+    "status": "active",
+    "access": "free",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-24T17:00:40.978Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:46:13.072Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "680a16cfff9fd736bc8c53f7"
+    },
+    "folder": {
+      "$oid": "6809ef54ee56bfbe4128874e"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện đề số 1 phần đọc",
+    "status": "active",
+    "access": "free",
+    "max_duration": 60,
+    "created_at": {
+      "$date": "2025-04-24T17:47:43.384Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T01:32:09.541Z"
+    },
+    "order": 0
+  },
+  {
+    "_id": {
+      "$oid": "680a1be7ff9fd736bc8c540d"
+    },
+    "folder": {
+      "$oid": "6809ef54ee56bfbe4128874e"
+    },
+    "original_exam": {
+      "$oid": "680a16cfff9fd736bc8c53f7"
+    },
+    "version": 1,
+    "title": "Luyện đề số 2 phần đọc",
+    "status": "active",
+    "access": "free",
+    "max_duration": 60,
+    "created_at": {
+      "$date": "2025-04-24T18:09:27.171Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-24T18:09:27.171Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "folder": {
+      "$oid": "6809ef54ee56bfbe4128874e"
+    },
+    "original_exam": {
+      "$oid": "680a16cfff9fd736bc8c53f7"
+    },
+    "version": 2,
+    "title": "Luyện đề số 2 phần đọc",
+    "status": "active",
+    "access": "free",
+    "max_duration": 60,
+    "created_at": {
+      "$date": "2025-04-24T18:58:43.736Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-24T18:58:43.736Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "680a47a3ff9fd736bc8c570c"
+    },
+    "folder": {
+      "$oid": "6809ef54ee56bfbe4128874e"
+    },
+    "original_exam": null,
+    "version": 0,
+    "title": "Luyện đề số 2 phần đọc",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 120,
+    "created_at": {
+      "$date": "2025-04-24T21:16:03.033Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:39:31.470Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "680a495cff9fd736bc8c575f"
+    },
+    "folder": {
+      "$oid": "6807d768fe817c3f09bf8086"
+    },
+    "original_exam": {
+      "$oid": "680890457c7ac636b7038f3d"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 6 buổi 4",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 30,
+    "created_at": {
+      "$date": "2025-04-24T21:23:24.803Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:46:13.079Z"
+    },
+    "order": 3
+  },
+  {
+    "_id": {
+      "$oid": "680a4b45ff9fd736bc8c5859"
+    },
+    "folder": {
+      "$oid": "6808945d7c7ac636b7038fb0"
+    },
+    "original_exam": {
+      "$oid": "680a0a70ff9fd736bc8c537a"
+    },
+    "version": 1,
+    "title": "Luyện tập bộ câu hỏi sát đề thi thật part 7 buổi 2",
+    "status": "active",
+    "access": "free",
+    "max_duration": 60,
+    "created_at": {
+      "$date": "2025-04-24T21:31:33.430Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-24T21:31:33.430Z"
+    },
+    "order": 1
+  },
+  {
+    "_id": {
+      "$oid": "680a5651936b4b2dcbd740b5"
+    },
+    "folder": {
+      "$oid": "6809ef54ee56bfbe4128874e"
+    },
+    "original_exam": {
+      "$oid": "680a47a3ff9fd736bc8c570c"
+    },
+    "version": 1,
+    "title": "Luyện đề số 3 phần đọc",
+    "status": "active",
+    "access": "free",
+    "max_duration": 120,
+    "created_at": {
+      "$date": "2025-04-24T22:18:41.695Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-24T22:18:41.695Z"
+    },
+    "order": 2
+  },
+  {
+    "_id": {
+      "$oid": "680a73b0936b4b2dcbd746bc"
+    },
+    "folder": {
+      "$oid": "6809ef54ee56bfbe4128874e"
+    },
+    "original_exam": {
+      "$oid": "680a16cfff9fd736bc8c53f7"
+    },
+    "version": 3,
+    "title": "Luyện đề số 1 phần đọc",
+    "status": "active",
+    "access": "free",
+    "max_duration": 60,
+    "created_at": {
+      "$date": "2025-04-25T00:24:00.451Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T01:32:09.541Z"
+    },
+    "order": 0
+  },
+  {
+    "_id": {
+      "$oid": "680aa183ea322ced8c9a1a40"
+    },
+    "folder": {
+      "$oid": "6809ef54ee56bfbe4128874e"
+    },
+    "original_exam": {
+      "$oid": "680a47a3ff9fd736bc8c570c"
+    },
+    "version": 2,
+    "title": "Luyện đề số 2 phần đọc",
+    "status": "active",
+    "access": "premium",
+    "max_duration": 120,
+    "created_at": {
+      "$date": "2025-04-25T03:39:31.862Z"
+    },
+    "updated_at": {
+      "$date": "2025-04-25T03:39:31.862Z"
+    },
+    "order": 1
+  }
+]

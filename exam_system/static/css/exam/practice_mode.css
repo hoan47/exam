@@ -180,7 +180,7 @@
 .submit-button {
     display: block;
     width: calc(100% - 32px);
-    margin: 10px 16px 0 16px;
+    margin: 10px 16px 10px 16px;
     padding: 12px 20px;
     background-color: var(--success-color);
     color: var(--white-color);

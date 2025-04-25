@@ -1,0 +1,650 @@
+[
+  {
+    "_id": {
+      "$oid": "6808e0a6a93b356c2cadfeea"
+    },
+    "user": {
+      "$oid": "6807e86042ac674dc406fc39"
+    },
+    "exam": {
+      "$oid": "68088a75ae56ca2bf8cb6f8b"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-23T19:44:22.762Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-23T21:05:11.471Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6808e57aa93b356c2cadff53"
+    },
+    "user": {
+      "$oid": "6808e22da93b356c2cadff51"
+    },
+    "exam": {
+      "$oid": "68088ad2ae56ca2bf8cb7006"
+    },
+    "mode": "test",
+    "started_at": {
+      "$date": "2025-04-23T20:04:58.452Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-23T20:06:17.931Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6808e7f0a93b356c2cadff6e"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-23T20:15:28.879Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-23T20:17:50.274Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6808e888a93b356c2cadff83"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-23T20:18:00.894Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-23T20:20:26.564Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6808ebbfa93b356c2cadff98"
+    },
+    "user": {
+      "$oid": "6808e22da93b356c2cadff51"
+    },
+    "exam": {
+      "$oid": "68088ad2ae56ca2bf8cb7006"
+    },
+    "mode": "test",
+    "started_at": {
+      "$date": "2025-04-23T20:31:43.903Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-23T20:31:55.316Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6808ebe6a93b356c2cadffad"
+    },
+    "user": {
+      "$oid": "6808e22da93b356c2cadff51"
+    },
+    "exam": {
+      "$oid": "68088ad2ae56ca2bf8cb7006"
+    },
+    "mode": "test",
+    "started_at": {
+      "$date": "2025-04-23T20:32:22.197Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-23T20:33:08.689Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6808eccba93b356c2cadffc2"
+    },
+    "user": {
+      "$oid": "6808e22da93b356c2cadff51"
+    },
+    "exam": {
+      "$oid": "68088ad2ae56ca2bf8cb7006"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-23T20:36:11.248Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-23T20:36:19.015Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "6808ed86a93b356c2cadffd7"
+    },
+    "user": {
+      "$oid": "6808e22da93b356c2cadff51"
+    },
+    "exam": {
+      "$oid": "68088ad2ae56ca2bf8cb7006"
+    },
+    "mode": "test",
+    "started_at": {
+      "$date": "2025-04-23T20:39:18.605Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-23T20:39:26.908Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "68090f88590dbb32c8659e76"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-23T23:04:24.596Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-23T23:09:43.173Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a1e8bff9fd736bc8c5464"
+    },
+    "user": {
+      "$oid": "680a1e7cff9fd736bc8c5463"
+    },
+    "exam": {
+      "$oid": "680a1be7ff9fd736bc8c540d"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T18:20:43.833Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T18:24:05.734Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a1facff9fd736bc8c5477"
+    },
+    "user": {
+      "$oid": "680a1e7cff9fd736bc8c5463"
+    },
+    "exam": {
+      "$oid": "680a1be7ff9fd736bc8c540d"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T18:25:32.602Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T18:27:12.534Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a1fcfff9fd736bc8c548a"
+    },
+    "user": {
+      "$oid": "67f25303a263d89b02db87b0"
+    },
+    "exam": {
+      "$oid": "68089dd31019b35c811bd611"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T18:26:07.123Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T18:30:41.690Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a2d08ff9fd736bc8c5679"
+    },
+    "user": {
+      "$oid": "680a280fff9fd736bc8c5607"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T19:22:32.379Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T19:24:39.269Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a2daaff9fd736bc8c568a"
+    },
+    "user": {
+      "$oid": "680a280fff9fd736bc8c5607"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T19:25:14.768Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T19:26:59.588Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a2e50ff9fd736bc8c569b"
+    },
+    "user": {
+      "$oid": "680a280fff9fd736bc8c5607"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T19:28:00.131Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T19:29:10.279Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a2eafff9fd736bc8c56ac"
+    },
+    "user": {
+      "$oid": "680a280fff9fd736bc8c5607"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "test",
+    "started_at": {
+      "$date": "2025-04-24T19:29:35.958Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T19:30:19.571Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a2ef3ff9fd736bc8c56bd"
+    },
+    "user": {
+      "$oid": "680a280fff9fd736bc8c5607"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "test",
+    "started_at": {
+      "$date": "2025-04-24T19:30:43.943Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T19:31:24.731Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a3e4bff9fd736bc8c56ce"
+    },
+    "user": {
+      "$oid": "6807e86042ac674dc406fc39"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T20:36:11.350Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T21:27:16.970Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a441fff9fd736bc8c56df"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T21:01:03.003Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T21:05:11.077Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a4598ff9fd736bc8c56fb"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T21:07:20.260Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T22:03:56.948Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a52e7936b4b2dcbd73f6b"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T22:04:07.303Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T22:46:30.416Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a5675936b4b2dcbd7411e"
+    },
+    "user": {
+      "$oid": "680a280fff9fd736bc8c5607"
+    },
+    "exam": {
+      "$oid": "680a5651936b4b2dcbd740b5"
+    },
+    "mode": "test",
+    "started_at": {
+      "$date": "2025-04-24T22:19:17.305Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T22:27:56.795Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a58eb936b4b2dcbd74176"
+    },
+    "user": {
+      "$oid": "680a280fff9fd736bc8c5607"
+    },
+    "exam": {
+      "$oid": "680a5651936b4b2dcbd740b5"
+    },
+    "mode": "test",
+    "started_at": {
+      "$date": "2025-04-24T22:29:47.497Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T22:46:33.169Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a5cfb936b4b2dcbd741ce"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "680a5651936b4b2dcbd740b5"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T22:47:07.611Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-25T00:01:47.092Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a5dfb936b4b2dcbd74226"
+    },
+    "user": {
+      "$oid": "680a280fff9fd736bc8c5607"
+    },
+    "exam": {
+      "$oid": "680a5651936b4b2dcbd740b5"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T22:51:23.288Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T22:59:24.152Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a60ef936b4b2dcbd7427f"
+    },
+    "user": {
+      "$oid": "680a60e7936b4b2dcbd7427e"
+    },
+    "exam": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T23:03:59.033Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T23:05:55.869Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a6174936b4b2dcbd74294"
+    },
+    "user": {
+      "$oid": "680a60e7936b4b2dcbd7427e"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T23:06:12.511Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T23:07:07.496Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a61ba936b4b2dcbd742a5"
+    },
+    "user": {
+      "$oid": "680a60e7936b4b2dcbd7427e"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T23:07:22.678Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T23:07:36.428Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a61d8936b4b2dcbd742b6"
+    },
+    "user": {
+      "$oid": "680a60e7936b4b2dcbd7427e"
+    },
+    "exam": {
+      "$oid": "680a5651936b4b2dcbd740b5"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T23:07:52.345Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T23:08:14.906Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a624a936b4b2dcbd743df"
+    },
+    "user": {
+      "$oid": "680a60e7936b4b2dcbd7427e"
+    },
+    "exam": {
+      "$oid": "680a2773ff9fd736bc8c55d9"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T23:09:46.026Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T23:10:05.119Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a6ac2936b4b2dcbd74404"
+    },
+    "user": {
+      "$oid": "680a6a4d936b4b2dcbd74400"
+    },
+    "exam": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-24T23:45:54.371Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T23:47:08.901Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a6ba3936b4b2dcbd744ea"
+    },
+    "user": {
+      "$oid": "680a6a4d936b4b2dcbd74400"
+    },
+    "exam": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "mode": "test",
+    "started_at": {
+      "$date": "2025-04-24T23:49:39.226Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-24T23:50:30.543Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a70ea936b4b2dcbd745d1"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-25T00:12:10.828Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-25T00:12:37.116Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a72bb936b4b2dcbd745e6"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-25T00:19:55.635Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-25T00:21:10.892Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a743b936b4b2dcbd7477e"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "680a73b0936b4b2dcbd746bc"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-25T00:26:19.855Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-25T00:26:22.012Z"
+    }
+  },
+  {
+    "_id": {
+      "$oid": "680a7933936b4b2dcbd7478f"
+    },
+    "user": {
+      "$oid": "67f12a818d038f875d9bd9fd"
+    },
+    "exam": {
+      "$oid": "6808e0dba93b356c2cadff13"
+    },
+    "mode": "practice",
+    "started_at": {
+      "$date": "2025-04-25T00:47:31.742Z"
+    },
+    "completed_at": {
+      "$date": "2025-04-25T01:11:31.743Z"
+    }
+  }
+]
